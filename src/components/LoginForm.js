@@ -1,7 +1,7 @@
 import React from 'react';
 import './../css/loginForm.css'
 
-class SearchForm extends React.Component{
+class LoginForm extends React.Component{
 
     constructor(props) {
         super(props);
@@ -27,22 +27,22 @@ class SearchForm extends React.Component{
             <div className="container">
                 <div className="row justify-content-center">
                     <div className="d-flex flex-column min-vh-100 justify-content-center w-50">
-                        <form id="login-form" className="bg-dark p-5 text-light">
+                        <form id="login-form" className="bg-smartcity p-5 text-light">
                             <div className="form-group">
                                 <label>Adresse email</label>
-                                <input className="form-control bg-dark" type="email" placeholder="Adresse email:" onChange={(event) => {
+                                <input className="form-control bg-smartcity" type="email" placeholder="Adresse email" onChange={(event) => {
                                     this.setState({email: event.target.value});
                                 }}/>
                             </div>
 
-                            <div className="form-group">
+                            <div className="form-group mt-md-3">
                                 <label>Mot de passe</label>
-                                <input className="form-control bg-dark" type="password" placeholder="Mot de passe:" onChange={(event) => {
+                                <input className="form-control bg-smartcity" type="password" placeholder="Mot de passe" onChange={(event) => {
                                     this.setState({password: event.target.value});
                                 }}/>
                             </div>
 
-                            <button className="btn text-light mx-auto d-block border-white" onClick={(event) => this.login(event)} disabled={!this.formDataAreValid()}>Se connecter</button>
+                            <button className="btn text-white mx-auto d-block border-white mt-md-3" onClick={(event) => this.login(event)}>Se connecter</button>
                         </form>
                     </div>
                 </div>
@@ -51,4 +51,4 @@ class SearchForm extends React.Component{
     }
 }
 
-export default SearchForm;
+export default LoginForm;
