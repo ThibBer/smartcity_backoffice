@@ -5,6 +5,7 @@ import {
     Route,
 } from "react-router-dom";
 import LoginForm from "../components/LoginForm";
+import TopBar from "../components/TopBar";
 
 export default function Routes(){
     return(
@@ -14,6 +15,7 @@ export default function Routes(){
                     <LoginForm/>
                 </Route>
                 <Route path="/">
+                    <TopBar/>
                 </Route>
             </Switch>
         </Router>
