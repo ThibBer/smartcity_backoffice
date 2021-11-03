@@ -4,6 +4,18 @@ import VerticalActionsBar from "./VerticalActionsBar";
 import Panel from "./Panel";
 
 class BackOffice extends React.Component{
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            currentButtonChoice: undefined
+        }
+    }
+
+    onMenuItemSelected(event, buttonName){
+        this.setState({currentButtonChoice: buttonName});
+    }
+
     render() {
         return (
             <div className="container-fluid">
@@ -13,12 +25,12 @@ class BackOffice extends React.Component{
                             <div className="row justify-content-center bg-purple">
                                 <TopBar/>
                             </div>
-                            <div className="row justify-content-center bg-blue flex-grow-1">
-                                <div className="col-2 p-2">
-                                    <VerticalActionsBar/>
+                            <div className="row justify-content-center bg-blue flex-grow-1 px-3">
+                                <div className="col-2 py-4">
+                                    <VerticalActionsBar onMenuItemSelected={(event, itemSelected) => this.onMenuItemSelected(event, itemSelected)}/>
                                 </div>
-                                <div className="col-10 p-2">
-                                    <Panel/>
+                                <div className="col-10 py-4">
+                                    <Panel key={this.state.currentButtonChoice} currentButtonChoice={this.state.currentButtonChoice}/>
                                 </div>
                             </div>
                         </div>
