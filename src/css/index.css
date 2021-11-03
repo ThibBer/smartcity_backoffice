@@ -6,3 +6,7 @@
     background-color: #101d2f !important;
     color: white !important;
 }
+
+#table-label{
+    text-transform: uppercase;
+}
