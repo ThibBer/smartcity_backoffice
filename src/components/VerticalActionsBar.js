@@ -10,11 +10,11 @@ class VerticalActionsBar extends React.Component{
         super(props);
 
         this.state = {
+            onMenuItemSelected: props.onMenuItemSelected,
             login: "",
-            firstname: "Jean",
-            lastname: " Dupont",
+            firstname: "Thibaut",
+            lastname: "BERG",
             role: "admin"
-
         }
     }
 
@@ -29,7 +29,7 @@ class VerticalActionsBar extends React.Component{
                 </div>
                 <div className="row">
                     <div className="col">
-                        <Accordion defaultActiveKey="0" className="pt-2">
+                        <Accordion className="pt-2">
                             <Accordion.Item eventKey="0">
                                 <Accordion.Header>Filtrer la liste</Accordion.Header>
                                 <Accordion.Body>
@@ -37,14 +37,14 @@ class VerticalActionsBar extends React.Component{
                                 </Accordion.Body>
                             </Accordion.Item>
                         </Accordion>
-                        <Accordion className="pb-2">
+                        <Accordion defaultActiveKey="0" className="pb-2">
                             <Accordion.Item eventKey="0">
                                 <Accordion.Header>Entités</Accordion.Header>
                                 <Accordion.Body>
-                                    <button className="btn"><i className="far fa-user"/> Utilisateurs</button>
-                                    <button className="btn"><i className="far fa-file-chart-line"/> Signalement</button>
-                                    <button className="btn"><i className="far fa-calendar-week"/> Évenements</button>
-                                    <button className="btn"><i className="far fa-list"/> Types de signalement</button>
+                                    <button className="btn" onClick={(event) => this.state.onMenuItemSelected(event, "user")}><i className="far fa-user"/> Utilisateurs</button>
+                                    <button className="btn" onClick={(event) => this.state.onMenuItemSelected(event, "report")}><i className="far fa-file-chart-line"/> Signalement</button>
+                                    <button className="btn" onClick={(event) => this.state.onMenuItemSelected(event, "event")}><i className="far fa-calendar-week"/> Évenements</button>
+                                    <button className="btn" onClick={(event) => this.state.onMenuItemSelected(event, "reportType")}><i className="far fa-list"/> Types de signalement</button>
                                 </Accordion.Body>
                             </Accordion.Item>
                         </Accordion>
