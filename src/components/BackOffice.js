@@ -22,10 +22,10 @@ class BackOffice extends React.Component{
                 <div className="row min-vh-100">
                     <div className="col">
                         <div className="d-flex flex-column h-100">
-                            <div className="row justify-content-center bg-purple">
+                            <div className="row">
                                 <TopBar/>
                             </div>
-                            <div className="row justify-content-center bg-blue flex-grow-1 px-3">
+                            <div className="row flex-grow-1 px-3">
                                 <div className="col-2 py-4">
                                     <VerticalActionsBar onMenuItemSelected={(event, itemSelected) => this.onMenuItemSelected(event, itemSelected)}/>
                                 </div>
