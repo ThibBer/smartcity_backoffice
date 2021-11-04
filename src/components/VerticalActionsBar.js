@@ -14,8 +14,23 @@ class VerticalActionsBar extends React.Component{
             login: "",
             firstname: "Thibaut",
             lastname: "BERG",
-            role: "admin"
+            role: "admin",
+            currentButton: "user",
+            buttons:[
+                {name: "user", label: "Utilisateurs", icon: "fa-user"},
+                {name: "report", label: "Signalement", icon: "fa-file-chart-line"},
+                {name: "event", label: "Évenements", icon: "fa-calendar-week"},
+                {name: "reportType", label: "Types de signalement", icon: "fa-list"},
+            ]
         }
+    }
+
+    onMenuItemClick(event, name){
+        this.setState({
+            currentButton: name,
+        });
+
+        this.state.onMenuItemSelected(event, name);
     }
 
     render() {
@@ -28,7 +43,7 @@ class VerticalActionsBar extends React.Component{
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col">
+                    <div className="col ">
                         <Accordion className="pt-2">
                             <Accordion.Item eventKey="0">
                                 <Accordion.Header>Filtrer la liste</Accordion.Header>
@@ -40,11 +55,18 @@ class VerticalActionsBar extends React.Component{
                         <Accordion defaultActiveKey="0" className="pb-2">
                             <Accordion.Item eventKey="0">
                                 <Accordion.Header>Entités</Accordion.Header>
-                                <Accordion.Body>
-                                    <button className="btn" onClick={(event) => this.state.onMenuItemSelected(event, "user")}><i className="far fa-user"/> Utilisateurs</button>
-                                    <button className="btn" onClick={(event) => this.state.onMenuItemSelected(event, "report")}><i className="far fa-file-chart-line"/> Signalement</button>
-                                    <button className="btn" onClick={(event) => this.state.onMenuItemSelected(event, "event")}><i className="far fa-calendar-week"/> Évenements</button>
-                                    <button className="btn" onClick={(event) => this.state.onMenuItemSelected(event, "reportType")}><i className="far fa-list"/> Types de signalement</button>
+                                <Accordion.Body className="px-0">
+                                    {
+                                        this.state.buttons.map(button => {
+                                            return (
+                                                <div key={button.name} className=" w-100">
+                                                    <button  className={"btn btn-nav-smartcity  w-100" + (this.state.currentButton === button.name ? " current-menu-item" : "")} onClick={(event) => this.onMenuItemClick(event, button.name)}>
+                                                        <i className={"far "+  button.icon}/> {button.label}
+                                                    </button>
+                                                </div>
+                                            )
+                                        })
+                                    }
                                 </Accordion.Body>
                             </Accordion.Item>
                         </Accordion>
