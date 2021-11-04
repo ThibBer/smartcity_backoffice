@@ -31,8 +31,13 @@ class UserTable extends React.Component {
     }
 
     // ON SAVE MODAL
-    onSaveModal(event, data){
-
+    async onSaveModal(event, data){
+        console.log("onSaveModal")
+        if(data !== this.state.data){
+            const response = await axios.patch("http://localhost:2001/v1/user/", data);
+            console.log("patch")
+            console.log(response.status)
+        }
 
 
         this.setModalVisibility(false);

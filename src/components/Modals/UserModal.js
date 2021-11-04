@@ -9,8 +9,7 @@ class UserModal extends React.Component{
         super(props);
 
         this.state = {
-            modalIsVisible : props.modalIsVisible,
-            roles: []
+            modalIsVisible : props.modalIsVisible
         }
 
         this.user = props.data;
@@ -33,7 +32,7 @@ class UserModal extends React.Component{
     }
 
     onInputChange(event, name){
-
+        this.user[name] = event.target.value;
     }
 
     formattedDate(sqlDate){
@@ -79,9 +78,8 @@ class UserModal extends React.Component{
                                     <label htmlFor="group">Rôle utilisateur</label>
                                     <Form.Select id="group">
                                         <option>Rôle</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
+                                        <option value="user">Utilisateur</option>
+                                        <option value="admin">Administrateur</option>
                                     </Form.Select>
                                 </div>
                             </div>
