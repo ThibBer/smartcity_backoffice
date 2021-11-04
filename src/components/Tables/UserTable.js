@@ -2,6 +2,7 @@ import React from 'react';
 import BackOfficeTable from "./BackOfficeTable";
 import userColumns from "./columns/user";
 import axios from "axios";
+import UserModal from "../Modals/UserModal";
 
 class UserTable extends React.Component {
 
@@ -9,7 +10,11 @@ class UserTable extends React.Component {
         super(props);
 
         this.state = {
-            data: []
+            data: [],
+            modal: {
+                visibility: false,
+                data: {}
+            }
         }
     }
 
@@ -20,9 +25,52 @@ class UserTable extends React.Component {
         this.setState({data: users});
     }
 
+    // ON CLOSE MODAL
+    onHideModal(event){
+        this.setModalVisibility(false);
+    }
+
+    // ON SAVE MODAL
+    onSaveModal(event, data){
+
+
+
+        this.setModalVisibility(false);
+    }
+
+    // UPDATE MODAL VISIBILITY
+    setModalVisibility(visibility){
+        this.setState({
+            modal: {
+                visibility: visibility
+            }
+        });
+    }
+
+    modalIsVisible(){
+        return this.state.modal.visibility && this.state.modal.data !== undefined;
+    }
+
+    onClickEditButton(event, rowData){
+        this.setState({
+            modal: {
+                visibility: true,
+                data: rowData
+            }
+        })
+    }
+
+    onClickDeleteButton(event){
+
+    }
+
     render(){
         return (
-            <BackOfficeTable key={this.state.data} columns={userColumns} data={this.state.data} filter={this.props.filter} />
+            <>
+                <BackOfficeTable key={this.state.data} columns={userColumns} data={this.state.data} filter={this.props.filter} onClickEditButton={(event, rowData) => this.onClickEditButton(event, rowData)} />
+
+                <UserModal modalIsVisible={this.modalIsVisible()} data={this.state.modal.data} onHide={(event) => this.onHideModal(event)} onSave={(event, object) => this.onSaveModal(event, object)}/>
+            </>
         )
     }
 }
