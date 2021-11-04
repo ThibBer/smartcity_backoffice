@@ -1,7 +1,6 @@
 import React from 'react';
 import './../css/panel.css'
 import './../css/verticalActionBar.css'
-import UserModal from "./Modals/UserModal";
 import UserTable from "./Tables/UserTable";
 import ReportTable from "./Tables/ReportTable";
 import EventTable from "./Tables/EventTable";
@@ -90,8 +89,6 @@ class Panel extends React.Component {
                         {this.getCurrentTableComponent()}
                     </div>
                 </div>
-
-                <UserModal/>
             </div>
 
         );
