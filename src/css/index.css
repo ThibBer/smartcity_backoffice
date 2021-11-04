@@ -10,3 +10,7 @@
 #table-label{
     text-transform: uppercase;
 }
+
+.current-menu-item {
+    color: blue !important;;
+}
