@@ -4,6 +4,7 @@ import './../css/verticalActionBar.css'
 import UserTable from "./Tables/UserTable";
 import ReportTable from "./Tables/ReportTable";
 import EventTable from "./Tables/EventTable";
+import ReportTypeTable from "./Tables/ReportTypeTable";
 
 class Panel extends React.Component {
 
@@ -24,6 +25,8 @@ class Panel extends React.Component {
                 return <ReportTable/>
             case "event":
                 return <EventTable/>
+            case "reportType":
+                return <ReportTypeTable/>
             default:
                 return "";
         }

@@ -41,7 +41,15 @@ class UserModal extends React.Component{
         }
 
         const date = new Date(sqlDate);
-        return date.getFullYear()  + '-' + ('0' + (date.getMonth()+1)).slice(-2) + '-' +  ('0' + date.getDate()).slice(-2);
+        return date.getFullYear()  + '-' + this.twoDigitFormatNumber(date.getMonth() + 1) + '-' + this.twoDigitFormatNumber(date.getDate());
+    }
+
+    twoDigitFormatNumber(number){
+        if(number <= 9){
+            return "0" + number;
+        }
+
+        return number;
     }
 
     render() {
@@ -70,7 +78,7 @@ class UserModal extends React.Component{
                             <div className="col-6">
                                 <div className="form-group mb-3">
                                     <label htmlFor="birth_date">Date de naissance</label>
-                                    <input id="birth_date" type="date" className="form-control" placeholder="Date de naissance" defaultValue={this.formattedDate(this.user?.birth_date)}/>
+                                    <input id="birth_date" type="date" className="form-control" placeholder="Date de naissance" defaultValue={this.formattedDate(this.user?.birth_date)} onChange={(event) => this.onInputChange(event, "birth_date")}/>
                                 </div>
                             </div>
                             <div className="col-6">

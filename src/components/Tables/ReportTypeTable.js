@@ -22,7 +22,7 @@ class ReportTypeTable extends React.Component {
 
     render(){
         return (
-            <BackOfficeTable key={this.state.data} columns={reportTypesColumns} data={this.state.data} filter={this.props.filter} />
+            <BackOfficeTable columns={reportTypesColumns} data={this.state.data} filter={this.props.filter} />
         )
     }
 }

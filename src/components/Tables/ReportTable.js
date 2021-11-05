@@ -14,15 +14,21 @@ class ReportTable extends React.Component {
     }
 
     async componentDidMount() {
-        const response = await axios.get("http://localhost:2001/v1/report/");
-        const reports = response.data;
+        try{
+            const response = await axios.get("http://localhost:2001/v1/report/");
+            const reports = response.data;
 
-        this.setState({data: reports});
+            this.setState({data: reports});
+        }catch (error) {
+            console.log(error.response)
+            this.setState({error: error.response});
+        }
+
     }
 
     render(){
         return (
-            <BackOfficeTable key={this.state.data} columns={reportColumns} data={this.state.data} filter={this.props.filter} />
+            <BackOfficeTable key={this.state.data} columns={reportColumns} data={this.state.data} filter={this.props.filter} error={this.state.error} />
         )
     }
 }

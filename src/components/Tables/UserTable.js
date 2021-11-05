@@ -14,15 +14,22 @@ class UserTable extends React.Component {
             modal: {
                 visibility: false,
                 data: {}
-            }
+            },
+            error: undefined
         }
     }
 
     async componentDidMount() {
-        const response = await axios.get("http://localhost:2001/v1/user/");
-        const users = response.data;
+        try {
+            const response = await axios.get("http://localhost:2001/v1/user/");
+            const users = response.data;
 
-        this.setState({data: users});
+            this.setState({data: users});
+        }catch (error) {
+            this.setState({
+                error: error
+            })
+        }
     }
 
     // ON CLOSE MODAL
@@ -32,11 +39,13 @@ class UserTable extends React.Component {
 
     // ON SAVE MODAL
     async onSaveModal(event, data){
-        console.log("onSaveModal")
         if(data !== this.state.data){
-            const response = await axios.patch("http://localhost:2001/v1/user/", data);
-            console.log("patch")
-            console.log(response.status)
+            try {
+                await axios.patch("http://localhost:2001/v1/user/", data);
+            }catch (error) {
+                console.error('Failure!');
+                console.error(error)
+            }
         }
 
 
@@ -56,25 +65,26 @@ class UserTable extends React.Component {
         return this.state.modal.visibility && this.state.modal.data !== undefined;
     }
 
-    onClickEditButton(event, rowData){
+    onClickEditButton(event, user){
         this.setState({
             modal: {
                 visibility: true,
-                data: rowData
+                data: user
             }
         })
     }
 
-    onClickDeleteButton(event){
-
+    async onClickDeleteButton(event, user){
+        //TODO Api call delete user
+        console.error("TODO Api call delete user");
     }
 
     render(){
         return (
             <>
-                <BackOfficeTable key={this.state.data} columns={userColumns} data={this.state.data} filter={this.props.filter} onClickEditButton={(event, rowData) => this.onClickEditButton(event, rowData)} />
+                <BackOfficeTable columns={userColumns} data={this.state.data} filter={this.props.filter} onClickEditButton={(event, user) => this.onClickEditButton(event, user)} onClickDeleteButton={(event, user) => this.onClickDeleteButton(event, user)} error={this.state.error} />
 
-                <UserModal modalIsVisible={this.modalIsVisible()} data={this.state.modal.data} onHide={(event) => this.onHideModal(event)} onSave={(event, object) => this.onSaveModal(event, object)}/>
+                <UserModal data={this.state.modal.data} modalIsVisible={this.modalIsVisible()} onHide={(event) => this.onHideModal(event)} onSave={(event, object) => this.onSaveModal(event, object)}/>
             </>
         )
     }
