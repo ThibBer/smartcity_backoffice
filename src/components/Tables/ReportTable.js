@@ -13,6 +13,17 @@ class ReportTable extends React.Component {
         }
     }
 
+    rowMapper(report) {
+        return (
+            <>
+                <td>{report.report_type.label}</td>
+                <td>{report.state}</td>
+                <td>{report.zip_code + " " + report.city}</td>
+                <td>{report.street + " " + report.house_number}</td>
+            </>
+        );
+    }
+
     async componentDidMount() {
         try{
             const response = await axios.get("http://localhost:2001/v1/report/");
@@ -28,7 +39,7 @@ class ReportTable extends React.Component {
 
     render(){
         return (
-            <BackOfficeTable key={this.state.data} columns={reportColumns} data={this.state.data} filter={this.props.filter} error={this.state.error} />
+            <BackOfficeTable key={this.state.data} columns={reportColumns} data={this.state.data} filter={this.props.filter} error={this.state.error} mapper={this.rowMapper}/>
         )
     }
 }

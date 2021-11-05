@@ -14,6 +14,13 @@ class EventTable extends React.Component {
         }
     }
 
+    rowMapper(object) {
+        return (
+            <>
+                <td>{object.report.state}</td>
+            </>
+        );
+    }
 
     async componentDidMount() {
         try{
@@ -33,7 +40,7 @@ class EventTable extends React.Component {
 
     render(){
         return (
-            <BackOfficeTable key={this.state.data} columns={eventColumns} data={this.state.data} filter={this.props.filter} error={this.state.error} />
+            <BackOfficeTable key={this.state.data} columns={eventColumns} data={this.state.data} filter={this.props.filter} error={this.state.error} mapper={this.rowMapper} />
         )
     }
 }
