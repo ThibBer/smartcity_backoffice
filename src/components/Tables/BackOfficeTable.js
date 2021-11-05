@@ -7,7 +7,6 @@ class BackOfficeTable extends React.Component {
 
         this.state = {
             filter: props.filter,
-            columns: props.columns ?? [],
             data: props.data ?? [],
             onClickEditButton: props.onClickEditButton,
             onClickDeleteButton: props.onClickDeleteButton,
@@ -32,43 +31,30 @@ class BackOfficeTable extends React.Component {
         }
     }
 
-    formatData(key, value){
-        if(key.includes("date")){
-            return new Date(value).toLocaleDateString();
-        }
-
-        return value;
-    }
-
-
     renderTable(){
-        return this.state.data.map((rowData, rowIndex) => {
+        return this.state.data.map((object, rowIndex) => {
             return (
                 <tr key={"tr" + rowIndex}>
                     <td key={"td" + rowIndex}>{rowIndex + 1}</td>
                     {
-                        this.state.columns.map((column, colIndex) => {
-                            const property = Object.keys(column)[0];
-
-                            return <td key={"td" + rowIndex + "-" + colIndex}>{this.formatData(property, rowData[property])}</td>
-                        })
+                        this.props.mapper(object)
                     }
                     <td>
-                        <button className="btn" onClick={(event) => this.state.onClickEditButton(event, rowData)}><i className="far fa-edit"/></button>
-                        <button className="btn" onClick={(event) => this.state.onClickDeleteButton(event, rowData)}><i className="far fa-trash-alt text-danger"/></button>
+                        <button className="btn" onClick={(event) => this.state.onClickEditButton(event, object)}><i className="far fa-edit"/></button>
+                        <button className="btn" onClick={(event) => this.state.onClickDeleteButton(event, object)}><i className="far fa-trash-alt text-danger"/></button>
                     </td>
                 </tr>
             )
         });
     }
 
-    renderEmptyBody(){
-        return <tr><td colSpan={this.state.columns.length + 2} className="text-center">Aucune donnée à afficher</td></tr>
+    emptyBody(){
+        return <tr><td colSpan={this.props.columns.length + 2} className="text-center">Aucune donnée à afficher</td></tr>
     }
 
     renderError(){
         const error = this.state.error;
-        let message = "";
+        let message = "Une erreur inatendu est survenue ...";
 
         if(error.status === 500){
             message = "Une erreur interne est survenue. Réessayer dans quelques instants";
@@ -76,10 +62,10 @@ class BackOfficeTable extends React.Component {
             message = "La ressource demandée n'est pas disponible";
         }
 
-        return <tr><td colSpan={this.state.columns.length + 2} className="text-center">{message}</td></tr>
+        return <tr><td colSpan={this.props.columns.length + 2} className="text-center">{message}</td></tr>
     }
 
-    renderBodyTable(){
+    bodyTable(){
         if(this.state.error){
             return this.renderError();
         }
@@ -88,7 +74,13 @@ class BackOfficeTable extends React.Component {
             return this.renderTable();
         }
 
-        return this.renderEmptyBody();
+        return this.emptyBody();
+    }
+
+    columns(){
+        return this.props.columns.map((column) => {
+            return <th scope="col" key={column}>{column}</th>
+        })
     }
 
     tableContent(){
@@ -98,17 +90,13 @@ class BackOfficeTable extends React.Component {
                     <thead>
                     <tr>
                         <th scope="col">#</th>
-                        {
-                            this.state.columns.map((column, index) => {
-                                return <th scope="col" key={index}>{column[Object.keys(column)[0]]}</th>
-                            })
-                        }
+                        {this.columns()}
                         <th scope="col">Action</th>
                     </tr>
                     </thead>
                     <tbody>
                     {
-                        this.renderBodyTable()
+                        this.bodyTable()
                     }
                     </tbody>
                 </table>
@@ -127,13 +115,11 @@ class BackOfficeTable extends React.Component {
     }
 
     render() {
-        return (
-            <>
-                {
-                    this.state.loadingCompleted ? this.tableContent() : this.spinner()
-                }
-            </>
-        );
+        if(this.state.loadingCompleted){
+            return this.tableContent();
+        }
+
+        return this.spinner();
     }
 }
 

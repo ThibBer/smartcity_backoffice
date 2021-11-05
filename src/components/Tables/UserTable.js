@@ -32,6 +32,22 @@ class UserTable extends React.Component {
         }
     }
 
+    rowMapper(user) {
+        return (
+            <>
+                <td>{user.id}</td>
+                <td>{user.first_name}</td>
+                <td>{user.last_name}</td>
+                <td>{user.email}</td>
+                <td>{(new Date(user.birth_date)).toLocaleDateString()}</td>
+                <td>{user.role}</td>
+
+                <td>{user.zip_code + " " + user.city}</td>
+                <td>{user.street + " " + user.house_number}</td>
+            </>
+        );
+    }
+
     // ON CLOSE MODAL
     onHideModal(event){
         this.setModalVisibility(false);
@@ -82,7 +98,7 @@ class UserTable extends React.Component {
     render(){
         return (
             <>
-                <BackOfficeTable columns={userColumns} data={this.state.data} filter={this.props.filter} onClickEditButton={(event, user) => this.onClickEditButton(event, user)} onClickDeleteButton={(event, user) => this.onClickDeleteButton(event, user)} error={this.state.error} />
+                <BackOfficeTable columns={userColumns} data={this.state.data} filter={this.props.filter} onClickEditButton={(event, user) => this.onClickEditButton(event, user)} onClickDeleteButton={(event, user) => this.onClickDeleteButton(event, user)} error={this.state.error} mapper={this.rowMapper}/>
 
                 <UserModal data={this.state.modal.data} modalIsVisible={this.modalIsVisible()} onHide={(event) => this.onHideModal(event)} onSave={(event, object) => this.onSaveModal(event, object)}/>
             </>
