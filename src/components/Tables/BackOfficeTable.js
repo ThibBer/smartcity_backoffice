@@ -10,7 +10,7 @@ class BackOfficeTable extends React.Component {
             data: props.data ?? [],
             onClickEditButton: props.onClickEditButton,
             onClickDeleteButton: props.onClickDeleteButton,
-            loadingCompleted: props.data !== undefined && props.data.length >= 0,
+            loadingCompleted: false,
             error: undefined
         }
     }
@@ -54,10 +54,12 @@ class BackOfficeTable extends React.Component {
 
     renderError(){
         const error = this.state.error;
-        let message = "Une erreur inatendu est survenue ...";
+        let message = "Une erreur inattendue est survenue ...";
 
-        if(error.status === 500){
-            message = "Une erreur interne est survenue. Réessayer dans quelques instants";
+        if(error.message === "Network Error"){
+            message = "Une erreur serveur rend impossible l'accès aux données";
+        }else if(error.status === 500){
+            message = "Une erreur serveur est survenue. Réessayer dans quelques instants";
         }else if(error.status === 404){
             message = "La ressource demandée n'est pas disponible";
         }

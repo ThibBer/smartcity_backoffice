@@ -31,8 +31,7 @@ class ReportTable extends React.Component {
 
             this.setState({data: reports});
         }catch (error) {
-            console.log(error.response)
-            this.setState({error: error.response});
+            this.setState({error: error});
         }
 
     }
