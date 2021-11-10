@@ -7,26 +7,23 @@ class BackOfficeTable extends React.Component {
 
         this.state = {
             filter: props.filter,
-            data: props.data ?? [],
+            data: props.data,
+            error: undefined,
             onClickEditButton: props.onClickEditButton,
-            onClickDeleteButton: props.onClickDeleteButton,
-            loadingCompleted: false,
-            error: undefined
+            onClickDeleteButton: props.onClickDeleteButton
         }
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         if(prevProps.data !== this.props.data){
             this.setState({
-                data: this.props.data,
-                loadingCompleted: true
+                data: this.props.data
             });
         }
 
         if(prevProps.error !== this.props.error){
             this.setState({
-                error: this.props.error,
-                loadingCompleted: true
+                error: this.props.error
             });
         }
     }
@@ -58,10 +55,10 @@ class BackOfficeTable extends React.Component {
 
         if(error.message === "Network Error"){
             message = "Une erreur serveur rend impossible l'accès aux données";
-        }else if(error.status === 500){
+        }else if(error.status >= 500 && error.status < 600){
             message = "Une erreur serveur est survenue. Réessayer dans quelques instants";
-        }else if(error.status === 404){
-            message = "La ressource demandée n'est pas disponible";
+        }else if(error.status >= 400 && error.status < 500 ){
+            message = "Une erreur est survenue. La ressource demandée n'est pas disponible";
         }
 
         return <tr><td colSpan={this.props.columns.length + 2} className="text-center">{message}</td></tr>
@@ -72,7 +69,7 @@ class BackOfficeTable extends React.Component {
             return this.renderError();
         }
 
-        if(this.state.data.length > 0){
+        if(this.state.data){
             return this.renderTable();
         }
 
@@ -117,7 +114,7 @@ class BackOfficeTable extends React.Component {
     }
 
     render() {
-        if(this.state.loadingCompleted){
+        if(this.props.data || this.props.error){
             return this.tableContent();
         }
 

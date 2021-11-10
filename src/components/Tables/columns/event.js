@@ -1,3 +1,3 @@
 module.exports = [
-    "Date", "Organisateur", "Type de signalement"
+    "Date", "Durée", "Organisateur", "Type de signalement", "Adresse"
 ];

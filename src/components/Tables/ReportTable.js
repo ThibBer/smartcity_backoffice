@@ -9,8 +9,25 @@ class ReportTable extends React.Component {
         super(props);
 
         this.state = {
-            data: []
+            data: undefined,
+            error: undefined
         }
+    }
+
+    async componentDidMount() {
+        try{
+            const response = await axios.get("http://localhost:2001/v1/report/");
+            const reports = response.data;
+
+            this.setState({
+                data: reports
+            });
+        }catch (error) {
+            this.setState({
+                error: error.response ?? error
+            })
+        }
+
     }
 
     rowMapper(report) {
@@ -24,21 +41,9 @@ class ReportTable extends React.Component {
         );
     }
 
-    async componentDidMount() {
-        try{
-            const response = await axios.get("http://localhost:2001/v1/report/");
-            const reports = response.data;
-
-            this.setState({data: reports});
-        }catch (error) {
-            this.setState({error: error});
-        }
-
-    }
-
     render(){
         return (
-            <BackOfficeTable key={this.state.data} columns={reportColumns} data={this.state.data} filter={this.props.filter} error={this.state.error} mapper={this.rowMapper}/>
+            <BackOfficeTable columns={reportColumns} data={this.state.data} filter={this.props.filter} error={this.state.error} mapper={this.rowMapper} loadingCompleted={this.state.load}/>
         )
     }
 }

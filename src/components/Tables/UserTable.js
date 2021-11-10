@@ -10,7 +10,7 @@ class UserTable extends React.Component {
         super(props);
 
         this.state = {
-            data: [],
+            data: undefined,
             modal: {
                 visibility: false,
                 data: {}
@@ -24,10 +24,12 @@ class UserTable extends React.Component {
             const response = await axios.get("http://localhost:2001/v1/user/");
             const users = response.data;
 
-            this.setState({data: users});
+            this.setState({
+                data: users
+            });
         }catch (error) {
             this.setState({
-                error: error
+                error: error.response ?? error
             })
         }
     }
@@ -98,7 +100,7 @@ class UserTable extends React.Component {
     render(){
         return (
             <>
-                <BackOfficeTable columns={userColumns} data={this.state.data} filter={this.props.filter} onClickEditButton={(event, user) => this.onClickEditButton(event, user)} onClickDeleteButton={(event, user) => this.onClickDeleteButton(event, user)} error={this.state.error} mapper={this.rowMapper}/>
+                <BackOfficeTable columns={userColumns} data={this.state.data} filter={this.props.filter} onClickEditButton={(event, user) => this.onClickEditButton(event, user)} onClickDeleteButton={(event, user) => this.onClickDeleteButton(event, user)} error={this.state.error} mapper={this.rowMapper} />
 
                 <UserModal data={this.state.modal.data} modalIsVisible={this.modalIsVisible()} onHide={(event) => this.onHideModal(event)} onSave={(event, object) => this.onSaveModal(event, object)}/>
             </>

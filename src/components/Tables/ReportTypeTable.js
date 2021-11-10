@@ -9,7 +9,7 @@ class ReportTypeTable extends React.Component {
         super(props);
 
         this.state = {
-            data: [],
+            data: undefined,
             error: undefined
         }
     }
@@ -20,15 +20,27 @@ class ReportTypeTable extends React.Component {
             const response = await axios.get("http://localhost:2001/v1/reportType/");
             const reportTypes = response.data;
 
-            this.setState({data: reportTypes});
+            this.setState({
+                data: reportTypes
+            });
         }catch (error) {
-            this.setState({error: error});
+            this.setState({
+                error: error
+            });
         }
+    }
+
+    rowMapper(reportType) {
+        return (
+            <>
+                <td>{reportType.label}</td>
+            </>
+        );
     }
 
     render(){
         return (
-            <BackOfficeTable columns={reportTypesColumns} data={this.state.data} filter={this.props.filter} error={this.state.error} />
+            <BackOfficeTable columns={reportTypesColumns} data={this.state.data} filter={this.props.filter} error={this.state.error} mapper={this.rowMapper} />
         )
     }
 }
