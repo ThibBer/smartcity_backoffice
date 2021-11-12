@@ -16,16 +16,11 @@ class EventTable extends React.Component {
 
     rowMapper(event) {
         const date = new Date(event.date);
-        const creator = event.creator;
-        const report = event.report;
 
         return (
             <>
-                <td>{date.toLocaleDateString() + " - " + date.toLocaleTimeString()}</td>
                 <td>{event.length}</td>
-                <td>{creator.first_name + " " + creator.last_name}</td>
-                <td>{report.report_type.label}</td>
-                <td>{report.street + ", " + report.house_number} <br/> {report.city + " " + report.zip_code}</td>
+                <td>{event.creator}</td>
             </>
         );
     }
