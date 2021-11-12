@@ -32,7 +32,6 @@ class BackOfficeTable extends React.Component {
         return this.state.data.map((object, rowIndex) => {
             return (
                 <tr key={"tr" + rowIndex}>
-                    <td key={"td" + rowIndex}>{rowIndex + 1}</td>
                     {
                         this.props.mapper(object)
                     }
@@ -46,7 +45,7 @@ class BackOfficeTable extends React.Component {
     }
 
     emptyBody(){
-        return <tr><td colSpan={this.props.columns.length + 2} className="text-center">Aucune donnée à afficher</td></tr>
+        return <tr><td colSpan={this.props.columns.length + 1} className="text-center">Aucune donnée à afficher</td></tr>
     }
 
     renderError(){
@@ -61,7 +60,7 @@ class BackOfficeTable extends React.Component {
             message = "Une erreur est survenue. La ressource demandée n'est pas disponible";
         }
 
-        return <tr><td colSpan={this.props.columns.length + 2} className="text-center">{message}</td></tr>
+        return <tr><td colSpan={this.props.columns.length + 1} className="text-center">{message}</td></tr>
     }
 
     bodyTable(){
@@ -88,7 +87,6 @@ class BackOfficeTable extends React.Component {
                 <table id="panel-table" className="table table-striped table-hover">
                     <thead>
                     <tr>
-                        <th scope="col">#</th>
                         {this.columns()}
                         <th scope="col">Action</th>
                     </tr>

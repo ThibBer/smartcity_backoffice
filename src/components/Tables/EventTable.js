@@ -15,8 +15,6 @@ class EventTable extends React.Component {
     }
 
     rowMapper(event) {
-        const date = new Date(event.date);
-
         return (
             <>
                 <td>{event.length}</td>

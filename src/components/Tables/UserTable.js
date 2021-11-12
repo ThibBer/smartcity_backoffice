@@ -61,8 +61,9 @@ class UserTable extends React.Component {
             try {
                 await axios.patch("http://localhost:2001/v1/user/", data);
             }catch (error) {
-                console.error('Failure!');
-                console.error(error)
+                this.setState({
+                    error: error.response ?? error
+                });
             }
         }
 
