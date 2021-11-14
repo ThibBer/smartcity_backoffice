@@ -1,5 +1,6 @@
 import React from 'react';
 import Spinner from "../Spinner";
+import ErrorCodeManager from "./../ErrorCodeManager";
 
 class BackOfficeTable extends React.Component {
     constructor(props) {
@@ -49,16 +50,7 @@ class BackOfficeTable extends React.Component {
     }
 
     renderError(){
-        const error = this.state.error;
-        let message = "Une erreur inattendue est survenue ...";
-
-        if(error.message === "Network Error"){
-            message = "Une erreur serveur rend impossible l'accès aux données";
-        }else if(error.status >= 500 && error.status < 600){
-            message = "Une erreur serveur est survenue. Réessayer dans quelques instants";
-        }else if(error.status >= 400 && error.status < 500 ){
-            message = "Une erreur est survenue. La ressource demandée n'est pas disponible";
-        }
+        const message = ErrorCodeManager.message(this.state.error);
 
         return <tr><td colSpan={this.props.columns.length + 1} className="text-center">{message}</td></tr>
     }
@@ -86,15 +78,15 @@ class BackOfficeTable extends React.Component {
             <>
                 <table id="panel-table" className="table table-striped table-hover">
                     <thead>
-                    <tr>
-                        {this.columns()}
-                        <th scope="col">Action</th>
-                    </tr>
+                        <tr>
+                            {this.columns()}
+                            <th scope="col">Action</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    {
-                        this.bodyTable()
-                    }
+                        {
+                            this.bodyTable()
+                        }
                     </tbody>
                 </table>
             </>

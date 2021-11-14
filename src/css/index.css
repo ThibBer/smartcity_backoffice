@@ -14,3 +14,7 @@
 .current-menu-item {
     color: blue !important;;
 }
+
+.error {
+    color: red;
+}

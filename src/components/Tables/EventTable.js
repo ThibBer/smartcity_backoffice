@@ -27,7 +27,6 @@ class EventTable extends React.Component {
         try{
             const response = await axios.get("http://localhost:2001/v1/event/");
             const events = response.data;
-            console.log(events)
 
             this.setState({
                 data: events

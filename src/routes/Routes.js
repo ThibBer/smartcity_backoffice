@@ -5,7 +5,7 @@ import {
     Route,
 } from "react-router-dom";
 import LoginForm from "../components/LoginForm";
-import BackOffice from "../components/BackOffice";
+import WalloniaFixed from "../components/WalloniaFixed";
 
 export default function Routes(){
     return(
@@ -15,7 +15,7 @@ export default function Routes(){
                     <LoginForm/>
                 </Route>
                 <Route path="/">
-                    <BackOffice/>
+                    <WalloniaFixed/>
                 </Route>
             </Switch>
         </Router>

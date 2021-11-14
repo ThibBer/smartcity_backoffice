@@ -3,8 +3,9 @@ import './../css/loginForm.css'
 import './../css/verticalActionBar.css'
 import {Accordion} from "react-bootstrap";
 import SearchBar from "./SearchBar";
+import SideBarItems from "./data/SideBarItems"
 
-class VerticalActionsBar extends React.Component{
+class SideBar extends React.Component{
 
     constructor(props) {
         super(props);
@@ -15,13 +16,7 @@ class VerticalActionsBar extends React.Component{
             firstname: "Thibaut",
             lastname: "BERG",
             role: "admin",
-            currentButton: "user",
-            buttons:[
-                {name: "user", label: "Utilisateurs", icon: "fa-user"},
-                {name: "report", label: "Signalement", icon: "fa-file-chart-line"},
-                {name: "event", label: "Évenements", icon: "fa-calendar-week"},
-                {name: "reportType", label: "Types de signalement", icon: "fa-list"},
-            ]
+            currentButton: "user"
         }
     }
 
@@ -57,7 +52,7 @@ class VerticalActionsBar extends React.Component{
                                 <Accordion.Header>Entités</Accordion.Header>
                                 <Accordion.Body className="px-0">
                                     {
-                                        this.state.buttons.map(button => {
+                                        SideBarItems.map(button => {
                                             return (
                                                 <div key={button.name} className=" w-100">
                                                     <button  className={"btn btn-nav-smartcity  w-100" + (this.state.currentButton === button.name ? " current-menu-item" : "")} onClick={(event) => this.onMenuItemClick(event, button.name)}>
@@ -77,4 +72,4 @@ class VerticalActionsBar extends React.Component{
     }
 }
 
-export default VerticalActionsBar;
+export default SideBar;
