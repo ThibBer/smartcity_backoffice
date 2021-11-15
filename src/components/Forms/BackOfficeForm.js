@@ -1,6 +1,4 @@
 import React from "react";
-import {Form} from "react-bootstrap";
-import UserRoles from "./../data/UserRoles"
 
 class BackOfficeForm extends React.Component {
     constructor(props) {
@@ -14,6 +12,7 @@ class BackOfficeForm extends React.Component {
 
     componentDidUpdate(previousProps, previousState, snapshot){
         if(previousProps.errors !== this.props.errors){
+            console.log("Errors updated BackOfficeForm")
             this.setState({errors: this.props.errors});
         }
     }
@@ -36,7 +35,6 @@ class BackOfficeForm extends React.Component {
     }
 
     render(){
-        console.log("Render Back Officer Form")
         return(
             this.props.form.getForm(this.state.data, this.state.errors, this.props.onInputChange)
         );

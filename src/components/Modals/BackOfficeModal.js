@@ -3,7 +3,6 @@ import './../../css/panel.css'
 import './../../css/verticalActionBar.css'
 import {Modal} from "react-bootstrap";
 import BackOfficeForm from "../Forms/BackOfficeForm";
-import UserForm from "../Forms/UserForm";
 
 class BackOfficeModal extends React.Component{
 
@@ -16,7 +15,7 @@ class BackOfficeModal extends React.Component{
             formErrors: {}
         }
 
-        this.modalData = []
+        this.modalData = {}
         this.isAnUpdate = false;
     }
 
@@ -42,15 +41,21 @@ class BackOfficeModal extends React.Component{
     }
 
     onClickSubmit(event){
+        this.setState({formErrors: {}});
         const formErrors = this.state.formErrors;
 
-        if(this.props.form.isValid(this.modalData, formErrors)){
-            this.setState({errors: {}});
-            //this.props.onSave(event, this.data, this.isAnUpdate);
-        }else{
-            this.setState({errors: formErrors});
+        if(Object.keys(this.modalData).length > 0){
+            /*RESET OBJECT PROPERTIES*/
+
+            if(this.props.form.isValid(this.modalData, formErrors)){
+                this.setState({errors: {}});
+                this.props.onSave(event, this.data, this.isAnUpdate);
+            }else{
+                this.setState({errors: formErrors});
+            }
         }
 
+        this.setState({formErrors});
     }
 
     render() {

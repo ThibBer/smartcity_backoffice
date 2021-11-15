@@ -6,7 +6,6 @@ import BackOfficeModal from "../Modals/BackOfficeModal";
 import UserForm from "../Forms/UserForm"
 import ErrorCodeManager from "../ErrorCodeManager"
 import DeletePopup from "../DeletePopup";
-import BackOfficeForm from "../Forms/BackOfficeForm";
 
 class UserBackOffice extends React.Component {
 
@@ -24,8 +23,7 @@ class UserBackOffice extends React.Component {
             popup: {
                 visibility: false,
                 user: undefined
-            },
-            formErrors: {}
+            }
         }
     }
 
@@ -98,7 +96,7 @@ class UserBackOffice extends React.Component {
 
         modal.data = undefined;
 
-        this.setState({modal, formErrors: {}});
+        this.setState({modal});
     }
 
     // UPDATE MODAL VISIBILITY
@@ -115,10 +113,6 @@ class UserBackOffice extends React.Component {
         modal.data = user;
 
         this.setState({modal});
-    }
-
-    onClickPopupDeleteButton(){
-
     }
 
     onClosePopup(){

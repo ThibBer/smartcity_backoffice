@@ -22,7 +22,8 @@ class UserForm{
     }
 
     getForm(user, errors, onInputChange){
-        console.log("Render User Form")
+        user.password = undefined;
+
         return(
             <form>
                 <div className="row">
@@ -52,7 +53,7 @@ class UserForm{
                     <div className="col-6">
                         <div className="form-group mb-3">
                             <label htmlFor="group">Rôle utilisateur</label>
-                            <Form.Select id="group">
+                            <Form.Select id="group" onClick={(event) => onInputChange(event, "role")}>
                                 <option>Rôle</option>
                                 {
                                     Object.keys(UserRoles).map(role =>
@@ -60,7 +61,7 @@ class UserForm{
                                     )
                                 }
                             </Form.Select>
-                            {errors.group && <FormError content={errors.group}/>}
+                            {errors.role && <FormError content={errors.role}/>}
                         </div>
                     </div>
                 </div>
@@ -69,7 +70,7 @@ class UserForm{
                         <div className="form-group mb-3">
                             <label htmlFor="lastname">Nom</label>
                             <input id="lastname" type="text" className="form-control" placeholder="Nom" defaultValue={user?.last_name} onChange={(event) => onInputChange(event, "last_name")}/>
-                            {errors.lastname && <FormError content={errors.lastname}/>}
+                            {errors.last_name && <FormError content={errors.last_name}/>}
                         </div>
                     </div>
                     <div className="col-6">
@@ -77,7 +78,7 @@ class UserForm{
                             <label htmlFor="firstname">Prénom</label>
                             <input id="firstname" type="text" className="form-control" placeholder="Prénom" defaultValue={user?.first_name} onChange={(event) => onInputChange(event, "first_name")}/>
 
-                            {errors.firstname && <FormError content={errors.firstname}/>}
+                            {errors.first_name && <FormError content={errors.first_name}/>}
                         </div>
                     </div>
                 </div>
@@ -120,12 +121,7 @@ class UserForm{
         );
     }
 
-
     isValid(user, errors){
-        /*RESET OBJECT PROPERTIES*/
-        Object.keys(errors).forEach(key => {
-            delete errors[key];
-        })
 
         const email = user?.email;
         if(email === undefined || !email.match("[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")){
@@ -136,6 +132,52 @@ class UserForm{
         if(password === undefined || password.trim() === ""){
             errors.password = "Mot de passe invalide";
         }
+
+        const birth_date = user?.birth_date;
+        const now = new Date();
+        const birthDate = new Date(birth_date);
+
+        if(birth_date === undefined){
+            errors.birth_date = "Date invalide";
+        }else if(new Date(birthDate) >= now){
+            errors.birth_date = "La date ne peut pas être égale ou après aujourd'hui";
+        }
+
+        const role = user?.role;
+        if(role === undefined || role === "Rôle"){
+            errors.role = "Rôle invalide";
+        }
+
+        const firstName = user?.first_name;
+        if(firstName === undefined || firstName.trim() === ""){
+            errors.first_name = "Prénom invalide";
+        }
+
+        const lastName = user?.last_name;
+        if(lastName === undefined || lastName.trim() === ""){
+            errors.last_name = "Nom invalide";
+        }
+
+        const city = user?.city;
+        if(city === undefined || city.trim() === ""){
+            errors.city = "Ville invalide";
+        }
+
+        const street = user?.street;
+        if(street === undefined || street.trim() === ""){
+            errors.street = "Rue invalide";
+        }
+
+        const zipCode = user?.zip_code;
+        if(zipCode === undefined){
+            errors.zip_code = "Rue invalide";
+        }
+
+        const houseNumber = user?.house_number;
+        if(houseNumber === undefined || houseNumber.trim() === ""){
+            errors.house_number = "Rue invalide";
+        }
+
 
         return Object.keys(errors).length === 0;
     }

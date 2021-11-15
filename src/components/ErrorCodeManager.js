@@ -1,5 +1,4 @@
 module.exports.message = (error) => {
-    console.log(error)
     let message = "Une erreur inattendue est survenue ...";
 
     if(error?.message === "Network Error"){
