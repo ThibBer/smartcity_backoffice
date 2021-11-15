@@ -2,6 +2,8 @@ import React from 'react';
 import './../../css/panel.css'
 import './../../css/verticalActionBar.css'
 import {Modal} from "react-bootstrap";
+import BackOfficeForm from "../Forms/BackOfficeForm";
+import UserForm from "../Forms/UserForm";
 
 class BackOfficeModal extends React.Component{
 
@@ -10,7 +12,8 @@ class BackOfficeModal extends React.Component{
 
         this.state = {
             modalIsVisible : props.modalIsVisible,
-            error: undefined
+            error: undefined,
+            formErrors: {}
         }
 
         this.modalData = []
@@ -38,6 +41,18 @@ class BackOfficeModal extends React.Component{
         this.modalData[name] = event.target.value;
     }
 
+    onClickSubmit(event){
+        const formErrors = this.state.formErrors;
+
+        if(this.props.form.isValid(this.modalData, formErrors)){
+            this.setState({errors: {}});
+            //this.props.onSave(event, this.data, this.isAnUpdate);
+        }else{
+            this.setState({errors: formErrors});
+        }
+
+    }
+
     render() {
         return (
             <Modal show={this.state.modalIsVisible} onHide={this.props.onHide} backdrop="static" keyboard={false} size="lg">
@@ -45,12 +60,13 @@ class BackOfficeModal extends React.Component{
                     <Modal.Title>{this.isAnUpdate ? "Modification" : "Création"} {this.props.title}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    {this.props.form(this.modalData, (event, name) => this.onInputChange(event, name))}
+                    <BackOfficeForm data={this.modalData} form={this.props.form} onInputChange={(event, name) => this.onInputChange(event, name)} errors={this.state.formErrors}/>
+
                     {this.state.error && <><i className="far fa-info-circle"/>&nbsp;<small>{this.state.error}</small></>}
                 </Modal.Body>
                 <Modal.Footer>
                     <button className="btn btn-success" onClick={(event) => this.props.onHide(event)}>Fermer</button>
-                    <button className="btn btn-smartcity" onClick={(event) => this.props.onSave(event, this.data, this.isAnUpdate)}>Valider</button>
+                    <button className="btn btn-smartcity" onClick={(event) => this.onClickSubmit(event)}>Valider</button>
                 </Modal.Footer>
             </Modal>
         );

@@ -6,6 +6,7 @@ import BackOfficeModal from "../Modals/BackOfficeModal";
 import UserForm from "../Forms/UserForm"
 import ErrorCodeManager from "../ErrorCodeManager"
 import DeletePopup from "../DeletePopup";
+import BackOfficeForm from "../Forms/BackOfficeForm";
 
 class UserBackOffice extends React.Component {
 
@@ -23,7 +24,8 @@ class UserBackOffice extends React.Component {
             popup: {
                 visibility: false,
                 user: undefined
-            }
+            },
+            formErrors: {}
         }
     }
 
@@ -71,6 +73,10 @@ class UserBackOffice extends React.Component {
     onHideModal(event){
         this.setModalVisibility(false);
 
+        const modal = this.state.modal;
+        modal.data = undefined;
+        this.setState({modal});
+
         this.props.onModalClosed();
     }
 
@@ -90,7 +96,9 @@ class UserBackOffice extends React.Component {
             modal.error = ErrorCodeManager.message(error.response ?? error);
         }
 
-        this.setState({modal});
+        modal.data = undefined;
+
+        this.setState({modal, formErrors: {}});
     }
 
     // UPDATE MODAL VISIBILITY
@@ -134,7 +142,7 @@ class UserBackOffice extends React.Component {
             <>
                 <BackOfficeTable columns={userColumns} data={this.state.tableContent} filter={this.props.filter} onClickEditButton={(event, user) => this.onClickEditButton(event, user)} onClickDeleteButton={(event, user) => this.onClickDeleteButton(event, user)} error={this.state.error} mapper={this.rowMapper} />
 
-                <BackOfficeModal data={this.state.modal.data} modalIsVisible={this.state.modal.visibility} form={UserForm} title={"d'un utilisateur"} error={this.state.modal.error} onHide={(event) => this.onHideModal(event)} onSave={(event, object, isAnUpdate) => this.onSaveModal(event, object, isAnUpdate)}/>
+                <BackOfficeModal data={this.state.modal.data} modalIsVisible={this.state.modal.visibility} form={new UserForm()} title={"d'un utilisateur"} error={this.state.modal.error} onHide={(event) => this.onHideModal(event)} onSave={(event, object, isAnUpdate) => this.onSaveModal(event, object, isAnUpdate)}/>
 
                 <DeletePopup popupIsVisible={this.state.popup.visibility} title={"Suppression d'un utilisateur"} content={"Etes-vous certains de vouloir supprimer " + this.state.popup.user?.first_name + " " + this.state.popup.user?.last_name}/>
             </>
