@@ -1,10 +1,8 @@
 import React from 'react';
-import TopBar from "./TopBar";
-import SideBar from "./SideBar";
-import UserBackOffice from "./Tables/UserBackOffice";
-import ReportTable from "./Tables/ReportTable";
-import EventTable from "./Tables/EventTable";
-import ReportTypeTable from "./Tables/ReportTypeTable";
+import TopBar from "./menus/TopBar";
+import SideBar from "./menus/SideBar";
+import UserBackOffice from "./ContentPanel";
+import SideBarItems from "./data/SideBarItems";
 
 class WalloniaFixed extends React.Component{
     constructor(props) {
@@ -12,71 +10,22 @@ class WalloniaFixed extends React.Component{
 
         this.state = {
             data: [],
-            currentButtonChoice: "user",
+            currentItem: SideBarItems[0],
             modalIsVisible: false
         }
     }
 
-    onMenuItemSelected(event, buttonName){
-        this.setState({currentButtonChoice: buttonName});
-    }
-
-    getTable(){
-        switch(this.state.currentButtonChoice){
-            case "user":
-                return <UserBackOffice modalIsVisible={this.state.modalIsVisible} onModalClosed={() => this.onModalClosed()}/>
-            case "report":
-                return <ReportTable modalIsVisible={this.state.modalIsVisible} onModalClosed={() => this.onModalClosed()}/>
-            case "event":
-                return <EventTable modalIsVisible={this.state.modalIsVisible} onModalClosed={() => this.onModalClosed()}/>
-            case "reportType":
-                return <ReportTypeTable modalIsVisible={this.state.modalIsVisible} onModalClosed={() => this.onModalClosed()}/>
-            default:
-                return "";
-        }
-    }
-
-    getTableLabel(name){
-        let label;
-        switch(name){
-            case "user":
-                label = "Utilisateurs";
-                break;
-            case "report":
-                label = "Signalements";
-                break;
-            case "event":
-                label = "Événements";
-                break;
-            case "reportType":
-                label = "Types de signalement";
-                break;
-            default:
-                label = "";
-        }
-
-        return label;
-    }
-
-    getTableIcon(name){
-        switch(name){
-            case "user":
-                return (<i className="far fa-user"/>);
-            case "report":
-                return (<i className="far fa-file-chart-line"/>);
-            case "event":
-                return (<i className="far fa-calendar-week"/>);
-            case "reportType":
-                return (<i className="far fa-list"/>);
-            default:
-                return "";
-        }
+    onMenuItemSelected(event, item){
+        this.setState({currentItem: item});
     }
 
     onModalClosed(){
         this.setState({modalIsVisible: false})
     }
 
+    getTableIcon(){
+        return (<i className={"far " + this.state.currentItem.icon}/>);
+    }
 
     render() {
         return (
@@ -89,13 +38,13 @@ class WalloniaFixed extends React.Component{
                             </div>
                             <div className="row flex-grow-1 px-3">
                                 <div className="col-2 py-4">
-                                    <SideBar onMenuItemSelected={(event, itemSelected) => this.onMenuItemSelected(event, itemSelected)}/>
+                                    <SideBar onMenuItemSelected={(event, item) => this.onMenuItemSelected(event, item)}/>
                                 </div>
                                 <div className="col-10 py-4">
                                     <div id="panel" className="p-3">
                                         <div className="row text-center">
                                             <div className="col">
-                                                <h3 id="table-label">{this.getTableIcon(this.state.currentButtonChoice)}&nbsp;&nbsp;{this.getTableLabel(this.state.currentButtonChoice)}</h3>
+                                                <h3 id="table-label">{this.getTableIcon()}&nbsp;&nbsp;{this.state.currentItem.label}</h3>
                                             </div>
                                         </div>
 
@@ -109,7 +58,7 @@ class WalloniaFixed extends React.Component{
 
                                         <div className="row">
                                             <div className="col">
-                                                {this.getTable()}
+                                                <UserBackOffice modalIsVisible={this.state.modalIsVisible} singularTableLabel={this.state.currentItem.singularLabel} onModalClosed={() => this.onModalClosed()} apiRoute={this.state.currentItem.apiRoute} form={this.state.currentItem.form} columns={this.state.currentItem.columns} mapper={this.state.currentItem.mapper}/>
                                             </div>
                                         </div>
                                     </div>

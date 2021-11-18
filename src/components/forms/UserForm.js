@@ -1,7 +1,7 @@
 import React from "react";
 import {Form} from "react-bootstrap";
 import UserRoles from "./../data/UserRoles"
-import FormError from "../FormError";
+import Error from "../Error";
 
 class UserForm{
     formattedDate(sqlDate){
@@ -31,14 +31,14 @@ class UserForm{
                         <div className="form-group mb-3">
                             <label htmlFor="email">Adresse email</label>
                             <input id="email" type="email" className="form-control" placeholder="Adresse email" defaultValue={user?.email} onChange={(event) => onInputChange(event, "email")}/>
-                            {errors.email && <FormError content={errors.email}/>}
+                            {errors.email && <Error content={errors.email}/>}
                         </div>
                     </div>
                     <div className="col-6">
                         <div className="form-group mb-3">
                             <label htmlFor="password">Mot de passe</label>
                             <input id="password" type="password" className="form-control" placeholder="Mot de passe" onChange={(event) => onInputChange(event, "password")}/>
-                            {errors.password && <FormError content={errors.password}/>}
+                            {errors.password && <Error content={errors.password}/>}
                         </div>
                     </div>
                 </div>
@@ -47,7 +47,7 @@ class UserForm{
                         <div className="form-group mb-3">
                             <label htmlFor="birth_date">Date de naissance</label>
                             <input id="birth_date" type="date" className="form-control" placeholder="Date de naissance" defaultValue={this.formattedDate(user?.birth_date)} onChange={(event) => onInputChange(event, "birth_date")}/>
-                            {errors.birth_date && <FormError content={errors.birth_date}/>}
+                            {errors.birth_date && <Error content={errors.birth_date}/>}
                         </div>
                     </div>
                     <div className="col-6">
@@ -61,7 +61,7 @@ class UserForm{
                                     )
                                 }
                             </Form.Select>
-                            {errors.role && <FormError content={errors.role}/>}
+                            {errors.role && <Error content={errors.role}/>}
                         </div>
                     </div>
                 </div>
@@ -70,7 +70,7 @@ class UserForm{
                         <div className="form-group mb-3">
                             <label htmlFor="lastname">Nom</label>
                             <input id="lastname" type="text" className="form-control" placeholder="Nom" defaultValue={user?.last_name} onChange={(event) => onInputChange(event, "last_name")}/>
-                            {errors.last_name && <FormError content={errors.last_name}/>}
+                            {errors.last_name && <Error content={errors.last_name}/>}
                         </div>
                     </div>
                     <div className="col-6">
@@ -78,7 +78,7 @@ class UserForm{
                             <label htmlFor="firstname">Prénom</label>
                             <input id="firstname" type="text" className="form-control" placeholder="Prénom" defaultValue={user?.first_name} onChange={(event) => onInputChange(event, "first_name")}/>
 
-                            {errors.first_name && <FormError content={errors.first_name}/>}
+                            {errors.first_name && <Error content={errors.first_name}/>}
                         </div>
                     </div>
                 </div>
@@ -88,7 +88,7 @@ class UserForm{
                             <label htmlFor="city">Ville</label>
                             <input id="city" type="text" className="form-control" placeholder="Ville" defaultValue={user?.city} onChange={(event) => onInputChange(event, "city")}/>
 
-                            {errors.city && <FormError content={errors.city}/>}
+                            {errors.city && <Error content={errors.city}/>}
                         </div>
                     </div>
                     <div className="col-6">
@@ -96,7 +96,7 @@ class UserForm{
                             <label htmlFor="street">Rue</label>
                             <input id="street" type="text" className="form-control" placeholder="Rue" defaultValue={user?.street} onChange={(event) => onInputChange(event, "street")}/>
 
-                            {errors.street && <FormError content={errors.street}/>}
+                            {errors.street && <Error content={errors.street}/>}
                         </div>
                     </div>
                 </div>
@@ -106,14 +106,14 @@ class UserForm{
                             <label htmlFor="zip_code">Code postal</label>
                             <input id="zip_code" type="number" className="form-control" placeholder="Code postal" defaultValue={user?.zip_code} onChange={(event) => onInputChange(event, "zip_code")}/>
 
-                            {errors.zip_code && <FormError content={errors.zip_code}/>}
+                            {errors.zip_code && <Error content={errors.zip_code}/>}
                         </div>
                     </div>
                     <div className="col-6">
                         <div className="form-group mb-3">
                             <label htmlFor="house_number">Numéro</label>
                             <input id="house_number" type="text" className="form-control" placeholder="Numéro" defaultValue={user?.house_number} onChange={(event) => onInputChange(event, "house_number")}/>
-                            {errors.house_number && <FormError content={errors.house_number}/>}
+                            {errors.house_number && <Error content={errors.house_number}/>}
                         </div>
                     </div>
                 </div>
@@ -170,14 +170,13 @@ class UserForm{
 
         const zipCode = user?.zip_code;
         if(zipCode === undefined){
-            errors.zip_code = "Rue invalide";
+            errors.zip_code = "Code postal invalide";
         }
 
         const houseNumber = user?.house_number;
         if(houseNumber === undefined || houseNumber.trim() === ""){
-            errors.house_number = "Rue invalide";
+            errors.house_number = "Numéro d'habitation invalide";
         }
-
 
         return Object.keys(errors).length === 0;
     }

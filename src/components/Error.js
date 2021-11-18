@@ -1,6 +1,6 @@
 import React from "react";
 
-class BackOfficeForm extends React.Component {
+class Error extends React.Component {
     render(){
         return(
             <small className="error"><i className="far fa-exclamation-triangle"/> {this.props.content}</small>
@@ -8,4 +8,4 @@ class BackOfficeForm extends React.Component {
     }
 }
 
-export default BackOfficeForm;
+export default Error;

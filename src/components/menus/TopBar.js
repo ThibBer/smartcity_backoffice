@@ -1,6 +1,6 @@
 import React from 'react';
-import './../css/topBar.css'
-import logo from '../logo.svg'
+import '../../css/topBar.css'
+import logo from '../../logo.svg'
 
 class TopBar extends React.Component{
     logout() {

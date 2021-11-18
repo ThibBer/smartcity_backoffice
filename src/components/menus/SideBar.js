@@ -1,9 +1,9 @@
 import React from 'react';
-import './../css/loginForm.css'
-import './../css/verticalActionBar.css'
+import '../../css/loginForm.css'
+import '../../css/verticalActionBar.css'
 import {Accordion} from "react-bootstrap";
 import SearchBar from "./SearchBar";
-import SideBarItems from "./data/SideBarItems"
+import SideBarItems from "../data/SideBarItems"
 
 class SideBar extends React.Component{
 
@@ -16,16 +16,16 @@ class SideBar extends React.Component{
             firstname: "Thibaut",
             lastname: "BERG",
             role: "admin",
-            currentButton: "user"
+            currentButton: SideBarItems[0]
         }
     }
 
-    onMenuItemClick(event, name){
+    onMenuItemClick(event, item){
         this.setState({
-            currentButton: name,
+            currentButton: item,
         });
 
-        this.state.onMenuItemSelected(event, name);
+        this.state.onMenuItemSelected(event, item);
     }
 
     render() {
@@ -52,11 +52,11 @@ class SideBar extends React.Component{
                                 <Accordion.Header>Entités</Accordion.Header>
                                 <Accordion.Body className="px-0">
                                     {
-                                        SideBarItems.map(button => {
+                                        SideBarItems.map(item => {
                                             return (
-                                                <div key={button.name} className=" w-100">
-                                                    <button  className={"btn btn-nav-smartcity  w-100" + (this.state.currentButton === button.name ? " current-menu-item" : "")} onClick={(event) => this.onMenuItemClick(event, button.name)}>
-                                                        <i className={"far "+  button.icon}/> {button.label}
+                                                <div key={item.name} className=" w-100">
+                                                    <button  className={"btn btn-nav-smartcity  w-100" + (this.state.currentButton.name === item.name ? " current-menu-item" : "")} onClick={(event) => this.onMenuItemClick(event, item)}>
+                                                        <i className={"far "+  item.icon}/> {item.label}
                                                     </button>
                                                 </div>
                                             )

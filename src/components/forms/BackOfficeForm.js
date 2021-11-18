@@ -12,7 +12,6 @@ class BackOfficeForm extends React.Component {
 
     componentDidUpdate(previousProps, previousState, snapshot){
         if(previousProps.errors !== this.props.errors){
-            console.log("Errors updated BackOfficeForm")
             this.setState({errors: this.props.errors});
         }
     }

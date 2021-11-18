@@ -1,13 +1,12 @@
 import React from 'react';
 import Spinner from "../Spinner";
-import ErrorCodeManager from "./../ErrorCodeManager";
+import ErrorCodeManager from "../ErrorCodeManager";
 
 class BackOfficeTable extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            filter: props.filter,
             data: props.data,
             error: undefined,
             onClickEditButton: props.onClickEditButton,
@@ -32,7 +31,7 @@ class BackOfficeTable extends React.Component {
     renderTable(){
         return this.state.data.map((object, rowIndex) => {
             return (
-                <tr key={"tr" + rowIndex}>
+                <tr key={"tr" + rowIndex} className={"align-middle"}>
                     {
                         this.props.mapper(object)
                     }
@@ -67,7 +66,7 @@ class BackOfficeTable extends React.Component {
         return this.emptyBody();
     }
 
-    columns(){
+    headerColumns(){
         return this.props.columns.map((column) => {
             return <th scope="col" key={column}>{column}</th>
         })
@@ -79,7 +78,7 @@ class BackOfficeTable extends React.Component {
                 <table id="panel-table" className="table table-striped table-hover">
                     <thead>
                         <tr>
-                            {this.columns()}
+                            {this.headerColumns()}
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
