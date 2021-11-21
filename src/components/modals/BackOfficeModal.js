@@ -3,13 +3,15 @@ import './../../css/panel.css'
 import './../../css/verticalActionBar.css'
 import {Modal} from "react-bootstrap";
 import BackOfficeForm from "../forms/BackOfficeForm";
+import Spinner from "../Spinner";
+import Error from "../Error";
 
 class BackOfficeModal extends React.Component{
-
     constructor(props) {
         super(props);
 
         this.state = {
+            submitted: false,
             modalIsVisible : props.modalIsVisible,
             error: undefined,
             formErrors: {}
@@ -40,25 +42,21 @@ class BackOfficeModal extends React.Component{
         this.modalData[name] = event.target.value;
     }
 
-    onClickSubmit(event){
-        this.setState({formErrors: {}});
-        const formErrors = this.state.formErrors;
+    onClickSubmit(event) {
+        this.setState({submitted: true, formErrors: {}, error: undefined});
+        const formErrors = {};
 
-        if(Object.keys(this.modalData).length > 0){
-            if(this.props.form.isValid(this.modalData, formErrors)){
-                this.setState({errors: {}});
-                this.props.onSave(event, this.data, this.isAnUpdate);
-            }else{
-                this.setState({errors: formErrors});
-            }
+        if (this.props.form.isValid(this.modalData, formErrors)) {
+            this.props.onSave(event, this.modalData, this.isAnUpdate);
         }
 
         this.setState({formErrors});
     }
 
-    onHide(event){
-        this.setState({formErrors: {}});
-        this.props.onHide(event)
+    onHide(event) {
+        this.setState({submitted: false, formErrors: {}, error: undefined});
+        this.props.onHide(event);
+        this.modalData = {};
     }
 
     render() {
@@ -69,8 +67,9 @@ class BackOfficeModal extends React.Component{
                 </Modal.Header>
                 <Modal.Body>
                     <BackOfficeForm data={this.modalData} form={this.props.form} onInputChange={(event, name) => this.onInputChange(event, name)} errors={this.state.formErrors}/>
+                    {(this.state.submitted && this.state.error === undefined && Object.keys(this.state.formErrors).length === 0) && <Spinner text={""} />}
 
-                    {this.state.error && <><i className="far fa-info-circle"/>&nbsp;<small>{this.state.error}</small></>}
+                    {this.state.error && <Error content={this.state.error} icon={"fa-info-circle"}/>}
                 </Modal.Body>
                 <Modal.Footer>
                     <button className="btn btn-success" onClick={(event) => this.onHide(event)}>Fermer</button>

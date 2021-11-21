@@ -1,3 +1,3 @@
 module.exports = [
-    "Type", "État", "Ville", "Rue"
+    "Id", "Description", "État", "Adresse", "Date de création"
 ];

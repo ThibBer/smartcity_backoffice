@@ -19,7 +19,7 @@ class Spinner extends React.Component {
                     <div className="ring"/>
                     <div className="ring"/>
                 </div>
-                <p>Chargement des données en cours</p>
+                <p>{this.props.text ?? "Chargement des données en cours"}</p>
             </div>
         );
     }

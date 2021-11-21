@@ -8,8 +8,7 @@ const mapper = function(user) {
             <td>{(new Date(user.birth_date)).toLocaleDateString()}</td>
             <td>{user.role}</td>
 
-            <td>{user.zip_code + " " + user.city}</td>
-            <td>{user.street + " " + user.house_number}</td>
+            <td>{user.zip_code + " " + user.city}<br/>{user.street + ", " + user.house_number}</td>
         </>
     );
 };

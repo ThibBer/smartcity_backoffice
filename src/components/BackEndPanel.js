@@ -5,7 +5,7 @@ import BackOfficeModal from "./modals/BackOfficeModal";
 import ErrorCodeManager from "./ErrorCodeManager"
 import DeletePopup from "./modals/DeletePopup";
 
-class UserBackOffice extends React.Component {
+class BackEndPanel extends React.Component {
 
     constructor(props) {
         super(props);
@@ -31,6 +31,10 @@ class UserBackOffice extends React.Component {
     }
 
     async loadTableContent(){
+        this.setState({
+            tableContent: undefined
+        });
+
         try {
             const response = await axios.get(process.env.REACT_APP_API_URL + this.props.apiRoute);
             const users = response.data;
@@ -62,10 +66,12 @@ class UserBackOffice extends React.Component {
 
     // ON CLOSE MODAL
     onHideModal(event){
-        this.setModalVisibility(false);
+        const modal = {
+            visibility: false,
+            data: undefined,
+            error: undefined
+        };
 
-        const modal = this.state.modal;
-        modal.data = undefined;
         this.setState({modal});
 
         this.props.onModalClosed();
@@ -73,15 +79,24 @@ class UserBackOffice extends React.Component {
 
     // ON SAVE MODAL
     async onSaveModal(event, data, isAnUpdate){
-        const modal = this.state.modal;
+        const modal = {...this.state.modal};
+        modal.error = undefined;
+        this.setState({modal});
+
         try {
+            const webServiceAddress = process.env.REACT_APP_API_URL + this.props.apiRoute;
             if(isAnUpdate){
-                await axios.patch(process.env.REACT_APP_API_URL + this.props.apiRoute, data);
+                await axios.patch(webServiceAddress, data);
             }else{
-                await axios.post(process.env.REACT_APP_API_URL +  this.props.apiRoute, data);
+                const response = await axios.post(webServiceAddress, data);
+                data.id = response.data.id;
+
+                const tableContent = [...this.state.tableContent];
+                tableContent.push(data)
+
+                this.setState({tableContent});
             }
 
-            modal.error = undefined;
             modal.visibility = false;
         }catch (error) {
             modal.error = ErrorCodeManager.message(error.response ?? error);
@@ -92,17 +107,9 @@ class UserBackOffice extends React.Component {
         this.setState({modal});
     }
 
-    // UPDATE MODAL VISIBILITY
-    setModalVisibility(visibility){
-        const modal = this.state.modal;
-        modal.visibility = visibility;
-
-        this.setState({modal});
-    }
-
     /*TABLE CALLBACKS*/
     onClickEditButton(event, selectedObject){
-        const modal = this.state.modal;
+        const modal = {...this.state.modal};
         modal.visibility = true;
         modal.data = selectedObject;
 
@@ -110,7 +117,7 @@ class UserBackOffice extends React.Component {
     }
 
     onClickDeleteButton(event, selectedObject){
-        const popup = this.state.popup;
+        const popup = {...this.state.popup};
         popup.visibility = true;
         popup.data = selectedObject;
 
@@ -121,8 +128,7 @@ class UserBackOffice extends React.Component {
 
     /*DELETE MODAL CALLBACKS*/
     async onCloseDeletePopup(event, isConfirmed){
-
-        const popup = this.state.popup;
+        const popup = {...this.state.popup};
 
         popup.visibility = false;
         popup.error = undefined;
@@ -154,4 +160,4 @@ class UserBackOffice extends React.Component {
     }
 }
 
-export default UserBackOffice;
+export default BackEndPanel;

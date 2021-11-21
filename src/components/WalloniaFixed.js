@@ -1,7 +1,7 @@
 import React from 'react';
 import TopBar from "./menus/TopBar";
 import SideBar from "./menus/SideBar";
-import UserBackOffice from "./ContentPanel";
+import BackEndPanel from "./BackEndPanel";
 import SideBarItems from "./data/SideBarItems";
 
 class WalloniaFixed extends React.Component{
@@ -9,7 +9,6 @@ class WalloniaFixed extends React.Component{
         super(props);
 
         this.state = {
-            data: [],
             currentItem: SideBarItems[0],
             modalIsVisible: false
         }
@@ -58,7 +57,7 @@ class WalloniaFixed extends React.Component{
 
                                         <div className="row">
                                             <div className="col">
-                                                <UserBackOffice modalIsVisible={this.state.modalIsVisible} singularTableLabel={this.state.currentItem.singularLabel} onModalClosed={() => this.onModalClosed()} apiRoute={this.state.currentItem.apiRoute} form={this.state.currentItem.form} columns={this.state.currentItem.columns} mapper={this.state.currentItem.mapper}/>
+                                                <BackEndPanel modalIsVisible={this.state.modalIsVisible} singularTableLabel={this.state.currentItem.singularLabel} onModalClosed={() => this.onModalClosed()} apiRoute={this.state.currentItem.apiRoute} form={this.state.currentItem.form} columns={this.state.currentItem.columns} mapper={this.state.currentItem.mapper}/>
                                             </div>
                                         </div>
                                     </div>
