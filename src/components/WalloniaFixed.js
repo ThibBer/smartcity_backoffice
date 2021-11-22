@@ -35,7 +35,7 @@ class WalloniaFixed extends React.Component{
                             <div className="row">
                                 <TopBar/>
                             </div>
-                            <div className="row flex-grow-1 px-3">
+                            <div className="row flex-grow-1">
                                 <div className="col-2 py-4">
                                     <SideBar onMenuItemSelected={(event, item) => this.onMenuItemSelected(event, item)}/>
                                 </div>

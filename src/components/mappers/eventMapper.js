@@ -1,13 +1,14 @@
 const mapper = function(event) {
-    const eventDate = new Date(event.date);
+    const eventDate = new Date(event.date_hour);
 
     return (
         <>
             <td>{event.id}</td>
+            <td>{event.description ?? "/"}</td>
             <td>{eventDate.toLocaleDateString()} {eventDate.toLocaleTimeString()}</td>
-            <td>{eventDate.length}</td>
-            <td>{eventDate.report}</td>
-            <td>{eventDate.creator}</td>
+            <td>{event.duration} minutes</td>
+            <td>{event.report}</td>
+            <td>{event.creator}</td>
         </>
     );
 };

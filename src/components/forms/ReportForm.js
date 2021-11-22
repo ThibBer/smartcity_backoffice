@@ -1,9 +1,9 @@
 import React from "react";
 import {Form} from "react-bootstrap";
-import UserRoles from "./../data/UserRoles"
+import ReportStates from "./../data/ReportStates"
 import Error from "../Error";
 
-class UserForm{
+class reportForm{
     formattedDate(sqlDate){
         if(sqlDate === undefined){
             return sqlDate;
@@ -21,64 +21,33 @@ class UserForm{
         return number;
     }
 
-    getForm(user, errors, onInputChange){
-        user.password = undefined;
-
+    getForm(report, errors, onInputChange){
         return(
             <form>
                 <div className="row">
-                    <div className="col-6">
+                    <div className="col">
                         <div className="form-group mb-3">
-                            <label htmlFor="email">Adresse email</label>
-                            <input id="email" type="email" className="form-control" placeholder="Adresse email" defaultValue={user?.email} onChange={(event) => onInputChange(event, "email")}/>
-                            {errors.email && <Error content={errors.email}/>}
-                        </div>
-                    </div>
-                    <div className="col-6">
-                        <div className="form-group mb-3">
-                            <label htmlFor="password">Mot de passe</label>
-                            <input id="password" type="password" className="form-control" placeholder="Mot de passe" onChange={(event) => onInputChange(event, "password")}/>
-                            {errors.password && <Error content={errors.password}/>}
+                            <label htmlFor="description">Description</label>
+
+                            <textarea className="form-control" id="description" rows="3" placeholder="Description" defaultValue={report?.description} onChange={(event) => onInputChange(event, "description")}/>
+                            {errors.description && <Error content={errors.description}/>}
                         </div>
                     </div>
                 </div>
+
                 <div className="row">
-                    <div className="col-6">
+                    <div className="col">
                         <div className="form-group mb-3">
-                            <label htmlFor="birth_date">Date de naissance</label>
-                            <input id="birth_date" type="date" className="form-control" placeholder="Date de naissance" defaultValue={this.formattedDate(user?.birth_date)} onChange={(event) => onInputChange(event, "birth_date")}/>
-                            {errors.birth_date && <Error content={errors.birth_date}/>}
-                        </div>
-                    </div>
-                    <div className="col-6">
-                        <div className="form-group mb-3">
-                            <label htmlFor="group">Rôle utilisateur</label>
-                            <Form.Select id="group" onClick={(event) => onInputChange(event, "role")}>
-                                <option>Rôle</option>
+                            <label htmlFor="state">État</label>
+                            <Form.Select id="state" onClick={(event) => onInputChange(event, "state")}>
+                                <option>État</option>
                                 {
-                                    Object.keys(UserRoles).map(role =>
-                                        (user?.role === role) ? <option key={role} value={role} defaultValue>{UserRoles[role]}</option> : <option key={role} value={role}>{UserRoles[role]}</option>
+                                    Object.keys(ReportStates).map(state =>
+                                        (report?.state === state) ? <option key={state} value={state} defaultValue>{ReportStates[state]}</option> : <option key={state} value={state}>{ReportStates[state]}</option>
                                     )
                                 }
                             </Form.Select>
-                            {errors.role && <Error content={errors.role}/>}
-                        </div>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-6">
-                        <div className="form-group mb-3">
-                            <label htmlFor="lastname">Nom</label>
-                            <input id="lastname" type="text" className="form-control" placeholder="Nom" defaultValue={user?.last_name} onChange={(event) => onInputChange(event, "last_name")}/>
-                            {errors.last_name && <Error content={errors.last_name}/>}
-                        </div>
-                    </div>
-                    <div className="col-6">
-                        <div className="form-group mb-3">
-                            <label htmlFor="firstname">Prénom</label>
-                            <input id="firstname" type="text" className="form-control" placeholder="Prénom" defaultValue={user?.first_name} onChange={(event) => onInputChange(event, "first_name")}/>
-
-                            {errors.first_name && <Error content={errors.first_name}/>}
+                            {errors.state && <Error content={errors.state}/>}
                         </div>
                     </div>
                 </div>
@@ -86,7 +55,7 @@ class UserForm{
                     <div className="col-6">
                         <div className="form-group mb-3">
                             <label htmlFor="city">Ville</label>
-                            <input id="city" type="text" className="form-control" placeholder="Ville" defaultValue={user?.city} onChange={(event) => onInputChange(event, "city")}/>
+                            <input id="city" type="text" className="form-control" placeholder="Ville" defaultValue={report?.city} onChange={(event) => onInputChange(event, "city")}/>
 
                             {errors.city && <Error content={errors.city}/>}
                         </div>
@@ -94,7 +63,7 @@ class UserForm{
                     <div className="col-6">
                         <div className="form-group mb-3">
                             <label htmlFor="street">Rue</label>
-                            <input id="street" type="text" className="form-control" placeholder="Rue" defaultValue={user?.street} onChange={(event) => onInputChange(event, "street")}/>
+                            <input id="street" type="text" className="form-control" placeholder="Rue" defaultValue={report?.street} onChange={(event) => onInputChange(event, "street")}/>
 
                             {errors.street && <Error content={errors.street}/>}
                         </div>
@@ -104,7 +73,7 @@ class UserForm{
                     <div className="col-6">
                         <div className="form-group mb-3">
                             <label htmlFor="zip_code">Code postal</label>
-                            <input id="zip_code" type="number" className="form-control" placeholder="Code postal" defaultValue={user?.zip_code} onChange={(event) => onInputChange(event, "zip_code")}/>
+                            <input id="zip_code" type="number" className="form-control" placeholder="Code postal" defaultValue={report?.zip_code} onChange={(event) => onInputChange(event, "zip_code")}/>
 
                             {errors.zip_code && <Error content={errors.zip_code}/>}
                         </div>
@@ -112,7 +81,7 @@ class UserForm{
                     <div className="col-6">
                         <div className="form-group mb-3">
                             <label htmlFor="house_number">Numéro</label>
-                            <input id="house_number" type="text" className="form-control" placeholder="Numéro" defaultValue={user?.house_number} onChange={(event) => onInputChange(event, "house_number")}/>
+                            <input id="house_number" type="text" className="form-control" placeholder="Numéro" defaultValue={report?.house_number} onChange={(event) => onInputChange(event, "house_number")}/>
                             {errors.house_number && <Error content={errors.house_number}/>}
                         </div>
                     </div>
@@ -121,59 +90,28 @@ class UserForm{
         );
     }
 
-    isValid(user, errors){
-
-        const email = user?.email;
-        if(email === undefined || !email.match("[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")){
-            errors.email = "Email invalide";
+    isValid(report, errors){
+        const state = report?.state;
+        if(state === undefined || state === "État"){
+            errors.state = "État invalide";
         }
 
-        const password = user?.password;
-        if(password === undefined || password.trim() === ""){
-            errors.password = "Mot de passe invalide";
-        }
-
-        const birth_date = user?.birth_date;
-        const now = new Date();
-        const birthDate = new Date(birth_date);
-
-        if(birth_date === undefined){
-            errors.birth_date = "Date invalide";
-        }else if(new Date(birthDate) >= now){
-            errors.birth_date = "La date ne peut pas être égale ou après aujourd'hui";
-        }
-
-        const role = user?.role;
-        if(role === undefined || role === "Rôle"){
-            errors.role = "Rôle invalide";
-        }
-
-        const firstName = user?.first_name;
-        if(firstName === undefined || firstName.trim() === ""){
-            errors.first_name = "Prénom invalide";
-        }
-
-        const lastName = user?.last_name;
-        if(lastName === undefined || lastName.trim() === ""){
-            errors.last_name = "Nom invalide";
-        }
-
-        const city = user?.city;
+        const city = report?.city;
         if(city === undefined || city.trim() === ""){
             errors.city = "Ville invalide";
         }
 
-        const street = user?.street;
+        const street = report?.street;
         if(street === undefined || street.trim() === ""){
             errors.street = "Rue invalide";
         }
 
-        const zipCode = user?.zip_code;
+        const zipCode = report?.zip_code;
         if(zipCode === undefined){
             errors.zip_code = "Code postal invalide";
         }
 
-        const houseNumber = user?.house_number;
+        const houseNumber = report?.house_number;
         if(houseNumber === undefined || houseNumber.trim() === ""){
             errors.house_number = "Numéro d'habitation invalide";
         }
@@ -182,4 +120,4 @@ class UserForm{
     }
 }
 
-export default UserForm;
+export default reportForm;

@@ -128,11 +128,6 @@ class UserForm{
             errors.email = "Email invalide";
         }
 
-        const password = user?.password;
-        if(password === undefined || password.trim() === ""){
-            errors.password = "Mot de passe invalide";
-        }
-
         const birth_date = user?.birth_date;
         const now = new Date();
         const birthDate = new Date(birth_date);

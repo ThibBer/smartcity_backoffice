@@ -58,6 +58,7 @@ class BackEndPanel extends React.Component {
         }
 
         if(previousProps.apiRoute !== this.props.apiRoute){
+            this.setState({tableContent: undefined})
             await this.loadTableContent();
         }
     }

@@ -22,6 +22,7 @@ class LoginForm extends React.Component{
 
         try{
             const response = await axios.post(process.env.REACT_APP_API_URL + "/login", {email: this.state.email, password: this.state.password});
+            console.log(response)
         }catch (e) {
             const error = e.response;
             errorMessage = "Une erreur inattendue est survenue ...";

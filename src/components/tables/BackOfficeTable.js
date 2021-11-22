@@ -69,7 +69,7 @@ class BackOfficeTable extends React.Component {
     headerColumns(){
         return this.props.columns.map((column) => {
             return <th scope="col" key={column}>{column}</th>
-        })
+        });
     }
 
     tableContent(){
