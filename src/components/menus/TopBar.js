@@ -4,7 +4,7 @@ import logo from '../../logo.svg'
 
 class TopBar extends React.Component{
     logout() {
-
+        localStorage.removeItem("jwt");
     }
 
     render() {

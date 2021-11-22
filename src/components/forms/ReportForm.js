@@ -4,24 +4,7 @@ import ReportStates from "./../data/ReportStates"
 import Error from "../Error";
 
 class reportForm{
-    formattedDate(sqlDate){
-        if(sqlDate === undefined){
-            return sqlDate;
-        }
-
-        const date = new Date(sqlDate);
-        return date.getFullYear()  + '-' + this.twoDigitFormatNumber(date.getMonth() + 1) + '-' + this.twoDigitFormatNumber(date.getDate());
-    }
-
-    twoDigitFormatNumber(number){
-        if(number <= 9){
-            return "0" + number;
-        }
-
-        return number;
-    }
-
-    getForm(report, errors, onInputChange){
+    getForm(report, errors, onInputChange, auxiliaryData){
         return(
             <form>
                 <div className="row">
@@ -51,6 +34,34 @@ class reportForm{
                         </div>
                     </div>
                 </div>
+
+                <div className="row">
+                    <div className="col-6">
+                        <div className="form-group mb-3">
+                            <label htmlFor="creator">Créateur</label>
+                            <input id="creator" type="number" className="form-control" placeholder="Créateur" defaultValue={report?.creator} onChange={(event) => onInputChange(event, "creator")}/>
+
+                            {errors.creator && <Error content={errors.creator}/>}
+                        </div>
+                    </div>
+                    <div className="col-6">
+                        <div className="form-group mb-3">
+                            <label htmlFor="creator">Type de report</label>
+                            <Form.Select id="reportType" onClick={(event) => onInputChange(event, "reportType")}>
+                                <option>État</option>
+                                {
+                                    Object.keys(auxiliaryData.reportTypes).map((str, index) =>{
+                                        const reportType = auxiliaryData.reportTypes[index];
+
+                                        return (report?.report_type.id === reportType.id) ? <option key={index} value={reportType.id} defaultValue>{reportType.label}</option> : <option key={index} value={reportType.id}>{reportType.label}</option>
+                                    })
+                                }
+                            </Form.Select>
+                            {errors.creator && <Error content={errors.creator}/>}
+                        </div>
+                    </div>
+                </div>
+
                 <div className="row">
                     <div className="col-6">
                         <div className="form-group mb-3">
@@ -90,7 +101,8 @@ class reportForm{
         );
     }
 
-    isValid(report, errors){
+    isValid(formReport, errors){
+        const report = {...formReport};
         const state = report?.state;
         if(state === undefined || state === "État"){
             errors.state = "État invalide";

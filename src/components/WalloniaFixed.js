@@ -26,6 +26,10 @@ class WalloniaFixed extends React.Component{
         return (<i className={"far " + this.state.currentItem.icon}/>);
     }
 
+    onClickAddElementButton(event){
+        this.setState({modalIsVisible: true});
+    }
+
     render() {
         return (
             <div className="container-fluid">
@@ -49,7 +53,7 @@ class WalloniaFixed extends React.Component{
 
                                         <div className="row">
                                             <div className="col">
-                                                <button className="btn btn-smartcity rounded-pill" onClick={(event) => {this.setState({modalIsVisible: true})}}>
+                                                <button className="btn btn-smartcity rounded-pill" onClick={(event) => this.onClickAddElementButton(event)}>
                                                     <i className="far fa-plus-circle"/>&nbsp;&nbsp;Ajouter un élément
                                                 </button>
                                             </div>

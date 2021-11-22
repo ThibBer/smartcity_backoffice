@@ -14,7 +14,7 @@ class BackOfficeModal extends React.Component{
             submitted: false,
             modalIsVisible : props.modalIsVisible,
             error: undefined,
-            formErrors: {}
+            formErrors: {},
         }
 
         this.modalData = {}
@@ -24,7 +24,7 @@ class BackOfficeModal extends React.Component{
     componentDidUpdate(previousProps, previousState, snapshot){
         if(previousProps.modalIsVisible !== this.props.modalIsVisible){
             this.setState({
-                modalIsVisible: this.props.modalIsVisible
+                modalIsVisible: this.props.modalIsVisible,
             });
         }
 
@@ -48,9 +48,11 @@ class BackOfficeModal extends React.Component{
 
         if (this.props.form.isValid(this.modalData, formErrors)) {
             this.props.onSave(event, this.modalData, this.isAnUpdate);
-        }
 
-        this.setState({formErrors});
+            this.setState({submitted: false});
+        }else{
+            this.setState({formErrors});
+        }
     }
 
     onHide(event) {
@@ -66,7 +68,7 @@ class BackOfficeModal extends React.Component{
                     <Modal.Title>{this.isAnUpdate ? "Modification" : "Création"} d'un {this.props.title}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <BackOfficeForm data={this.modalData} form={this.props.form} onInputChange={(event, name) => this.onInputChange(event, name)} errors={this.state.formErrors}/>
+                    <BackOfficeForm data={this.modalData} form={this.props.form} onInputChange={(event, name) => this.onInputChange(event, name)} errors={this.state.formErrors} auxiliaryData={this.props.auxiliaryData}/>
                     {(this.state.submitted && this.state.error === undefined && Object.keys(this.state.formErrors).length === 0) && <Spinner text={""} />}
 
                     {this.state.error && <Error content={this.state.error} icon={"fa-info-circle"}/>}

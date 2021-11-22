@@ -4,18 +4,22 @@ import '../../css/verticalActionBar.css'
 import {Accordion} from "react-bootstrap";
 import SearchBar from "./SearchBar";
 import SideBarItems from "../data/SideBarItems"
+import UserRoles from "../data/UserRoles"
 
 class SideBar extends React.Component{
 
     constructor(props) {
         super(props);
 
+        const jwt = localStorage.getItem("jwt");
+        const payload = jwt.split(".")[1];
+        const userData = JSON.parse(Buffer.from(payload, 'base64').toString('utf-8'));
+
         this.state = {
             onMenuItemSelected: props.onMenuItemSelected,
-            login: "",
-            firstname: "Thibaut",
-            lastname: "BERG",
-            role: "admin",
+            firstname: userData.first_name,
+            lastname: userData.last_name,
+            role: UserRoles[userData.role],
             currentButton: SideBarItems[0]
         }
     }
@@ -33,8 +37,8 @@ class SideBar extends React.Component{
             <div id="vertical-action-bar">
                 <div className="row text-center">
                     <div className="col">
-                        <h4>{this.state.firstname} {this.state.lastname}</h4>
-                        <p>{this.state.role.toUpperCase()}</p>
+                        <h4>{this.state.firstname.toUpperCase()} {this.state.lastname.toUpperCase()}</h4>
+                        <p className={"user-role"}>{this.state.role?.toUpperCase()}</p>
                     </div>
                 </div>
                 <div className="row">

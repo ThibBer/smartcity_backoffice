@@ -1,17 +1,21 @@
 import React from 'react';
 import '../../css/loginForm.css'
-import axios from "axios";
 import Error from "../Error";
+import {Redirect} from "react-router-dom";
+
+import axios from "axios";
+import axiosRetry from 'axios-retry';
+axiosRetry(axios, {retries: process.env.REACT_APP_EXPONENTIAL_RETRY_COUNT});
 
 class LoginForm extends React.Component{
-
     constructor(props) {
         super(props);
 
         this.state = {
             email: "",
             password: "",
-            error: undefined
+            error: undefined,
+            isLogged: false
         }
     }
 
@@ -22,7 +26,19 @@ class LoginForm extends React.Component{
 
         try{
             const response = await axios.post(process.env.REACT_APP_API_URL + "/login", {email: this.state.email, password: this.state.password});
-            console.log(response)
+            const jwt = response.data;
+
+            const payload = jwt.split(".")[1];
+            const userData = JSON.parse(Buffer.from(payload, 'base64').toString('utf-8'));
+
+            if(Date.now() >= userData.exp * 1000){
+                this.setState({error: "Votre session à expirée. Veuillez vous connecter"});
+            } else if(userData.role !== "admin"){
+                this.setState({error: "Vous n'êtes pas autorisé à vous connecter."});
+            }else{
+                localStorage.setItem("jwt", jwt);
+                this.setState({isLogged: true, error: undefined});
+            }
         }catch (e) {
             const error = e.response;
             errorMessage = "Une erreur inattendue est survenue ...";
@@ -32,16 +48,16 @@ class LoginForm extends React.Component{
             }else if (error.status === 404){
                 errorMessage = "Adresse email et/ou mot de passe invalide";
             }
+
+            this.setState({error: errorMessage});
         }
-
-        this.setState({error: errorMessage});
-    }
-
-    formDataAreValid(){
-        return this.state.email.length > 0 && this.state.password.length > 0;
     }
 
     render() {
+        if(this.state.isLogged){
+            return <Redirect to="/"/>
+        }
+
         return (
             <div className="container">
                 <div className="row justify-content-center">

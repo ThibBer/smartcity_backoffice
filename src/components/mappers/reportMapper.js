@@ -17,6 +17,7 @@ const mapper = function(report) {
             <td>{formatState(report.state)}</td>
             <td>{report.zip_code + " " + report.city}<br/>{report.street + ", " + report.house_number}</td>
             <td>{createdAt.toLocaleDateString()} {createdAt.toLocaleTimeString()}</td>
+            <td>{report.reporter}</td>
         </>
     );
 };
