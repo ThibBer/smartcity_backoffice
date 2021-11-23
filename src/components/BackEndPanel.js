@@ -6,7 +6,7 @@ import DeletePopup from "./modals/DeletePopup";
 
 import axios from "axios";
 import axiosRetry from 'axios-retry';
-axiosRetry(axios, {retries: process.env.REACT_APP_EXPONENTIAL_RETRY_COUNT});
+axiosRetry(axios, {retries: process.env.REACT_APP_EXPONENTIAL_RETRY_COUNT, retryDelay: axiosRetry.exponentialDelay});
 
 class BackEndPanel extends React.Component {
 
@@ -43,11 +43,9 @@ class BackEndPanel extends React.Component {
             const response = await axios.get(process.env.REACT_APP_API_URL + this.props.apiRoute);
 
             this.setState({tableContent: response.data});
-
-            console.log(this.state)
         }catch (error) {
             this.setState({
-                error: error.response ?? error
+                error: error
             })
         }
     }
@@ -84,9 +82,8 @@ class BackEndPanel extends React.Component {
 
     // ON SAVE MODAL
     async onSaveModal(event, data, isAnUpdate){
+        alert("OnSaveModal")
         const modal = {...this.state.modal};
-        modal.error = undefined;
-        this.setState({modal});
 
         try {
             const webServiceAddress = process.env.REACT_APP_API_URL + this.props.apiRoute;
@@ -103,8 +100,9 @@ class BackEndPanel extends React.Component {
             }
 
             modal.visibility = false;
+            modal.error = undefined;
         }catch (error) {
-            modal.error = ErrorCodeManager.message(error.response ?? error);
+            modal.error = ErrorCodeManager.message(error);
         }
 
         modal.data = undefined;
@@ -124,7 +122,7 @@ class BackEndPanel extends React.Component {
             const response = await axios.get(process.env.REACT_APP_API_URL + "reportType");
             const reportTypes = response.data;
 
-            modal.auxiliaryData.reportTypes= reportTypes;
+            modal.auxiliaryData.reportTypes = reportTypes;
         }
 
         this.setState({modal});
@@ -153,10 +151,10 @@ class BackEndPanel extends React.Component {
 
         if(isConfirmed){
             try {
-                await axios.delete(process.env.REACT_APP_API_URL + this.props.apiRoute, {data: popup.data.id});
+                await axios.delete(process.env.REACT_APP_API_URL + this.props.apiRoute, {data: popup.data});
             }catch (error) {
-                popup.error = ErrorCodeManager.message(error.response ?? error);
                 popup.visibility = true;
+                popup.error = ErrorCodeManager.message(error);
             }
         }
 

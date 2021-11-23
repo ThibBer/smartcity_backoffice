@@ -1,4 +1,5 @@
-Stocker jwt dans le Storage ou LocalStorage
+Exponential Rety -> seulement pour les get ?
+
 
 ## Fichier .env
 ```

@@ -10,7 +10,7 @@ class ReportTypeForm{
                         <div className="form-group mb-3">
                             <label htmlFor="label">Libellé</label>
                             <input id="label" type="text" className="form-control" placeholder="Libellé" defaultValue={reportType?.label} onChange={(event) => onInputChange(event, "label")}/>
-                            {errors.label && <Error content={errors.label}/>}
+                            {errors?.label && <Error content={errors.label}/>}
                         </div>
                     </div>
                 </div>
@@ -18,14 +18,15 @@ class ReportTypeForm{
         );
     }
 
-    isValid(reportType, errors){
+    validation(reportType){
+        const errors = {};
         const label = reportType?.label;
 
         if(label === undefined || label.trim() === ""){
             errors.label = "Libellé invalide";
         }
 
-        return Object.keys(errors).length === 0;
+        return {object: reportType, errors: errors, isValid: Object.keys(errors).length === 0};
     }
 }
 

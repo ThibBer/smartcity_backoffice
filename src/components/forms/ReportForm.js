@@ -13,7 +13,7 @@ class reportForm{
                             <label htmlFor="description">Description</label>
 
                             <textarea className="form-control" id="description" rows="3" placeholder="Description" defaultValue={report?.description} onChange={(event) => onInputChange(event, "description")}/>
-                            {errors.description && <Error content={errors.description}/>}
+                            {errors?.description && <Error content={errors.description}/>}
                         </div>
                     </div>
                 </div>
@@ -30,7 +30,7 @@ class reportForm{
                                     )
                                 }
                             </Form.Select>
-                            {errors.state && <Error content={errors.state}/>}
+                            {errors?.state && <Error content={errors.state}/>}
                         </div>
                     </div>
                 </div>
@@ -41,23 +41,24 @@ class reportForm{
                             <label htmlFor="creator">Créateur</label>
                             <input id="creator" type="number" className="form-control" placeholder="Créateur" defaultValue={report?.creator} onChange={(event) => onInputChange(event, "creator")}/>
 
-                            {errors.creator && <Error content={errors.creator}/>}
+                            {errors?.creator && <Error content={errors.creator}/>}
                         </div>
                     </div>
                     <div className="col-6">
                         <div className="form-group mb-3">
-                            <label htmlFor="creator">Type de report</label>
+                            <label htmlFor="reportType">Type de report</label>
                             <Form.Select id="reportType" onClick={(event) => onInputChange(event, "reportType")}>
-                                <option>État</option>
+                                <option>Type de report</option>
                                 {
                                     Object.keys(auxiliaryData.reportTypes).map((str, index) =>{
                                         const reportType = auxiliaryData.reportTypes[index];
+                                        const currentReportId = report?.report_type?.id;
 
-                                        return (report?.report_type.id === reportType.id) ? <option key={index} value={reportType.id} defaultValue>{reportType.label}</option> : <option key={index} value={reportType.id}>{reportType.label}</option>
+                                        return (currentReportId === reportType.id) ? <option key={index} value={reportType} defaultValue>{reportType.label}</option> : <option key={index} value={reportType}>{reportType.label}</option>
                                     })
                                 }
                             </Form.Select>
-                            {errors.creator && <Error content={errors.creator}/>}
+                            {errors?.reportType && <Error content={errors.reportType}/>}
                         </div>
                     </div>
                 </div>
@@ -68,7 +69,7 @@ class reportForm{
                             <label htmlFor="city">Ville</label>
                             <input id="city" type="text" className="form-control" placeholder="Ville" defaultValue={report?.city} onChange={(event) => onInputChange(event, "city")}/>
 
-                            {errors.city && <Error content={errors.city}/>}
+                            {errors?.city && <Error content={errors.city}/>}
                         </div>
                     </div>
                     <div className="col-6">
@@ -76,7 +77,7 @@ class reportForm{
                             <label htmlFor="street">Rue</label>
                             <input id="street" type="text" className="form-control" placeholder="Rue" defaultValue={report?.street} onChange={(event) => onInputChange(event, "street")}/>
 
-                            {errors.street && <Error content={errors.street}/>}
+                            {errors?.street && <Error content={errors.street}/>}
                         </div>
                     </div>
                 </div>
@@ -86,14 +87,14 @@ class reportForm{
                             <label htmlFor="zip_code">Code postal</label>
                             <input id="zip_code" type="number" className="form-control" placeholder="Code postal" defaultValue={report?.zip_code} onChange={(event) => onInputChange(event, "zip_code")}/>
 
-                            {errors.zip_code && <Error content={errors.zip_code}/>}
+                            {errors?.zip_code && <Error content={errors.zip_code}/>}
                         </div>
                     </div>
                     <div className="col-6">
                         <div className="form-group mb-3">
                             <label htmlFor="house_number">Numéro</label>
                             <input id="house_number" type="text" className="form-control" placeholder="Numéro" defaultValue={report?.house_number} onChange={(event) => onInputChange(event, "house_number")}/>
-                            {errors.house_number && <Error content={errors.house_number}/>}
+                            {errors?.house_number && <Error content={errors.house_number}/>}
                         </div>
                     </div>
                 </div>
@@ -101,7 +102,8 @@ class reportForm{
         );
     }
 
-    isValid(formReport, errors){
+    validation(formReport){
+        const errors = {};
         const report = {...formReport};
         const state = report?.state;
         if(state === undefined || state === "État"){
@@ -128,7 +130,14 @@ class reportForm{
             errors.house_number = "Numéro d'habitation invalide";
         }
 
-        return Object.keys(errors).length === 0;
+        const reportType = formReport.reportType;
+        if(reportType === undefined || reportType === "Type de report"){
+            formReport.report_type = reportType;
+
+            delete formReport.reportType;
+        }
+
+        return {object: formReport, errors: errors, isValid: Object.keys(errors).length === 0};
     }
 }
 
