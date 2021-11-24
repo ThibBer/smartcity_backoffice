@@ -1,5 +1,5 @@
 Exponential Rety -> seulement pour les get ?
-
+Beug quand on supprime et qu'on edit juste après
 
 ## Fichier .env
 ```

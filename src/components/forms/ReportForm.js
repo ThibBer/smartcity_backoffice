@@ -22,11 +22,11 @@ class reportForm{
                     <div className="col">
                         <div className="form-group mb-3">
                             <label htmlFor="state">État</label>
-                            <Form.Select id="state" onClick={(event) => onInputChange(event, "state")}>
+                            <Form.Select id="state" onChange={(event) => onInputChange(event, "state")} value={report?.state}>
                                 <option>État</option>
                                 {
                                     Object.keys(ReportStates).map(state =>
-                                        (report?.state === state) ? <option key={state} value={state} defaultValue>{ReportStates[state]}</option> : <option key={state} value={state}>{ReportStates[state]}</option>
+                                        <option key={state} value={state}>{ReportStates[state]}</option>
                                     )
                                 }
                             </Form.Select>
@@ -38,27 +38,25 @@ class reportForm{
                 <div className="row">
                     <div className="col-6">
                         <div className="form-group mb-3">
-                            <label htmlFor="creator">Créateur</label>
-                            <input id="creator" type="number" className="form-control" placeholder="Créateur" defaultValue={report?.creator} onChange={(event) => onInputChange(event, "creator")}/>
+                            <label htmlFor="reporter">Créateur</label>
+                            <input id="reporter" type="number" className="form-control" placeholder="Créateur" defaultValue={report?.reporter} onChange={(event) => onInputChange(event, "reporter")}/>
 
-                            {errors?.creator && <Error content={errors.creator}/>}
+                            {errors?.reporter && <Error content={errors.reporter}/>}
                         </div>
                     </div>
                     <div className="col-6">
                         <div className="form-group mb-3">
-                            <label htmlFor="reportType">Type de report</label>
-                            <Form.Select id="reportType" onClick={(event) => onInputChange(event, "reportType")}>
-                                <option>Type de report</option>
-                                {
-                                    Object.keys(auxiliaryData.reportTypes).map((str, index) =>{
-                                        const reportType = auxiliaryData.reportTypes[index];
-                                        const currentReportId = report?.report_type?.id;
+                            <label htmlFor="report_type">Type de signalement</label>
 
-                                        return (currentReportId === reportType.id) ? <option key={index} value={reportType} defaultValue>{reportType.label}</option> : <option key={index} value={reportType}>{reportType.label}</option>
+                            <Form.Select id="report_type" onChange={(event) => onInputChange(event, "report_type")} value={report?.report_type}>
+                                <option>Type de signalement</option>
+                                {
+                                    auxiliaryData.reportTypes && auxiliaryData.reportTypes.map((reportType, index) =>{
+                                        return <option key={index} value={index}>{reportType.label}</option>
                                     })
                                 }
                             </Form.Select>
-                            {errors?.reportType && <Error content={errors.reportType}/>}
+                            {errors?.report_type && <Error content={errors.report_type}/>}
                         </div>
                     </div>
                 </div>
@@ -102,12 +100,18 @@ class reportForm{
         );
     }
 
-    validation(formReport){
+    validation(formReport, auxiliaryData){
         const errors = {};
         const report = {...formReport};
+
         const state = report?.state;
         if(state === undefined || state === "État"){
             errors.state = "État invalide";
+        }
+
+        const reporter = report?.reporter;
+        if(reporter === undefined){
+            errors.reporter = "Créateur invalide";
         }
 
         const city = report?.city;
@@ -130,11 +134,11 @@ class reportForm{
             errors.house_number = "Numéro d'habitation invalide";
         }
 
-        const reportType = formReport.reportType;
-        if(reportType === undefined || reportType === "Type de report"){
-            formReport.report_type = reportType;
-
-            delete formReport.reportType;
+        const reportType = formReport.report_type;
+        if(reportType === undefined || reportType === "Type de signalement"){
+            errors.report_type = "Type de signalement invalide";
+        }else{
+            formReport.report_type = auxiliaryData.reportTypes[reportType];
         }
 
         return {object: formReport, errors: errors, isValid: Object.keys(errors).length === 0};

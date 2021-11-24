@@ -2,6 +2,7 @@ import React from 'react';
 import '../../css/loginForm.css'
 import Error from "../Error";
 import {Redirect} from "react-router-dom";
+import JwtManager from "../../JwtManager";
 
 import axios from "axios";
 import axiosRetry from 'axios-retry';
@@ -21,19 +22,16 @@ class LoginForm extends React.Component{
 
     async login(event){
         event.preventDefault();
-
         let errorMessage = undefined;
 
         try{
             const response = await axios.post(process.env.REACT_APP_API_URL + "/login", {email: this.state.email, password: this.state.password});
             const jwt = response.data;
+            const decodeJWT = JwtManager.decode(jwt);
 
-            const payload = jwt.split(".")[1];
-            const userData = JSON.parse(Buffer.from(payload, 'base64').toString('utf-8'));
-
-            if(Date.now() >= userData.exp * 1000){
+            if(!JwtManager.isValid(decodeJWT)){
                 this.setState({error: "Votre session à expirée. Veuillez vous connecter"});
-            } else if(userData.role !== "admin"){
+            } else if(decodeJWT.payload.role !== "admin"){
                 this.setState({error: "Vous n'êtes pas autorisé à vous connecter."});
             }else{
                 localStorage.setItem("jwt", jwt);
@@ -63,7 +61,7 @@ class LoginForm extends React.Component{
                 <div className="row justify-content-center">
                     <div className="d-flex flex-column min-vh-100 justify-content-center w-50">
                         <div id="form-container" className="bg-smartcity p-5 text-light">
-                            <form id="login-form" >
+                            <form id="login-form" method="post">
                                 <div className={"text-center"}>
                                     <h3>Wallonia Fixed</h3>
                                 </div>

@@ -38,6 +38,7 @@ class UserForm{
                         <div className="form-group mb-3">
                             <label htmlFor="password">Mot de passe</label>
                             <input id="password" type="password" className="form-control" placeholder="Mot de passe" onChange={(event) => onInputChange(event, "password")}/>
+                            <small><i className="far fa-info-circle"/> Laisser le champ vide permet de modifier un utilisateur sans modifier son mot de passe</small>
                             {errors?.password && <Error content={errors.password}/>}
                         </div>
                     </div>

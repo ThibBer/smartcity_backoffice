@@ -1,10 +1,4 @@
-function formatState(state){
-    if(state === undefined){
-        return "";
-    }
-
-    return state.charAt(0).toUpperCase() + state.slice(1);
-}
+import ReportStates from "../data/ReportStates";
 
 const mapper = function(report) {
     const createdAt = new Date(report.created_at);
@@ -14,7 +8,7 @@ const mapper = function(report) {
             <td>{report.id}</td>
             <td>{report.description}</td>
             <td>{report.report_type?.label}</td>
-            <td>{formatState(report.state)}</td>
+            <td>{ReportStates[report.state]}</td>
             <td>{report.zip_code + " " + report.city}<br/>{report.street + ", " + report.house_number}</td>
             <td>{createdAt.toLocaleDateString()} {createdAt.toLocaleTimeString()}</td>
             <td>{report.reporter}</td>

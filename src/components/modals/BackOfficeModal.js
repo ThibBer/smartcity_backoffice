@@ -15,7 +15,8 @@ class BackOfficeModal extends React.Component{
             modalIsVisible : props.modalIsVisible,
             error: this.props.error ?? undefined,
             formErrors: {},
-            modalData: {}
+            modalData: {},
+            auxiliaryData: this.props.auxiliaryData ?? {}
         }
 
         this.isAnUpdate = false;
@@ -36,6 +37,10 @@ class BackOfficeModal extends React.Component{
         if(previousProps.error !== this.props.error){
             this.setState({error: this.props.error})
         }
+
+        if(previousProps.auxiliaryData !== this.props.auxiliaryData){
+            this.setState({auxiliaryData: this.props.auxiliaryData})
+        }
     }
 
     onInputChange(event, name){
@@ -47,7 +52,7 @@ class BackOfficeModal extends React.Component{
     }
 
     onClickSubmit(event) {
-        const {object, errors, isValid} = this.props.form.validation(this.state.modalData);
+        const {object, errors, isValid} = this.props.form.validation(this.state.modalData, this.props.auxiliaryData);
 
         if(isValid){
             this.setState({submitted: true, modalData: {...object}, formErrors: {}});
@@ -55,6 +60,8 @@ class BackOfficeModal extends React.Component{
         }else{
             this.setState({formErrors: errors});
         }
+
+        this.setState({submitted: false});
     }
 
     onHide(event) {

@@ -62,6 +62,10 @@ class BackEndPanel extends React.Component {
             this.setState({tableContent: undefined})
             await this.loadTableContent();
         }
+
+        if(previousProps.loadAuxiliaryData !== this.props.loadAuxiliaryData && this.props.loadAuxiliaryData){
+            await this.loadAuxiliaryData();
+        }
     }
 
     /*EDIT MODAL CALLBACKS*/
@@ -72,6 +76,7 @@ class BackEndPanel extends React.Component {
             visibility: false,
             data: undefined,
             error: undefined,
+            rowIndex: undefined,
             auxiliaryData: {}
         };
 
@@ -80,58 +85,63 @@ class BackEndPanel extends React.Component {
         this.props.onModalClosed();
     }
 
-    // ON SAVE MODAL
-    async onSaveModal(event, data, isAnUpdate){
-        alert("OnSaveModal")
+    async loadAuxiliaryData(){
         const modal = {...this.state.modal};
-
-        try {
-            const webServiceAddress = process.env.REACT_APP_API_URL + this.props.apiRoute;
-            if(isAnUpdate){
-                await axios.patch(webServiceAddress, data);
-            }else{
-                const response = await axios.post(webServiceAddress, data);
-                data.id = response.data.id;
-
-                const tableContent = [...this.state.tableContent];
-                tableContent.push(data)
-
-                this.setState({tableContent});
-            }
-
-            modal.visibility = false;
-            modal.error = undefined;
-        }catch (error) {
-            modal.error = ErrorCodeManager.message(error);
-        }
-
-        modal.data = undefined;
-
-        this.props.onModalClosed();
-        this.setState({modal, auxiliaryData: {}});
-    }
-
-    /*TABLE CALLBACKS*/
-    async onClickEditButton(event, selectedObject){
-        const modal = {...this.state.modal};
-
-        modal.visibility = true;
-        modal.data = selectedObject;
 
         if(this.props.apiRoute === "report"){
             const response = await axios.get(process.env.REACT_APP_API_URL + "reportType");
-            const reportTypes = response.data;
-
-            modal.auxiliaryData.reportTypes = reportTypes;
+            modal.auxiliaryData.reportTypes = response.data;
         }
 
         this.setState({modal});
     }
 
-    onClickDeleteButton(event, selectedObject){
+    // ON SAVE MODAL
+    async onSaveModal(event, data, isAnUpdate){
+        const modal = {...this.state.modal};
+        const tableContent = [...this.state.tableContent];
+
+        try {
+            const webServiceAddress = process.env.REACT_APP_API_URL + this.props.apiRoute;
+            if(isAnUpdate){
+                await axios.patch(webServiceAddress, data);
+                tableContent[this.state.modal.rowIndex] = data;
+            }else{
+                const response = await axios.post(webServiceAddress, data);
+                data.id = response.data.id;
+
+                tableContent.push(data);
+            }
+
+            modal.visibility = false;
+            modal.error = undefined;
+            modal.data = undefined;
+        }catch (error) {
+            modal.error = ErrorCodeManager.message(error);
+        }
+
+        this.props.onModalClosed();
+        this.setState({modal, auxiliaryData: {}, tableContent});
+    }
+
+    /*TABLE CALLBACKS*/
+    async onClickEditButton(event, selectedObject, rowIndex){
+        const modal = {...this.state.modal};
+
+        modal.visibility = true;
+        modal.data = selectedObject;
+        modal.rowIndex = rowIndex;
+
+        await this.loadAuxiliaryData();
+
+        this.setState({modal});
+    }
+
+    onClickDeleteButton(event, selectedObject, rowIndex){
         const popup = {...this.state.popup};
         popup.visibility = true;
         popup.data = selectedObject;
+        popup.rowIndex = rowIndex;
 
         const modal = {...this.state.modal};
         modal.auxiliaryData = {};
@@ -145,6 +155,7 @@ class BackEndPanel extends React.Component {
     /*DELETE MODAL CALLBACKS*/
     async onCloseDeletePopup(event, isConfirmed){
         const popup = {...this.state.popup};
+        const tableContent = [...this.state.tableContent];
 
         popup.visibility = false;
         popup.error = undefined;
@@ -152,23 +163,25 @@ class BackEndPanel extends React.Component {
         if(isConfirmed){
             try {
                 await axios.delete(process.env.REACT_APP_API_URL + this.props.apiRoute, {data: popup.data});
+                delete tableContent[this.state.popup.rowIndex]
             }catch (error) {
                 popup.visibility = true;
                 popup.error = ErrorCodeManager.message(error);
             }
         }
 
-        popup.data = undefined;
+        popup.data = undefined
+        popup.rowIndex = undefined;
 
         this.setState({
-            popup
+            popup, tableContent
         });
     }
 
     render(){
         return (
             <>
-                <BackOfficeTable columns={this.props.columns} data={this.state.tableContent} onClickEditButton={(event, selectedObject) => this.onClickEditButton(event, selectedObject)} onClickDeleteButton={(event, selectedObject) => this.onClickDeleteButton(event, selectedObject)} error={this.state.error} mapper={this.props.mapper} />
+                <BackOfficeTable columns={this.props.columns} data={this.state.tableContent} onClickEditButton={(event, selectedObject, rowIndex) => this.onClickEditButton(event, selectedObject, rowIndex)} onClickDeleteButton={(event, selectedObject, rowIndex) => this.onClickDeleteButton(event, selectedObject, rowIndex)} error={this.state.error} mapper={this.props.mapper} />
                 <BackOfficeModal data={this.state.modal.data} modalIsVisible={this.state.modal.visibility} form={this.props.form} title={this.props.singularTableLabel} error={this.state.modal.error} onHide={(event) => this.onHideModal(event)} onSave={(event, object, isAnUpdate) => this.onSaveModal(event, object, isAnUpdate)} auxiliaryData={this.state.modal.auxiliaryData}/>
                 <DeletePopup popupIsVisible={this.state.popup.visibility} title={this.props.singularTableLabel} onClose={(event, isConfirmed) => this.onCloseDeletePopup(event, isConfirmed)} error={this.state.popup.error}/>
             </>

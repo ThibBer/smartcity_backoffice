@@ -10,7 +10,8 @@ class WalloniaFixed extends React.Component{
 
         this.state = {
             currentItem: SideBarItems[0],
-            modalIsVisible: false
+            modalIsVisible: false,
+            loadAuxiliaryData: false
         }
     }
 
@@ -19,7 +20,7 @@ class WalloniaFixed extends React.Component{
     }
 
     onModalClosed(){
-        this.setState({modalIsVisible: false})
+        this.setState({modalIsVisible: false, loadAuxiliaryData: false})
     }
 
     getTableIcon(){
@@ -27,7 +28,7 @@ class WalloniaFixed extends React.Component{
     }
 
     onClickAddElementButton(event){
-        this.setState({modalIsVisible: true});
+        this.setState({modalIsVisible: true, loadAuxiliaryData: true});
     }
 
     render() {
@@ -61,7 +62,7 @@ class WalloniaFixed extends React.Component{
 
                                         <div className="row">
                                             <div className="col">
-                                                <BackEndPanel modalIsVisible={this.state.modalIsVisible} singularTableLabel={this.state.currentItem.singularLabel} onModalClosed={() => this.onModalClosed()} apiRoute={this.state.currentItem.apiRoute} form={this.state.currentItem.form} columns={this.state.currentItem.columns} mapper={this.state.currentItem.mapper}/>
+                                                <BackEndPanel modalIsVisible={this.state.modalIsVisible} singularTableLabel={this.state.currentItem.singularLabel} onModalClosed={() => this.onModalClosed()} apiRoute={this.state.currentItem.apiRoute} form={this.state.currentItem.form} columns={this.state.currentItem.columns} mapper={this.state.currentItem.mapper} loadAuxiliaryData={this.state.loadAuxiliaryData}/>
                                             </div>
                                         </div>
                                     </div>

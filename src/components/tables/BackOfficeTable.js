@@ -36,8 +36,8 @@ class BackOfficeTable extends React.Component {
                         this.props.mapper(object)
                     }
                     <td>
-                        <button className="btn" onClick={(event) => this.state.onClickEditButton(event, object)}><i className="far fa-edit"/></button>
-                        <button className="btn" onClick={(event) => this.state.onClickDeleteButton(event, object)}><i className="far fa-trash-alt text-danger"/></button>
+                        <button className="btn" onClick={(event) => this.state.onClickEditButton(event, object, rowIndex)}><i className="far fa-edit"/></button>
+                        <button className="btn" onClick={(event) => this.state.onClickDeleteButton(event, object, rowIndex)}><i className="far fa-trash-alt text-danger"/></button>
                     </td>
                 </tr>
             )

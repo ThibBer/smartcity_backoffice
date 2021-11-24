@@ -8,17 +8,21 @@ import {
 import LoginForm from "../components/forms/LoginForm";
 import WalloniaFixed from "../components/WalloniaFixed";
 
+import jwtManager from "../JwtManager";
+
 export default function Routes(){
-    const jwtExist = localStorage.getItem("jwt") !== null;
+    const jwt = localStorage.getItem("jwt");
+    const decodedJWT = jwtManager.decode(jwt);
+    const jwtIsValid = jwtManager.isValid(decodedJWT);
 
     return(
         <Router>
             <Switch>
                 <Route path="/login">
-                    {!jwtExist ? <LoginForm/> : <Redirect to={"/"}/>}
+                    {jwtIsValid ? <Redirect to={"/"}/> : <LoginForm/>}
                 </Route>
                 <Route path="/">
-                    {jwtExist ? <WalloniaFixed/> : <Redirect to={"/login"}/>}
+                    {jwtIsValid ? <WalloniaFixed/> : <Redirect to={"/login"}/>}
                 </Route>
             </Switch>
         </Router>
