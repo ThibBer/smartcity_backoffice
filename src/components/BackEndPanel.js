@@ -16,6 +16,7 @@ class BackEndPanel extends React.Component {
         this.state = {
             tableContent: undefined,
             error: undefined,
+            filter: "",
             modal: {
                 visibility: this.props.modalIsVisible,
                 data: undefined,
@@ -65,6 +66,10 @@ class BackEndPanel extends React.Component {
 
         if(previousProps.loadAuxiliaryData !== this.props.loadAuxiliaryData && this.props.loadAuxiliaryData){
             await this.loadAuxiliaryData();
+        }
+
+        if(previousProps.filter !== this.props.filter){
+            this.setState({filter: this.props.filter});
         }
     }
 
@@ -181,7 +186,7 @@ class BackEndPanel extends React.Component {
     render(){
         return (
             <>
-                <BackOfficeTable columns={this.props.columns} data={this.state.tableContent} onClickEditButton={(event, selectedObject, rowIndex) => this.onClickEditButton(event, selectedObject, rowIndex)} onClickDeleteButton={(event, selectedObject, rowIndex) => this.onClickDeleteButton(event, selectedObject, rowIndex)} error={this.state.error} mapper={this.props.mapper} />
+                <BackOfficeTable columns={this.props.columns} data={this.state.tableContent} onClickEditButton={(event, selectedObject, rowIndex) => this.onClickEditButton(event, selectedObject, rowIndex)} onClickDeleteButton={(event, selectedObject, rowIndex) => this.onClickDeleteButton(event, selectedObject, rowIndex)} error={this.state.error} mapper={this.props.mapper} filter={this.state.filter} />
                 <BackOfficeModal data={this.state.modal.data} modalIsVisible={this.state.modal.visibility} form={this.props.form} title={this.props.singularTableLabel} error={this.state.modal.error} onHide={(event) => this.onHideModal(event)} onSave={(event, object, isAnUpdate) => this.onSaveModal(event, object, isAnUpdate)} auxiliaryData={this.state.modal.auxiliaryData}/>
                 <DeletePopup popupIsVisible={this.state.popup.visibility} title={this.props.singularTableLabel} onClose={(event, isConfirmed) => this.onCloseDeletePopup(event, isConfirmed)} error={this.state.popup.error}/>
             </>

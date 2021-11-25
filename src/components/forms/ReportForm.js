@@ -141,6 +141,8 @@ class reportForm{
             formReport.report_type = auxiliaryData.reportTypes[reportType];
         }
 
+        formReport.created_at = Date.now();
+
         return {object: formReport, errors: errors, isValid: Object.keys(errors).length === 0};
     }
 }

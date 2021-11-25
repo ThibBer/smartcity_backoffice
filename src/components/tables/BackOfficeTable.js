@@ -10,7 +10,8 @@ class BackOfficeTable extends React.Component {
             data: props.data,
             error: undefined,
             onClickEditButton: props.onClickEditButton,
-            onClickDeleteButton: props.onClickDeleteButton
+            onClickDeleteButton: props.onClickDeleteButton,
+            filter: ""
         }
     }
 
@@ -26,22 +27,41 @@ class BackOfficeTable extends React.Component {
                 error: this.props.error
             });
         }
+
+        if(prevProps.filter !== this.props.filter){
+            this.setState({
+                filter: this.props.filter
+            });
+        }
     }
 
     renderTable(){
         return this.state.data.map((object, rowIndex) => {
-            return (
-                <tr key={"tr" + rowIndex} className={"align-middle"}>
-                    {
-                        this.props.mapper(object)
-                    }
-                    <td>
-                        <button className="btn" onClick={(event) => this.state.onClickEditButton(event, object, rowIndex)}><i className="far fa-edit"/></button>
-                        <button className="btn" onClick={(event) => this.state.onClickDeleteButton(event, object, rowIndex)}><i className="far fa-trash-alt text-danger"/></button>
-                    </td>
-                </tr>
-            )
+            if(this.anyObjectPropertyContainsFilter(object)){
+                return (
+                    <tr key={"tr" + rowIndex} className={"align-middle"}>
+                        {
+                            this.props.mapper(object)
+                        }
+                        <td>
+                            <button className="btn" onClick={(event) => this.state.onClickEditButton(event, object, rowIndex)}><i className="far fa-edit"/></button>
+                            <button className="btn" onClick={(event) => this.state.onClickDeleteButton(event, object, rowIndex)}><i className="far fa-trash-alt text-danger"/></button>
+                        </td>
+                    </tr>
+                )
+            }
         });
+    }
+
+    anyObjectPropertyContainsFilter(object){
+        for(const [key, value] of Object.entries(object)){
+            if(value.toString().includes(this.state.filter)){
+                console.log("Found " + this.state.filter + " on " + key + " - " + value)
+                return true;
+            }
+        }
+
+        return false;
     }
 
     emptyBody(){

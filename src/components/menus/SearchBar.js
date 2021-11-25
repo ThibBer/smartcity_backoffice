@@ -5,16 +5,32 @@ class SearchBar extends React.Component{
         super(props);
 
         this.state = {
-            searchValue : ""
+            filter: ""
         }
+
+        this.intervalTypingTimeout = undefined;
     }
 
-    changeSearchValue(event){
-        event.preventDefault();
+    onInputChange(event){
+        const filter = event.target.value;
+        this.setState({filter});
+
+        if(this.intervalTypingTimeout){
+            clearTimeout(this.intervalTypingTimeout);
+        }
+
+        this.intervalTypingTimeout = setTimeout(() => this.updateInputValue(filter), 500);
+    }
+
+    updateInputValue(filter){
+        this.props.onFilter(filter);
     }
 
     reset(event){
         event.preventDefault();
+
+        this.setState({filter: ""});
+        this.props.onFilter("");
     }
 
     render(){
@@ -23,7 +39,7 @@ class SearchBar extends React.Component{
                 <div className="row">
                     <div className="col">
                         <label>Recherche</label>
-                        <input type="text" className="form-control" placeholder="Votre recherche" onChange={(event) => this.changeSearchValue(event)}/>
+                        <input type="text" className="form-control" placeholder="Votre recherche" onChange={(event) => {this.onInputChange(event)}} value={this.state.filter}/>
                     </div>
                 </div>
                 <div className="row mt-3">

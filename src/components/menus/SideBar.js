@@ -47,7 +47,7 @@ class SideBar extends React.Component{
                             <Accordion.Item eventKey="0">
                                 <Accordion.Header>Filtrer la liste</Accordion.Header>
                                 <Accordion.Body>
-                                    <SearchBar/>
+                                    <SearchBar onFilter={(filterValue) => this.props.onFilter(filterValue)}/>
                                 </Accordion.Body>
                             </Accordion.Item>
                         </Accordion>

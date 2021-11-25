@@ -11,7 +11,8 @@ class WalloniaFixed extends React.Component{
         this.state = {
             currentItem: SideBarItems[0],
             modalIsVisible: false,
-            loadAuxiliaryData: false
+            loadAuxiliaryData: false,
+            filter: undefined
         }
     }
 
@@ -31,6 +32,11 @@ class WalloniaFixed extends React.Component{
         this.setState({modalIsVisible: true, loadAuxiliaryData: true});
     }
 
+    onFilter(filter){
+        this.setState({filter})
+        console.log("Filter: " + filter);
+    }
+
     render() {
         return (
             <div className="container-fluid">
@@ -42,7 +48,7 @@ class WalloniaFixed extends React.Component{
                             </div>
                             <div className="row flex-grow-1">
                                 <div className="col-2 py-4">
-                                    <SideBar onMenuItemSelected={(event, item) => this.onMenuItemSelected(event, item)}/>
+                                    <SideBar onMenuItemSelected={(event, item) => this.onMenuItemSelected(event, item)} onFilter={(filterValue) => this.onFilter(filterValue)}/>
                                 </div>
                                 <div className="col-10 py-4">
                                     <div id="panel" className="p-3">
@@ -62,7 +68,7 @@ class WalloniaFixed extends React.Component{
 
                                         <div className="row">
                                             <div className="col">
-                                                <BackEndPanel modalIsVisible={this.state.modalIsVisible} singularTableLabel={this.state.currentItem.singularLabel} onModalClosed={() => this.onModalClosed()} apiRoute={this.state.currentItem.apiRoute} form={this.state.currentItem.form} columns={this.state.currentItem.columns} mapper={this.state.currentItem.mapper} loadAuxiliaryData={this.state.loadAuxiliaryData}/>
+                                                <BackEndPanel modalIsVisible={this.state.modalIsVisible} singularTableLabel={this.state.currentItem.singularLabel} onModalClosed={() => this.onModalClosed()} apiRoute={this.state.currentItem.apiRoute} form={this.state.currentItem.form} columns={this.state.currentItem.columns} mapper={this.state.currentItem.mapper} loadAuxiliaryData={this.state.loadAuxiliaryData} filter={this.state.filter}/>
                                             </div>
                                         </div>
                                     </div>
