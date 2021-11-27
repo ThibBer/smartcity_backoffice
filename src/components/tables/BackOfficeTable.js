@@ -50,6 +50,8 @@ class BackOfficeTable extends React.Component {
                     </tr>
                 )
             }
+
+            return (<></>)
         });
     }
 
