@@ -17,6 +17,10 @@ class BackEndPanel extends React.Component {
             tableContent: undefined,
             error: undefined,
             filter: "",
+            currentPagination: 1,
+            nbElementsPerPage: this.props.nbElementsPerPage,
+            allEntitiesCount: undefined,
+            apiRoute: this.props.apiRoute,
             modal: {
                 visibility: this.props.modalIsVisible,
                 data: undefined,
@@ -37,17 +41,23 @@ class BackEndPanel extends React.Component {
 
     async loadTableContent(){
         this.setState({
-            tableContent: undefined
+            tableContent: undefined,
+            error: undefined
         });
 
+        const filter = this.state.filter;
         try {
-            const response = await axios.get(process.env.REACT_APP_API_URL + this.props.apiRoute);
+            const webServiceAddress = process.env.REACT_APP_API_URL + this.state.apiRoute + "/filter/" + this.state.nbElementsPerPage * (this.state.currentPagination - 1) + "&" + (this.state.nbElementsPerPage * this.state.currentPagination) + (filter && ("&" + filter));
+            const response = await axios.get(webServiceAddress);
 
-            this.setState({tableContent: response.data});
+            const jsonResponse = response.data
+
+            this.setState({tableContent: jsonResponse.data, allEntitiesCount: jsonResponse.countWithoutLimit});
+
         }catch (error) {
             this.setState({
                 error: error
-            })
+            });
         }
     }
 
@@ -59,8 +69,14 @@ class BackEndPanel extends React.Component {
             this.setState({modal});
         }
 
+        if(previousProps.nbElementsPerPage !== this.props.nbElementsPerPage){
+            await this.setState({nbElementsPerPage: this.props.nbElementsPerPage});
+
+            await this.loadTableContent();
+        }
+
         if(previousProps.apiRoute !== this.props.apiRoute){
-            this.setState({tableContent: undefined})
+            await this.setState({tableContent: undefined, apiRoute: this.props.apiRoute});
             await this.loadTableContent();
         }
 
@@ -69,14 +85,15 @@ class BackEndPanel extends React.Component {
         }
 
         if(previousProps.filter !== this.props.filter){
-            this.setState({filter: this.props.filter});
+            await this.setState({filter: this.props.filter});
+            await this.loadTableContent();
         }
     }
 
     /*EDIT MODAL CALLBACKS*/
 
     // ON CLOSE MODAL
-    onHideModal(event){
+    onHideModal(){
         const modal = {
             visibility: false,
             data: undefined,
@@ -93,7 +110,7 @@ class BackEndPanel extends React.Component {
     async loadAuxiliaryData(){
         const modal = {...this.state.modal};
 
-        if(this.props.apiRoute === "report"){
+        if(this.state.apiRoute === "report"){
             const response = await axios.get(process.env.REACT_APP_API_URL + "reportType");
             modal.auxiliaryData.reportTypes = response.data;
         }
@@ -107,7 +124,7 @@ class BackEndPanel extends React.Component {
         const tableContent = [...this.state.tableContent];
 
         try {
-            const webServiceAddress = process.env.REACT_APP_API_URL + this.props.apiRoute;
+            const webServiceAddress = process.env.REACT_APP_API_URL + this.state.apiRoute;
             if(isAnUpdate){
                 await axios.patch(webServiceAddress, data);
                 tableContent[this.state.modal.rowIndex] = data;
@@ -167,7 +184,7 @@ class BackEndPanel extends React.Component {
 
         if(isConfirmed){
             try {
-                await axios.delete(process.env.REACT_APP_API_URL + this.props.apiRoute, {data: popup.data});
+                await axios.delete(process.env.REACT_APP_API_URL + this.state.apiRoute, {data: popup.data});
                 delete tableContent[this.state.popup.rowIndex]
             }catch (error) {
                 popup.visibility = true;
@@ -183,10 +200,18 @@ class BackEndPanel extends React.Component {
         });
     }
 
+    async onPaginationClick(newPagination){
+        if(this.state.currentPagination !== newPagination){
+            await this.setState({currentPagination: newPagination});
+
+            await this.loadTableContent();
+        }
+    }
+
     render(){
         return (
             <>
-                <BackOfficeTable columns={this.props.columns} data={this.state.tableContent} onClickEditButton={(event, selectedObject, rowIndex) => this.onClickEditButton(event, selectedObject, rowIndex)} onClickDeleteButton={(event, selectedObject, rowIndex) => this.onClickDeleteButton(event, selectedObject, rowIndex)} error={this.state.error} mapper={this.props.mapper} filter={this.state.filter} />
+                <BackOfficeTable columns={this.props.columns} data={this.state.tableContent} onClickEditButton={(event, selectedObject, rowIndex) => this.onClickEditButton(event, selectedObject, rowIndex)} onClickDeleteButton={(event, selectedObject, rowIndex) => this.onClickDeleteButton(event, selectedObject, rowIndex)} error={this.state.error} mapper={this.props.mapper} filter={this.state.filter} allEntitiesCount={this.state.allEntitiesCount} onPaginationClick={(newPagination) => this.onPaginationClick(newPagination)} nbElementsPerPage={this.state.nbElementsPerPage}/>
                 <BackOfficeModal data={this.state.modal.data} modalIsVisible={this.state.modal.visibility} form={this.props.form} title={this.props.singularTableLabel} error={this.state.modal.error} onHide={(event) => this.onHideModal(event)} onSave={(event, object, isAnUpdate) => this.onSaveModal(event, object, isAnUpdate)} auxiliaryData={this.state.modal.auxiliaryData}/>
                 <DeletePopup popupIsVisible={this.state.popup.visibility} title={this.props.singularTableLabel} onClose={(event, isConfirmed) => this.onCloseDeletePopup(event, isConfirmed)} error={this.state.popup.error}/>
             </>

@@ -1,5 +1,5 @@
 module.exports.message = (error) => {
-    const errorData = error?.response.data?.error;
+    const errorData = error?.response?.data?.error;
     let errorMessage = "Une erreur inattendue est survenue ...";
 
     if (error?.message === "Network Error") {
