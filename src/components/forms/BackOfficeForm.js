@@ -17,7 +17,7 @@ class BackOfficeForm extends React.Component {
 
     render(){
         return(
-            this.props.form.getForm(this.props.data, this.state.errors, this.props.onInputChange, this.props.auxiliaryData)
+            this.props.form.getForm(this.props.data, this.state.errors, this.props.onInputChange, this.props.auxiliaryData, this.props.isAnUpdate)
         );
     }
 }

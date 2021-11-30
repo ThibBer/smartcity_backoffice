@@ -52,7 +52,7 @@ class BackOfficeModal extends React.Component{
     }
 
     onClickSubmit(event) {
-        const {object, errors, isValid} = this.props.form.validation(this.state.modalData, this.props.auxiliaryData);
+        const {object, errors, isValid} = this.props.form.validation(this.state.modalData, this.isAnUpdate, this.props.auxiliaryData);
 
         if(isValid){
             this.setState({submitted: true, modalData: {...object}, formErrors: {}});
@@ -76,7 +76,7 @@ class BackOfficeModal extends React.Component{
                     <Modal.Title>{this.isAnUpdate ? "Modification" : "Création"} d'un {this.props.title}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <BackOfficeForm data={this.state.modalData} form={this.props.form} onInputChange={(event, name) => this.onInputChange(event, name)} errors={this.state.formErrors} auxiliaryData={this.props.auxiliaryData}/>
+                    <BackOfficeForm data={this.state.modalData} form={this.props.form} onInputChange={(event, name) => this.onInputChange(event, name)} errors={this.state.formErrors} auxiliaryData={this.props.auxiliaryData} isAnUpdate={this.isAnUpdate}/>
                     {(this.state.submitted && this.state.error === undefined && Object.keys(this.state.formErrors).length === 0) && <Spinner text={""} />}
 
                     {this.state.error && <Error content={this.state.error} icon={"fa-info-circle"}/>}

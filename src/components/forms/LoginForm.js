@@ -35,7 +35,7 @@ class LoginForm extends React.Component{
 
             if(!JwtManager.isValid(decodeJWT)){
                 this.setState({error: "Votre session à expirée. Veuillez vous connecter"});
-            } else if(decodeJWT.payload.role !== "admin"){
+            } else if(decodeJWT.payload.user.role !== "admin"){
                 this.setState({error: "Vous n'êtes pas autorisé à vous connecter."});
             }else{
                 localStorage.setItem("jwt", jwt);

@@ -13,7 +13,7 @@ class SideBar extends React.Component{
 
         const jwt = localStorage.getItem("jwt");
         const payload = jwt.split(".")[1];
-        const userData = JSON.parse(Buffer.from(payload, 'base64').toString('utf-8'));
+        const userData = JSON.parse(Buffer.from(payload, 'base64').toString('utf-8')).user;
 
         this.state = {
             onMenuItemSelected: props.onMenuItemSelected,

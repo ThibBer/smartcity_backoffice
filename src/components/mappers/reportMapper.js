@@ -3,6 +3,8 @@ import ReportStates from "../data/ReportStates";
 const mapper = function(report) {
     const createdAt = new Date(report.created_at);
 
+    console.log(report)
+
     return (
         <>
             <td>{report.id}</td>

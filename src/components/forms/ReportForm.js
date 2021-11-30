@@ -97,7 +97,7 @@ class reportForm{
         );
     }
 
-    validation(formReport, auxiliaryData){
+    validation(formReport, isAnUpdate, auxiliaryData){
         const errors = {};
         const report = {...formReport};
 

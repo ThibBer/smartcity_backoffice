@@ -1,4 +1,5 @@
 module.exports.message = (error, customChecksCallback) => {
+    console.error(error)
     let errorMessage = undefined;
 
     if (error?.message === "Network Error") {

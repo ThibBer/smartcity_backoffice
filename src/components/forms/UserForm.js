@@ -21,9 +21,7 @@ class UserForm{
         return number;
     }
 
-    getForm(user, errors, onInputChange){
-        user.password = undefined;
-
+    getForm(user, errors, onInputChange, auxiliaryData, isAnUpdate){
         return(
             <form>
                 <div className="row">
@@ -38,7 +36,7 @@ class UserForm{
                         <div className="form-group mb-3">
                             <label htmlFor="password">Mot de passe</label>
                             <input id="password" type="password" className="form-control" placeholder="Mot de passe" onChange={(event) => onInputChange(event, "password")}/>
-                            <small><i className="far fa-info-circle"/> Laisser le champ vide permet de modifier un utilisateur sans modifier son mot de passe</small>
+                            {isAnUpdate && <><small><i className="far fa-info-circle"/> Laisser le champ vide permet de modifier un utilisateur sans modifier son mot de passe</small><br/></>}
                             {errors?.password && <Error content={errors.password}/>}
                         </div>
                     </div>
@@ -122,7 +120,7 @@ class UserForm{
         );
     }
 
-    validation(user){
+    validation(user, isAnUpdate){
         const errors = {};
         const email = user?.email;
         if(email === undefined || !email.match("[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")){
@@ -137,6 +135,11 @@ class UserForm{
             errors.birth_date = "Date invalide";
         }else if(new Date(birthDate) >= now){
             errors.birth_date = "La date ne peut pas être égale ou après aujourd'hui";
+        }
+
+        const password = user?.password;
+        if(!isAnUpdate && (password === undefined || password.trim() === "")){
+            errors.password = "Mot de passe invalide";
         }
 
         const role = user?.role;

@@ -19,7 +19,7 @@ class BackEndPanel extends React.Component {
             filter: "",
             currentPagination: 1,
             nbElementsPerPage: this.props.nbElementsPerPage,
-            allEntitiesCount: undefined,
+            allEntitiesCount: 0,
             apiRoute: this.props.apiRoute,
             modal: {
                 visibility: this.props.modalIsVisible,
@@ -76,7 +76,7 @@ class BackEndPanel extends React.Component {
         }
 
         if(previousProps.apiRoute !== this.props.apiRoute){
-            await this.setState({tableContent: undefined, apiRoute: this.props.apiRoute});
+            await this.setState({tableContent: undefined, apiRoute: this.props.apiRoute, currentPagination: 1});
             await this.loadTableContent();
         }
 
@@ -120,6 +120,7 @@ class BackEndPanel extends React.Component {
 
     // ON SAVE MODAL
     async onSaveModal(event, data, isAnUpdate){
+        console.log("onSaveModal")
         const modal = {...this.state.modal};
         const tableContent = [...this.state.tableContent];
 
@@ -139,6 +140,7 @@ class BackEndPanel extends React.Component {
             modal.error = undefined;
             modal.data = undefined;
         }catch (error) {
+            console.error(error)
             modal.error = ErrorCodeManager.message(error);
         }
 
@@ -211,7 +213,7 @@ class BackEndPanel extends React.Component {
     render(){
         return (
             <>
-                <BackOfficeTable columns={this.props.columns} data={this.state.tableContent} onClickEditButton={(event, selectedObject, rowIndex) => this.onClickEditButton(event, selectedObject, rowIndex)} onClickDeleteButton={(event, selectedObject, rowIndex) => this.onClickDeleteButton(event, selectedObject, rowIndex)} error={this.state.error} mapper={this.props.mapper} filter={this.state.filter} allEntitiesCount={this.state.allEntitiesCount} onPaginationClick={(newPagination) => this.onPaginationClick(newPagination)} nbElementsPerPage={this.state.nbElementsPerPage}/>
+                <BackOfficeTable columns={this.props.columns} data={this.state.tableContent} onClickEditButton={(event, selectedObject, rowIndex) => this.onClickEditButton(event, selectedObject, rowIndex)} onClickDeleteButton={(event, selectedObject, rowIndex) => this.onClickDeleteButton(event, selectedObject, rowIndex)} error={this.state.error} mapper={this.props.mapper} filter={this.state.filter} allEntitiesCount={this.state.allEntitiesCount} onPaginationClick={(newPagination) => this.onPaginationClick(newPagination)} nbElementsPerPage={this.state.nbElementsPerPage} currentPagination={this.state.currentPagination}/>
                 <BackOfficeModal data={this.state.modal.data} modalIsVisible={this.state.modal.visibility} form={this.props.form} title={this.props.singularTableLabel} error={this.state.modal.error} onHide={(event) => this.onHideModal(event)} onSave={(event, object, isAnUpdate) => this.onSaveModal(event, object, isAnUpdate)} auxiliaryData={this.state.modal.auxiliaryData}/>
                 <DeletePopup popupIsVisible={this.state.popup.visibility} title={this.props.singularTableLabel} onClose={(event, isConfirmed) => this.onCloseDeletePopup(event, isConfirmed)} error={this.state.popup.error}/>
             </>
