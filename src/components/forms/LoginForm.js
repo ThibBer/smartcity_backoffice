@@ -62,9 +62,9 @@ class LoginForm extends React.Component{
                 <div className="row justify-content-center">
                     <div className="d-flex flex-column min-vh-100 justify-content-center w-50">
                         <div id="form-container" className="bg-smartcity p-5 text-light">
-                            <form id="login-form" method="post">
+                            <div id="login-form">
                                 <div className={"text-center"}>
-                                    <h3>Wallonia Fixed</h3>
+                                    <h3>Wallonia Fixed {this.state.email}</h3>
                                 </div>
                                 <div className="form-group">
                                     <label>Adresse email</label>
@@ -83,7 +83,7 @@ class LoginForm extends React.Component{
                                 {(!this.state.isLogged && this.state.loginSubmitted && !this.state.error) && <Spinner text={""} />}
 
                                 <button className="btn text-white mx-auto d-block border-white mt-md-3" onClick={(event) => this.login(event)}>Se connecter</button>
-                            </form>
+                            </div>
                             {this.state.error && <Error content={this.state.error}/>}
                         </div>
                     </div>

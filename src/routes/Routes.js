@@ -11,9 +11,13 @@ import WalloniaFixed from "../components/WalloniaFixed";
 import jwtManager from "../JwtManager";
 
 export default function Routes(){
-    const jwt = localStorage.getItem("jwt");
-    const decodedJWT = jwtManager.decode(jwt);
-    const jwtIsValid = jwtManager.isValid(decodedJWT);
+    const jwtToken = localStorage.getItem("jwt");
+    const jwt = jwtManager.decode(jwtToken);
+    const jwtIsValid = jwtManager.isValid(jwt);
+
+    if(!jwtIsValid){
+        localStorage.removeItem("jwt");
+    }
 
     return(
         <Router>
