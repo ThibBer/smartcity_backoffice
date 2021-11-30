@@ -185,7 +185,7 @@ class BackEndPanel extends React.Component {
         if(isConfirmed){
             try {
                 await axios.delete(process.env.REACT_APP_API_URL + this.state.apiRoute, {data: popup.data});
-                delete tableContent[this.state.popup.rowIndex]
+                tableContent.splice(this.state.popup.rowIndex, 1);
             }catch (error) {
                 popup.visibility = true;
                 popup.error = ErrorCodeManager.message(error);

@@ -17,7 +17,6 @@ class reportForm{
                         </div>
                     </div>
                 </div>
-
                 <div className="row">
                     <div className="col">
                         <div className="form-group mb-3">
@@ -34,7 +33,6 @@ class reportForm{
                         </div>
                     </div>
                 </div>
-
                 <div className="row">
                     <div className="col-6">
                         <div className="form-group mb-3">
@@ -60,7 +58,6 @@ class reportForm{
                         </div>
                     </div>
                 </div>
-
                 <div className="row">
                     <div className="col-6">
                         <div className="form-group mb-3">

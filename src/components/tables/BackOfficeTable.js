@@ -114,11 +114,12 @@ class BackOfficeTable extends React.Component {
             );
         }
 
+        const moreThanOneEntity = this.state.allEntitiesCount > 1;
         return (
             <>
                 <div className={"row"}>
                     <div className={"col"}>
-                        {this.state.filter !== "" && <p>{this.state.allEntitiesCount} élément{this.state.allEntitiesCount > 1 && "s"} trouvé{this.state.allEntitiesCount > 1 && "s"} avec le filtre "{this.state.filter}"</p>}
+                        <p>{this.state.allEntitiesCount} élément{moreThanOneEntity && "s"} trouvé{moreThanOneEntity && "s"} {this.state.filter !== "" && <>avec le filtre "{this.state.filter}"</>}</p>
                     </div>
                 </div>
                 <div className="row">
@@ -138,7 +139,7 @@ class BackOfficeTable extends React.Component {
                            </table>
                     </div>
                 </div>
-                <div className="row">
+                {!this.props.error && <div className="row">
                    <div className="col align-self-end">
                        <ul className="pagination">
                            <li className={"page-item" + (this.state.currentPagination <= 1 && " disabled")}>
@@ -156,7 +157,7 @@ class BackOfficeTable extends React.Component {
                            </li>
                        </ul>
                     </div>
-                </div>
+                </div>}
             </>
         );
     }
