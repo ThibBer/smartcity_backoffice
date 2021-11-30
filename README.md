@@ -1,6 +1,3 @@
-Exponential Rety -> seulement pour les get ?
-Beug quand on supprime et qu'on edit juste après
-
 ## Fichier .env
 ```
 REACT_APP_API_URL=http://ip:port/v1/

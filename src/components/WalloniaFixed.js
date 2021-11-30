@@ -3,6 +3,8 @@ import TopBar from "./menus/TopBar";
 import SideBar from "./menus/SideBar";
 import BackEndPanel from "./BackEndPanel";
 import SideBarItems from "./data/SideBarItems";
+import {Form} from "react-bootstrap";
+import ElementsByPage from "./data/ElementsByPage";
 
 class WalloniaFixed extends React.Component{
     constructor(props) {
@@ -12,7 +14,8 @@ class WalloniaFixed extends React.Component{
             currentItem: SideBarItems[0],
             modalIsVisible: false,
             loadAuxiliaryData: false,
-            filter: undefined
+            filter: undefined,
+            nbElementsPerPage: ElementsByPage[0]
         }
     }
 
@@ -28,13 +31,18 @@ class WalloniaFixed extends React.Component{
         return (<i className={"far " + this.state.currentItem.icon}/>);
     }
 
-    onClickAddElementButton(event){
+    onClickAddElementButton(){
         this.setState({modalIsVisible: true, loadAuxiliaryData: true});
     }
 
     onFilter(filter){
         this.setState({filter})
-        console.log("Filter: " + filter);
+    }
+
+    onUpdateElementsByPage(event){
+        const nbElementsPerPage = event.target.value;
+
+        this.setState({nbElementsPerPage})
     }
 
     render() {
@@ -64,11 +72,28 @@ class WalloniaFixed extends React.Component{
                                                     <i className="far fa-plus-circle"/>&nbsp;&nbsp;Ajouter un élément
                                                 </button>
                                             </div>
+                                            <div className={"col-2"}>
+                                                <div className={"row"}>
+                                                    <div className={"col-6"}>
+                                                        <p>Nombre d'élements</p>
+                                                    </div>
+                                                    <div className={"col-6"}>
+                                                        <Form.Select onChange={(event) => this.onUpdateElementsByPage(event)} value={this.state.nbElementsPerPage}>
+                                                            {
+                                                                ElementsByPage.map((nbElementsPerPage) =>{
+                                                                    return <option key={nbElementsPerPage} value={nbElementsPerPage}>{nbElementsPerPage}</option>
+                                                                })
+                                                            }
+                                                        </Form.Select>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
+
 
                                         <div className="row">
                                             <div className="col">
-                                                <BackEndPanel modalIsVisible={this.state.modalIsVisible} singularTableLabel={this.state.currentItem.singularLabel} onModalClosed={() => this.onModalClosed()} apiRoute={this.state.currentItem.apiRoute} form={this.state.currentItem.form} columns={this.state.currentItem.columns} mapper={this.state.currentItem.mapper} loadAuxiliaryData={this.state.loadAuxiliaryData} filter={this.state.filter}/>
+                                                <BackEndPanel modalIsVisible={this.state.modalIsVisible} singularTableLabel={this.state.currentItem.singularLabel} onModalClosed={() => this.onModalClosed()} apiRoute={this.state.currentItem.apiRoute} form={this.state.currentItem.form} columns={this.state.currentItem.columns} mapper={this.state.currentItem.mapper} loadAuxiliaryData={this.state.loadAuxiliaryData} filter={this.state.filter} nbElementsPerPage={this.state.nbElementsPerPage}/>
                                             </div>
                                         </div>
                                     </div>

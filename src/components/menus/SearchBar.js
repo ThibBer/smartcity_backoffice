@@ -30,7 +30,7 @@ class SearchBar extends React.Component{
         event.preventDefault();
 
         this.setState({filter: ""});
-        this.props.onFilter("");
+        this.props.onFilter(this.state.filter);
     }
 
     render(){
