@@ -6,6 +6,8 @@ import JwtManager from "../../JwtManager";
 
 import axios from "axios";
 import axiosRetry from 'axios-retry';
+import ErrorCodeManager from "../ErrorCodeManager";
+import Spinner from "../Spinner";
 axiosRetry(axios, {retries: process.env.REACT_APP_EXPONENTIAL_RETRY_COUNT});
 
 class LoginForm extends React.Component{
@@ -16,16 +18,18 @@ class LoginForm extends React.Component{
             email: "",
             password: "",
             error: undefined,
-            isLogged: false
+            isLogged: false,
+            loginSubmitted: false
         }
     }
 
     async login(event){
         event.preventDefault();
-        let errorMessage = undefined;
+
+        this.setState({error: undefined, isLogged: false, loginSubmitted: true})
 
         try{
-            const response = await axios.post(process.env.REACT_APP_API_URL + "/login", {email: this.state.email, password: this.state.password});
+            const response = await axios.post(process.env.REACT_APP_API_URL + "login", {email: this.state.email, password: this.state.password});
             const jwt = response.data;
             const decodeJWT = JwtManager.decode(jwt);
 
@@ -35,19 +39,16 @@ class LoginForm extends React.Component{
                 this.setState({error: "Vous n'êtes pas autorisé à vous connecter."});
             }else{
                 localStorage.setItem("jwt", jwt);
-                this.setState({isLogged: true, error: undefined});
+                this.setState({isLogged: true, error: undefined, loginSubmitted: false});
             }
-        }catch (e) {
-            const error = e.response;
-            errorMessage = "Une erreur inattendue est survenue ...";
+        }catch (error) {
+            const errorMessage = ErrorCodeManager.message(error, function(error){
+                if(error?.status === 404){
+                    return "Adresse email et/ou mot de passe invalide";
+                }
+            });
 
-            if(error?.message === "Network Error"){
-                errorMessage = "Une erreur serveur rend cette action impossible";
-            }else if (error.status === 404){
-                errorMessage = "Adresse email et/ou mot de passe invalide";
-            }
-
-            this.setState({error: errorMessage});
+            this.setState({error: errorMessage, loginSubmitted: false});
         }
     }
 
@@ -78,6 +79,8 @@ class LoginForm extends React.Component{
                                         this.setState({password: event.target.value});
                                     }}/>
                                 </div>
+
+                                {(!this.state.isLogged && this.state.loginSubmitted && !this.state.error) && <Spinner text={""} />}
 
                                 <button className="btn text-white mx-auto d-block border-white mt-md-3" onClick={(event) => this.login(event)}>Se connecter</button>
                             </form>
