@@ -70,7 +70,7 @@ class BackEndPanel extends React.Component {
         }
 
         if(previousProps.nbElementsPerPage !== this.props.nbElementsPerPage){
-            await this.setState({nbElementsPerPage: this.props.nbElementsPerPage});
+            await this.setState({nbElementsPerPage: this.props.nbElementsPerPage, currentPagination: 1});
 
             await this.loadTableContent();
         }
