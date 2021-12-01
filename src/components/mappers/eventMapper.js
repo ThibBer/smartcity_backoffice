@@ -4,8 +4,6 @@ const mapper = function(event) {
     const eventDate = new Date(event?.date_hour);
     const creator = event.creator;
 
-    console.log(event.report)
-
     return (
         <>
             <td>{event.id}</td>
