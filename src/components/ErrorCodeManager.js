@@ -1,17 +1,16 @@
 module.exports.message = (error, customChecksCallback) => {
-    console.error(error)
+    console.error(error) //TODO Use console.error() only for debug
     let errorMessage = undefined;
-
-    if (error?.message === "Network Error") {
-        errorMessage = "Une erreur serveur rend cette action impossible, il est impossible de joindre le serveur";
-    }else if (customChecksCallback !== undefined){
+    if (customChecksCallback !== undefined){
         errorMessage = customChecksCallback(error);
     }
 
     if(errorMessage === undefined){
         const errorData = error?.response.data?.error;
 
-        if(errorData) {
+        if (error?.message === "Network Error") {
+            errorMessage = "Une erreur serveur rend cette action impossible, il est impossible de joindre le serveur";
+        }else if(errorData) {
             errorMessage = errorData;
         } else if (error.status >= 200 && error.status < 300) {
             errorMessage = undefined;
