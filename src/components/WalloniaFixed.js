@@ -13,7 +13,6 @@ class WalloniaFixed extends React.Component{
         this.state = {
             currentItem: SideBarItems[0],
             modalIsVisible: false,
-            loadAuxiliaryData: false,
             filter: undefined,
             nbElementsPerPage: ElementsByPage[0]
         }
@@ -24,7 +23,7 @@ class WalloniaFixed extends React.Component{
     }
 
     onModalClosed(){
-        this.setState({modalIsVisible: false, loadAuxiliaryData: false})
+        this.setState({modalIsVisible: false})
     }
 
     getTableIcon(){
@@ -32,7 +31,7 @@ class WalloniaFixed extends React.Component{
     }
 
     onClickAddElementButton(){
-        this.setState({modalIsVisible: true, loadAuxiliaryData: true});
+        this.setState({modalIsVisible: true});
     }
 
     onFilter(filter){
@@ -93,7 +92,7 @@ class WalloniaFixed extends React.Component{
 
                                         <div className="row">
                                             <div className="col">
-                                                <BackEndPanel modalIsVisible={this.state.modalIsVisible} singularTableLabel={this.state.currentItem.singularLabel} onModalClosed={() => this.onModalClosed()} apiRoute={this.state.currentItem.apiRoute} form={this.state.currentItem.form} columns={this.state.currentItem.columns} mapper={this.state.currentItem.mapper} loadAuxiliaryData={this.state.loadAuxiliaryData} filter={this.state.filter} nbElementsPerPage={this.state.nbElementsPerPage}/>
+                                                <BackEndPanel modalIsVisible={this.state.modalIsVisible} singularTableLabel={this.state.currentItem.singularLabel} onModalClosed={() => this.onModalClosed()} apiRoute={this.state.currentItem.apiRoute} columns={this.state.currentItem.columns} mapper={this.state.currentItem.mapper} filter={this.state.filter} nbElementsPerPage={this.state.nbElementsPerPage}/>
                                             </div>
                                         </div>
                                     </div>

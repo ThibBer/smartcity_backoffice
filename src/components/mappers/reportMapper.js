@@ -2,8 +2,7 @@ import ReportStates from "../data/ReportStates";
 
 const mapper = function(report) {
     const createdAt = new Date(report.created_at);
-
-    console.log(report)
+    const reporter = report.reporter;
 
     return (
         <>
@@ -13,7 +12,7 @@ const mapper = function(report) {
             <td>{ReportStates[report.state]}</td>
             <td>{report.zip_code + " " + report.city}<br/>{report.street + ", " + report.house_number}</td>
             <td>{createdAt.toLocaleDateString()} {createdAt.toLocaleTimeString()}</td>
-            <td>{report.reporter}</td>
+            <td>{reporter && ("#" + reporter.id + " " + reporter.first_name + " " + reporter.last_name)}</td>
         </>
     );
 };

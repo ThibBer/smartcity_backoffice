@@ -24,8 +24,7 @@ class BackEndPanel extends React.Component {
             modal: {
                 visibility: this.props.modalIsVisible,
                 data: undefined,
-                error: undefined,
-                auxiliaryData: {}
+                error: undefined
             },
             popup: {
                 visibility: false,
@@ -80,10 +79,6 @@ class BackEndPanel extends React.Component {
             await this.loadTableContent();
         }
 
-        if(previousProps.loadAuxiliaryData !== this.props.loadAuxiliaryData && this.props.loadAuxiliaryData){
-            await this.loadAuxiliaryData();
-        }
-
         if(previousProps.filter !== this.props.filter){
             await this.setState({filter: this.props.filter});
             await this.loadTableContent();
@@ -98,8 +93,7 @@ class BackEndPanel extends React.Component {
             visibility: false,
             data: undefined,
             error: undefined,
-            rowIndex: undefined,
-            auxiliaryData: {}
+            rowIndex: undefined
         };
 
         this.setState({modal});
@@ -107,20 +101,8 @@ class BackEndPanel extends React.Component {
         this.props.onModalClosed();
     }
 
-    async loadAuxiliaryData(){
-        const modal = {...this.state.modal};
-
-        if(this.state.apiRoute === "report"){
-            const response = await axios.get(process.env.REACT_APP_API_URL + "reportType");
-            modal.auxiliaryData.reportTypes = response.data;
-        }
-
-        this.setState({modal});
-    }
-
     // ON SAVE MODAL
     async onSaveModal(event, data, isAnUpdate){
-        console.log("onSaveModal")
         const modal = {...this.state.modal};
         const tableContent = [...this.state.tableContent];
 
@@ -145,7 +127,7 @@ class BackEndPanel extends React.Component {
         }
 
         this.props.onModalClosed();
-        this.setState({modal, auxiliaryData: {}, tableContent});
+        this.setState({modal, tableContent});
     }
 
     /*TABLE CALLBACKS*/
@@ -155,8 +137,6 @@ class BackEndPanel extends React.Component {
         modal.visibility = true;
         modal.data = selectedObject;
         modal.rowIndex = rowIndex;
-
-        await this.loadAuxiliaryData();
 
         this.setState({modal});
     }
@@ -168,7 +148,6 @@ class BackEndPanel extends React.Component {
         popup.rowIndex = rowIndex;
 
         const modal = {...this.state.modal};
-        modal.auxiliaryData = {};
 
         this.setState({
             popup,
@@ -210,12 +189,28 @@ class BackEndPanel extends React.Component {
         }
     }
 
-    render(){
+    render() {
         return (
             <>
-                <BackOfficeTable columns={this.props.columns} data={this.state.tableContent} onClickEditButton={(event, selectedObject, rowIndex) => this.onClickEditButton(event, selectedObject, rowIndex)} onClickDeleteButton={(event, selectedObject, rowIndex) => this.onClickDeleteButton(event, selectedObject, rowIndex)} error={this.state.error} mapper={this.props.mapper} filter={this.state.filter} allEntitiesCount={this.state.allEntitiesCount} onPaginationClick={(newPagination) => this.onPaginationClick(newPagination)} nbElementsPerPage={this.state.nbElementsPerPage} currentPagination={this.state.currentPagination}/>
-                <BackOfficeModal data={this.state.modal.data} modalIsVisible={this.state.modal.visibility} form={this.props.form} title={this.props.singularTableLabel} error={this.state.modal.error} onHide={(event) => this.onHideModal(event)} onSave={(event, object, isAnUpdate) => this.onSaveModal(event, object, isAnUpdate)} auxiliaryData={this.state.modal.auxiliaryData}/>
-                <DeletePopup popupIsVisible={this.state.popup.visibility} title={this.props.singularTableLabel} onClose={(event, isConfirmed) => this.onCloseDeletePopup(event, isConfirmed)} error={this.state.popup.error}/>
+                <BackOfficeTable columns={this.props.columns} data={this.state.tableContent}
+                                 onClickEditButton={(event, selectedObject, rowIndex) => this.onClickEditButton(event, selectedObject, rowIndex)}
+                                 onClickDeleteButton={(event, selectedObject, rowIndex) => this.onClickDeleteButton(event, selectedObject, rowIndex)}
+                                 error={this.state.error} mapper={this.props.mapper} filter={this.state.filter}
+                                 allEntitiesCount={this.state.allEntitiesCount}
+                                 onPaginationClick={(newPagination) => this.onPaginationClick(newPagination)}
+                                 nbElementsPerPage={this.state.nbElementsPerPage}
+                                 currentPagination={this.state.currentPagination}/>
+
+                <BackOfficeModal data={this.state.modal.data} modalIsVisible={this.state.modal.visibility}
+                                 title={this.props.singularTableLabel} error={this.state.modal.error}
+                                 onHide={(event) => this.onHideModal(event)}
+                                 onSave={(event, object, isAnUpdate) => this.onSaveModal(event, object, isAnUpdate)}
+                                 apiRoute={this.state.apiRoute}
+                />
+
+                <DeletePopup popupIsVisible={this.state.popup.visibility} title={this.props.singularTableLabel}
+                             onClose={(event, isConfirmed) => this.onCloseDeletePopup(event, isConfirmed)}
+                             error={this.state.popup.error}/>
             </>
         )
     }
