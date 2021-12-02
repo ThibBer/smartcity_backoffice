@@ -1,5 +1,5 @@
 import React from "react";
-import Error from "../../Error";
+import Error from "../Error";
 
 class ReportTypeForm extends React.Component{
     constructor(props) {

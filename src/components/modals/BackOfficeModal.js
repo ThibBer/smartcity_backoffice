@@ -6,10 +6,10 @@ import Spinner from "../Spinner";
 import Error from "../Error";
 
 /*Form*/
-import UserForm from "../forms/components/UserForm";
-import ReportForm from "../forms/components/ReportForm";
-import EventForm from "../forms/components/EventForm";
-import ReportTypeForm from "../forms/components/ReportTypeForm";
+import UserForm from "../forms/UserForm";
+import ReportForm from "../forms/ReportForm";
+import EventForm from "../forms/EventForm";
+import ReportTypeForm from "../forms/ReportTypeForm";
 
 /*Validators*/
 import ReportFormValidator from "../forms/validators/ReportFormValidator";

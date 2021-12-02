@@ -2,9 +2,9 @@ import React from 'react';
 
 import axios from "axios";
 import axiosRetry from 'axios-retry';
-import Error from "../../Error";
+import Error from "../Error";
 import {Form} from "react-bootstrap";
-import ReportStates from "../../data/ReportStates";
+import ReportStates from "../data/ReportStates";
 import {AsyncTypeahead, Typeahead} from "react-bootstrap-typeahead";
 
 axiosRetry(axios, {retries: process.env.REACT_APP_EXPONENTIAL_RETRY_COUNT, retryDelay: axiosRetry.exponentialDelay});
@@ -66,7 +66,6 @@ class ReportForm extends React.Component {
     }
 
     render() {
-        console.log(this.state.report)
         return (
             <form>
                 <div className="row">
@@ -109,12 +108,12 @@ class ReportForm extends React.Component {
                                 delay={800}
                                 multiple={false}
                                 labelKey={user => ("#" + user.id + " " + user.first_name + " " + user.last_name)}
-                                minLength={3}
+                                minLength={1}
                                 onSearch={(filter) => this.onUserSearch(filter)}
                                 options={this.state.users}
                                 emptyLabel="Aucune donnée trouvée"
                                 placeholder="Créateur du signalement"
-                                defaultSelected={[this.state.report?.reporter]}
+                                defaultSelected={this.state.report?.reporter ? [this.state.report?.reporter] : []}
                                 renderMenuItemChildren={(user, props) => (
                                     <>
                                         <span>#{user.id} - {user.email} | {user.first_name} {user.last_name}</span>
@@ -134,7 +133,7 @@ class ReportForm extends React.Component {
                                 onChange={(reportType) => this.onUpdateReportValue("report_type", reportType[0])}
                                 options={this.state.reportTypes}
                                 placeholder="Type de signalement"
-                                defaultSelected={[this.state.report?.report_type]}
+                                defaultSelected={this.state.report?.report_type ? [this.state.report?.report_type] : []}
                             />
                             {this.state.errors?.report_type && <Error content={this.state.errors.report_type}/>}
                         </div>

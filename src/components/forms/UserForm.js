@@ -1,7 +1,7 @@
 import React from "react";
 import {Form} from "react-bootstrap";
-import UserRoles from "../../data/UserRoles"
-import Error from "../../Error";
+import UserRoles from "../data/UserRoles"
+import Error from "../Error";
 
 class UserForm extends React.Component{
     constructor(props) {

@@ -1,5 +1,5 @@
 import React from 'react';
-import Error from "../../Error";
+import Error from "../Error";
 import {AsyncTypeahead} from "react-bootstrap-typeahead";
 import axios from "axios";
 
@@ -57,11 +57,25 @@ class EventForm extends React.Component {
         return (
             <form>
                 <div className="row">
-                    <div className="col">
+                    <div className="col-6">
                         <div className="form-group mb-3">
                             <label htmlFor="date_hour">Date / heure</label>
                             <input id="date_hour" type="datetime-local" className="form-control" defaultValue={this.state.event?.date_hour?.substr(0, 16)} onChange={(event) => this.onInputChange(event, "date_hour")}/>
                             {this.state.errors?.date_hour && <Error content={this.state.errors.date_hour}/>}
+                        </div>
+                    </div>
+                    <div className="col-6">
+                        <div className="form-group mb-3">
+                            <label>Durée de l'événement</label>
+
+                            <div className="input-group">
+                                <input type="number" className="form-control" placeholder="Durée de l'événement" aria-describedby="minutes-label" defaultValue={this.state.event?.duration} onChange={(event) => this.onInputChange(event, "duration")}/>
+                                <div className="input-group-append">
+                                    <span className="input-group-text" id="minutes-label">minutes</span>
+                                </div>
+
+                                {this.state.errors?.duration && <Error content={this.state.errors.duration}/>}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -77,12 +91,12 @@ class EventForm extends React.Component {
                                 delay={800}
                                 multiple={false}
                                 labelKey={report => ("#" + report.description)}
-                                minLength={3}
+                                minLength={1}
                                 onSearch={(filter) => this.onReportSearch(filter)}
                                 options={this.state.reports}
                                 emptyLabel="Aucune donnée trouvée"
                                 placeholder="Signalement"
-                                defaultSelected={[this.state.event?.report]}
+                                defaultSelected={this.state.event?.report ? [this.state.event?.report] : []}
                                 renderMenuItemChildren={(report, props) => (
                                     <>
                                         <span>#{report.description}</span>
@@ -104,12 +118,12 @@ class EventForm extends React.Component {
                                 delay={800}
                                 multiple={false}
                                 labelKey={user => ("#" + user.id + " " + user.first_name + " " + user.last_name)}
-                                minLength={3}
+                                minLength={1}
                                 onSearch={(filter) => this.onUserSearch(filter)}
                                 options={this.state.users}
                                 emptyLabel="Aucune donnée trouvée"
                                 placeholder="Créateur de l'événement"
-                                defaultSelected={[this.state.event?.creator]}
+                                defaultSelected={this.state.event?.creator ? [this.state.event?.creator] : []}
                                 renderMenuItemChildren={(user, props) => (
                                     <>
                                         <span>#{user.id} - {user.email} | {user.first_name} {user.last_name}</span>
