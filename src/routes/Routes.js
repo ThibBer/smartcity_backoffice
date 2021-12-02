@@ -11,23 +11,26 @@ import WalloniaFixed from "../components/WalloniaFixed";
 import jwtManager from "../JwtManager";
 
 export default function Routes(){
-    const jwtToken = localStorage.getItem("jwt");
-    const jwt = jwtManager.decode(jwtToken);
-    const jwtIsValid = jwtManager.isValid(jwt);
+    function jwtIsValid(key){
+        const jwtToken = localStorage.getItem(key);
+        const jwt = jwtManager.decode(jwtToken);
+        const jwtIsValid = jwtToken !== null && jwtManager.isValid(jwt);
 
-    if(!jwtIsValid){
-        localStorage.removeItem("jwt");
+        if(!jwtIsValid){
+            localStorage.removeItem(key);
+        }
+
+        return jwtIsValid;
     }
+
+    const HomeComponent = () => jwtIsValid("jwt") ? <WalloniaFixed/> : <Redirect to={"/login"}/>
+    const LoginComponent = () => jwtIsValid("jwt") ? <Redirect to={"/"}/> : <LoginForm/>
 
     return(
         <Router>
             <Switch>
-                <Route path="/login">
-                    {jwtIsValid ? <Redirect to={"/"}/> : <LoginForm/>}
-                </Route>
-                <Route path="/">
-                    {jwtIsValid ? <WalloniaFixed/> : <Redirect to={"/login"}/>}
-                </Route>
+                <Route exact path="/login" component={LoginComponent}/>
+                <Route path="/" component={HomeComponent}/>
             </Switch>
         </Router>
     );

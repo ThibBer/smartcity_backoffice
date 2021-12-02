@@ -25,17 +25,16 @@ class LoginForm extends React.Component{
 
     async login(event){
         event.preventDefault();
-
         this.setState({error: undefined, isLogged: false, loginSubmitted: true})
 
         try{
             const response = await axios.post(process.env.REACT_APP_API_URL + "login", {email: this.state.email, password: this.state.password});
             const jwt = response.data;
-            const decodeJWT = JwtManager.decode(jwt);
+            const decodedJWT = JwtManager.decode(jwt);
 
-            if(!JwtManager.isValid(decodeJWT)){
+            if(!JwtManager.isValid(decodedJWT)){
                 this.setState({error: "Votre session à expirée. Veuillez vous connecter"});
-            } else if(decodeJWT.payload.user.role !== "admin"){
+            } else if(decodedJWT.payload.user.role !== "admin"){
                 this.setState({error: "Vous n'êtes pas autorisé à vous connecter."});
             }else{
                 localStorage.setItem("jwt", jwt);
@@ -64,7 +63,7 @@ class LoginForm extends React.Component{
                         <div id="form-container" className="bg-smartcity p-5 text-light">
                             <div id="login-form">
                                 <div className={"text-center"}>
-                                    <h3>Wallonia Fixed {this.state.email}</h3>
+                                    <h3>Wallonia Fixed</h3>
                                 </div>
                                 <div className="form-group">
                                     <label>Adresse email</label>

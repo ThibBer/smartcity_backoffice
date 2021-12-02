@@ -16,7 +16,6 @@ import ReportFormValidator from "../forms/validators/ReportFormValidator";
 import UserFormValidator from "../forms/validators/UserFormValidator";
 import EventFormValidator from "../forms/validators/EventFormValidator";
 import ReportTypeFormValidator from "../forms/validators/ReportTypeFormValidator";
-import axios from "axios";
 
 class BackOfficeModal extends React.Component{
     constructor(props) {

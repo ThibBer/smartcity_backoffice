@@ -9,7 +9,6 @@ import axiosRetry from 'axios-retry';
 axiosRetry(axios, {retries: process.env.REACT_APP_EXPONENTIAL_RETRY_COUNT, retryDelay: axiosRetry.exponentialDelay});
 
 class BackEndPanel extends React.Component {
-
     constructor(props) {
         super(props);
 

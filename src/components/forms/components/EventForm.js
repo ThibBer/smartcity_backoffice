@@ -27,12 +27,12 @@ class EventForm extends React.Component {
     }
 
     onUpdateReportValue(name, value) {
-        const report = {...this.state.report};
+        const event = {...this.state.event};
 
-        report[name] = value;
+        event[name] = value;
 
         this.props.onInputChange(name, value);
-        this.setState({report});
+        this.setState({event});
     }
 
     async onUserSearch(filter) {
@@ -82,6 +82,7 @@ class EventForm extends React.Component {
                                 options={this.state.reports}
                                 emptyLabel="Aucune donnée trouvée"
                                 placeholder="Signalement"
+                                defaultSelected={[this.state.event?.report]}
                                 renderMenuItemChildren={(report, props) => (
                                     <>
                                         <span>#{report.description}</span>
@@ -108,6 +109,7 @@ class EventForm extends React.Component {
                                 options={this.state.users}
                                 emptyLabel="Aucune donnée trouvée"
                                 placeholder="Créateur de l'événement"
+                                defaultSelected={[this.state.event?.creator]}
                                 renderMenuItemChildren={(user, props) => (
                                     <>
                                         <span>#{user.id} - {user.email} | {user.first_name} {user.last_name}</span>
