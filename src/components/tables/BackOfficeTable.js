@@ -61,7 +61,7 @@ class BackOfficeTable extends React.Component {
     }
 
     emptyBody(){
-        return <tr><td colSpan={this.props.columns.length + 1} className="text-center">Aucune donnée à afficher</td></tr>
+        return <tr><td colSpan={this.props.columns.length + 1} className="text-center">{this.state.filter ? "Aucune donnée disponible pour cette recherche" : "Aucune donnée à afficher"}</td></tr>
     }
 
     renderError(){

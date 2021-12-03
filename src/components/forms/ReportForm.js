@@ -26,7 +26,10 @@ class ReportForm extends React.Component {
 
     async componentDidMount() {
         try {
-            const response = await axios.get(process.env.REACT_APP_API_URL + "reportType");
+            const response = await axios.get(process.env.REACT_APP_API_URL + "reportType", {headers: {
+                'Authorization': `Bearer ${localStorage.getItem("jwt")}`
+            }});
+
             this.setState({reportTypes: response.data});
         } catch (error) {
             console.error(error)
@@ -56,7 +59,10 @@ class ReportForm extends React.Component {
         this.setState({loading: true});
 
         try {
-            const response = await axios.get(process.env.REACT_APP_API_URL + "user/filter/" + filter);
+            const response = await axios.get(process.env.REACT_APP_API_URL + "user/filter/" + filter, {headers: {
+                'Authorization': `Bearer ${localStorage.getItem("jwt")}`
+            }});
+
             await this.setState({users: response.data});
         } catch (e) {
             console.error(e)

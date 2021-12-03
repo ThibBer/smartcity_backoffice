@@ -37,7 +37,9 @@ class EventForm extends React.Component {
 
     async onUserSearch(filter) {
         try {
-            const response = await axios.get(process.env.REACT_APP_API_URL + "user/filter/" + filter);
+            const response = await axios.get(process.env.REACT_APP_API_URL + "user/filter/" + filter, {headers: {
+                'Authorization': `Bearer ${localStorage.getItem("jwt")}`
+            }});
             await this.setState({users: response.data});
         } catch (e) {
             console.error(e)
@@ -46,7 +48,9 @@ class EventForm extends React.Component {
 
     async onReportSearch(filter) {
         try {
-            const response = await axios.get(process.env.REACT_APP_API_URL + "report/filter/" + filter);
+            const response = await axios.get(process.env.REACT_APP_API_URL + "report/filter/" + filter, {headers: {
+                'Authorization': `Bearer ${localStorage.getItem("jwt")}`
+            }});
             await this.setState({reports: response.data});
         } catch (e) {
             console.error(e)

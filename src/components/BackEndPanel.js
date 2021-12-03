@@ -46,7 +46,9 @@ class BackEndPanel extends React.Component {
         const filter = this.state.filter;
         try {
             const webServiceAddress = process.env.REACT_APP_API_URL + this.state.apiRoute + "/filter/" + this.state.nbElementsPerPage * (this.state.currentPagination - 1) + "&" + (this.state.nbElementsPerPage * this.state.currentPagination) + (filter && ("&" + filter));
-            const response = await axios.get(webServiceAddress);
+            const response = await axios.get(webServiceAddress, {headers: {
+                'Authorization': `Bearer ${localStorage.getItem("jwt")}`
+            }});
 
             const jsonResponse = response.data
 
@@ -108,10 +110,14 @@ class BackEndPanel extends React.Component {
         try {
             const webServiceAddress = process.env.REACT_APP_API_URL + this.state.apiRoute;
             if(isAnUpdate){
-                await axios.patch(webServiceAddress, data);
+                await axios.patch(webServiceAddress, data, {headers: {
+                    'Authorization': `Bearer ${localStorage.getItem("jwt")}`
+                }});
                 tableContent[this.state.modal.rowIndex] = data;
             }else{
-                const response = await axios.post(webServiceAddress, data);
+                const response = await axios.post(webServiceAddress, data, {headers: {
+                    'Authorization': `Bearer ${localStorage.getItem("jwt")}`
+                }});
                 data.id = response.data.id;
 
                 tableContent.push(data);
@@ -164,7 +170,9 @@ class BackEndPanel extends React.Component {
 
         if(isConfirmed){
             try {
-                await axios.delete(process.env.REACT_APP_API_URL + this.state.apiRoute, {data: popup.data});
+                await axios.delete(process.env.REACT_APP_API_URL + this.state.apiRoute, {data: popup.data}, {headers: {
+                    'Authorization': `Bearer ${localStorage.getItem("jwt")}`
+                }});
                 tableContent.splice(this.state.popup.rowIndex, 1);
             }catch (error) {
                 popup.visibility = true;

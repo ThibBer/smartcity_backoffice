@@ -28,7 +28,10 @@ class LoginForm extends React.Component{
         this.setState({error: undefined, isLogged: false, loginSubmitted: true})
 
         try{
-            const response = await axios.post(process.env.REACT_APP_API_URL + "login", {email: this.state.email, password: this.state.password});
+            const response = await axios.post(process.env.REACT_APP_API_URL + "login", {email: this.state.email, password: this.state.password}, {headers: {
+                'Authorization': `Bearer ${localStorage.getItem("jwt")}`
+            }});
+
             const jwt = response.data;
             const decodedJWT = JwtManager.decode(jwt);
 

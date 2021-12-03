@@ -6,7 +6,7 @@ module.exports.message = (error, customChecksCallback) => {
     }
 
     if(errorMessage === undefined){
-        const errorData = error?.response.data?.error;
+        const errorData = error?.response?.data?.error;
 
         if (error?.message === "Network Error") {
             errorMessage = "Une erreur serveur rend cette action impossible, il est impossible de joindre le serveur";
