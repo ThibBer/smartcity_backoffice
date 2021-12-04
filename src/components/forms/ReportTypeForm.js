@@ -1,5 +1,6 @@
 import React from "react";
 import Error from "../Error";
+import Comparator from "../../utils/Comparator";
 
 class ReportTypeForm extends React.Component{
     constructor(props) {
@@ -12,7 +13,7 @@ class ReportTypeForm extends React.Component{
     }
 
     async componentDidUpdate(previousProps, previousState, snapshot){
-        if(previousProps.errors !== this.props.errors){
+        if(!Comparator.objectsAreEquals(previousProps.errors, this.props.errors)){
             this.setState({errors: this.props.errors});
         }
     }

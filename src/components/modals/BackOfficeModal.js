@@ -16,6 +16,7 @@ import ReportFormValidator from "../forms/validators/ReportFormValidator";
 import UserFormValidator from "../forms/validators/UserFormValidator";
 import EventFormValidator from "../forms/validators/EventFormValidator";
 import ReportTypeFormValidator from "../forms/validators/ReportTypeFormValidator";
+import Comparator from "../../utils/Comparator";
 
 class BackOfficeModal extends React.Component{
     constructor(props) {
@@ -39,7 +40,7 @@ class BackOfficeModal extends React.Component{
             });
         }
 
-        if(previousProps.data !== this.props.data){
+        if(!Comparator.objectsAreEquals(previousProps.data, this.props.data)){
             this.setState({modalData: {...this.props.data}})
             this.isAnUpdate = this.props.data !== undefined && Object.keys(this.props.data).length > 0;
         }

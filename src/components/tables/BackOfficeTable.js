@@ -1,6 +1,7 @@
 import React from 'react';
 import Spinner from "../Spinner";
 import ErrorCodeManager from "../ErrorCodeManager";
+import Comparator from "../../utils/Comparator";
 
 class BackOfficeTable extends React.Component {
     constructor(props) {
@@ -18,21 +19,23 @@ class BackOfficeTable extends React.Component {
         }
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if(prevProps.data !== this.props.data){
+    async componentDidUpdate(prevProps, prevState, snapshot) {
+        if(!Comparator.arraysAreEquals(prevProps.data, this.props.data)){
             this.setState({data: this.props.data});
         }
 
         if(prevProps.nbElementsPerPage !== this.props.nbElementsPerPage){
-            this.setState({nbElementsPerPage: this.props.nbElementsPerPage});
+            await this.setState({nbElementsPerPage: this.props.nbElementsPerPage, currentPagination: 1});
+            this.props.onPaginationClick(this.state.currentPagination);
         }
 
         if(prevProps.allEntitiesCount !== this.props.allEntitiesCount){
-            this.setState({allEntitiesCount: this.props.allEntitiesCount});
+            await this.setState({allEntitiesCount: this.props.allEntitiesCount});
         }
 
         if(prevProps.currentPagination !== this.props.currentPagination){
-            this.setState({currentPagination: this.props.currentPagination});
+            await this.setState({currentPagination: this.props.currentPagination});
+            this.props.onPaginationClick(this.state.currentPagination);
         }
 
         if(prevProps.error !== this.props.error){
@@ -40,7 +43,8 @@ class BackOfficeTable extends React.Component {
         }
 
         if(prevProps.filter !== this.props.filter){
-            this.setState({filter: this.props.filter});
+            await this.setState({filter: this.props.filter, currentPagination: 1});
+            this.props.onPaginationClick(this.state.currentPagination);
         }
     }
 
@@ -61,7 +65,7 @@ class BackOfficeTable extends React.Component {
     }
 
     emptyBody(){
-        return <tr><td colSpan={this.props.columns.length + 1} className="text-center">{this.state.filter ? "Aucune donnée disponible pour cette recherche" : "Aucune donnée à afficher"}</td></tr>
+        return <tr><td colSpan={this.props.columns.length + 1} className="text-center">{this.state.filter !== "" ? "Aucune donnée ne correspond à cette recherche" : "Aucune donnée à afficher"}</td></tr>
     }
 
     renderError(){
@@ -75,7 +79,8 @@ class BackOfficeTable extends React.Component {
             return this.renderError();
         }
 
-        if(this.state.data){
+
+        if(this.state.data !== undefined && this.state.data.length > 0){
             return this.renderTable();
         }
 
@@ -88,7 +93,7 @@ class BackOfficeTable extends React.Component {
         });
     }
 
-    onPaginationClick(event, number){
+    async onPaginationClick(event, number){
         let newPageNumber = number;
 
         if(number === "previous"){
@@ -97,7 +102,7 @@ class BackOfficeTable extends React.Component {
             newPageNumber = this.state.currentPagination + 1;
         }
 
-        this.setState({currentPagination: newPageNumber})
+        await this.setState({currentPagination: newPageNumber});
 
         this.props.onPaginationClick(newPageNumber);
     }
@@ -109,7 +114,7 @@ class BackOfficeTable extends React.Component {
         for(let i = 1; i <= nbPages; i++){
             paginationElements.push(
                 <li className="page-item" key={i}>
-                    <button className={"page-link" + ((this.state.currentPagination === i) ? " text-black" : "")} onClick={(event) => this.onPaginationClick(event, i)}>{i}</button>
+                    <button className={"page-link" + ((this.state.currentPagination === i) ? " text-light bg-info" : " text-black")} onClick={(event) => this.onPaginationClick(event, i)}>{i}</button>
                 </li>
             );
         }
@@ -126,10 +131,10 @@ class BackOfficeTable extends React.Component {
                    <div className="col">
                            <table id="panel-table" className="table table-striped table-hover">
                                <thead>
-                               <tr>
-                                   {this.headerColumns()}
-                                   <th scope="col">Action</th>
-                               </tr>
+                                   <tr>
+                                       {this.headerColumns()}
+                                       <th scope="col">Action</th>
+                                   </tr>
                                </thead>
                                <tbody>
                                {

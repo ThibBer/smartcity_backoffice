@@ -1,5 +1,6 @@
 import React from 'react';
 import Error from "../Error";
+import Comparator from "../../utils/Comparator";
 import {AsyncTypeahead} from "react-bootstrap-typeahead";
 import axios from "axios";
 import axiosRetry from 'axios-retry';
@@ -19,7 +20,7 @@ class EventForm extends React.Component {
     }
 
     async componentDidUpdate(previousProps, previousState, snapshot){
-        if(previousProps.errors !== this.props.errors){
+        if(!Comparator.objectsAreEquals(previousProps.errors, this.props.errors)){
             this.setState({errors: this.props.errors});
         }
     }
@@ -103,7 +104,7 @@ class EventForm extends React.Component {
                                 emptyLabel="Aucune donnée trouvée"
                                 placeholder="Signalement"
                                 defaultSelected={this.state.event?.report ? [this.state.event?.report] : []}
-                                renderMenuItemChildren={(report, props) => (
+                                renderMenuItemChildren={(report) => (
                                     <>
                                         <span>#{report.description}</span>
                                     </>
@@ -130,7 +131,7 @@ class EventForm extends React.Component {
                                 emptyLabel="Aucune donnée trouvée"
                                 placeholder="Créateur de l'événement"
                                 defaultSelected={this.state.event?.creator ? [this.state.event?.creator] : []}
-                                renderMenuItemChildren={(user, props) => (
+                                renderMenuItemChildren={(user) => (
                                     <>
                                         <span>#{user.id} - {user.email} | {user.first_name} {user.last_name}</span>
                                     </>

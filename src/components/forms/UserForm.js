@@ -2,6 +2,7 @@ import React from "react";
 import {Form} from "react-bootstrap";
 import UserRoles from "../data/UserRoles"
 import Error from "../Error";
+import Comparator from "../../utils/Comparator";
 
 class UserForm extends React.Component{
     constructor(props) {
@@ -31,7 +32,7 @@ class UserForm extends React.Component{
     }
 
     async componentDidUpdate(previousProps, previousState, snapshot){
-        if(previousProps.errors !== this.props.errors){
+        if(!Comparator.objectsAreEquals(previousProps.errors, this.props.errors)){
             this.setState({errors: this.props.errors});
         }
     }

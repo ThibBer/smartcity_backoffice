@@ -1,6 +1,6 @@
 import React from 'react';
 import '../../css/topBar.css'
-import logo from '../../logo.svg'
+import logo from '../../images/logo.svg'
 
 class TopBar extends React.Component{
     logout() {
@@ -11,7 +11,7 @@ class TopBar extends React.Component{
         return (
             <div id="top-bar" className="row bg-smartcity">
                 <div className="col-4 align-self-center">
-                    <img src={logo} alt="logo" width={100}/>
+                    <img src={logo} alt="logo" width={100} className="app-logo"/>
                 </div>
                 <div className="col-4 text-center align-self-center">
                     <h3 className="text-white">WALLONIA FIXED</h3>

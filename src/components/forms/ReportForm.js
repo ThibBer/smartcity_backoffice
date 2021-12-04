@@ -7,6 +7,7 @@ import {AsyncTypeahead, Typeahead} from "react-bootstrap-typeahead";
 
 import axios from "axios";
 import axiosRetry from 'axios-retry';
+import Comparator from "../../utils/Comparator";
 axiosRetry(axios, {retries: process.env.REACT_APP_EXPONENTIAL_RETRY_COUNT, retryDelay: axiosRetry.exponentialDelay});
 
 class ReportForm extends React.Component {
@@ -37,7 +38,7 @@ class ReportForm extends React.Component {
     }
 
     async componentDidUpdate(previousProps, previousState, snapshot) {
-        if (previousProps.errors !== this.props.errors) {
+        if(!Comparator.objectsAreEquals(previousProps.errors, this.props.errors)){
             this.setState({errors: this.props.errors});
         }
     }
@@ -120,7 +121,7 @@ class ReportForm extends React.Component {
                                 emptyLabel="Aucune donnée trouvée"
                                 placeholder="Créateur du signalement"
                                 defaultSelected={this.state.report?.reporter ? [this.state.report?.reporter] : []}
-                                renderMenuItemChildren={(user, props) => (
+                                renderMenuItemChildren={(user) => (
                                     <>
                                         <span>#{user.id} - {user.email} | {user.first_name} {user.last_name}</span>
                                     </>

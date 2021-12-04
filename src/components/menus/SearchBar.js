@@ -1,11 +1,13 @@
 import React from 'react';
+const INVALID_CHAR = /[!#$%^&*()_+\-=[\]{};':"\\|,<>/?]+/;
 
 class SearchBar extends React.Component{
     constructor(props) {
         super(props);
 
         this.state = {
-            filter: ""
+            filter: "",
+            error: undefined
         }
 
         this.intervalTypingTimeout = undefined;
@@ -23,13 +25,18 @@ class SearchBar extends React.Component{
     }
 
     updateInputValue(filter){
-        this.props.onFilter(filter);
+        if(filter.match(INVALID_CHAR)){
+            this.setState({error: "Impossible d'effectuer une recherche avec des caractères spéciaux."});
+        }else{
+            this.setState({error: undefined});
+            this.props.onFilter(filter);
+        }
     }
 
-    reset(event){
+    async reset(event){
         event.preventDefault();
 
-        this.setState({filter: ""});
+        await this.setState({filter: "", error: undefined});
         this.props.onFilter(this.state.filter);
     }
 
@@ -41,6 +48,7 @@ class SearchBar extends React.Component{
                         <label>Recherche</label>
                         <input type="text" className="form-control" placeholder="Votre recherche" onChange={(event) => {this.onInputChange(event)}} value={this.state.filter}/>
                     </div>
+                    {this.state.error && <small>{this.state.error}</small>}
                 </div>
                 <div className="row mt-3">
                     <div className="col">

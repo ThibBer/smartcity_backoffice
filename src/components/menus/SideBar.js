@@ -5,23 +5,28 @@ import {Accordion} from "react-bootstrap";
 import SearchBar from "./SearchBar";
 import SideBarItems from "../data/SideBarItems"
 import UserRoles from "../data/UserRoles"
+import jwtManager from "../../JwtManager";
 
 class SideBar extends React.Component{
 
     constructor(props) {
         super(props);
 
-        const jwt = localStorage.getItem(process.env.REACT_APP_JWT_KEY);
-        const payload = jwt.split(".")[1];
-        const userData = JSON.parse(Buffer.from(payload, 'base64').toString('utf-8')).user;
-
         this.state = {
             onMenuItemSelected: props.onMenuItemSelected,
-            firstname: userData.first_name,
-            lastname: userData.last_name,
-            role: UserRoles[userData.role],
-            currentButton: SideBarItems[0]
+            currentButton: SideBarItems[0],
+            firstname: "",
+            lastname: "",
+            role: ""
         }
+    }
+
+    componentDidMount() {
+        const jwtToken = localStorage.getItem(process.env.REACT_APP_JWT_KEY);
+        const jwt = jwtManager.decode(jwtToken);
+        const {first_name, last_name, role} = jwt.payload.user;
+
+        this.setState({firstname: first_name,lastname: last_name, role: UserRoles[role]});
     }
 
     onMenuItemClick(event, item){

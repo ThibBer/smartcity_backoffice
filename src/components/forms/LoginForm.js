@@ -5,6 +5,10 @@ import {Redirect} from "react-router-dom";
 import JwtManager from "../../JwtManager";
 import ErrorCodeManager from "../ErrorCodeManager";
 import Spinner from "../Spinner";
+import GitHubLogo from "../../images/github.svg";
+import HenalluxLogo from "../../images/henallux.svg";
+import BernardNicolas from "../../images/bernard_nicolas.jpg";
+import BergThibaut from "../../images/berg_thibaut.png";
 
 import axios from "axios";
 import axiosRetry from 'axios-retry';
@@ -64,7 +68,7 @@ class LoginForm extends React.Component{
                         <div id="form-container" className="bg-smartcity p-5 text-light">
                             <div id="login-form">
                                 <div className={"text-center"}>
-                                    <h3>Wallonia Fixed</h3>
+                                    <h3>Wallonia Fixed - Administration</h3>
                                 </div>
                                 <div className="form-group">
                                     <label>Adresse email</label>
@@ -86,6 +90,16 @@ class LoginForm extends React.Component{
                             </div>
                             {this.state.error && <Error content={this.state.error}/>}
                         </div>
+                        <div className="text-center">
+                            <small>Créé par BERG Thibaut & BERNARD Nicolas pour le projet SmartCity - Henallux IESN (IG3)</small>
+                        </div>
+
+                        <ul id="icons-list" className="list-inline mx-auto mt-3">
+                            <li><a target="_blank" rel="noreferrer" href="https://www.henallux.be/"><img src={HenalluxLogo} width="55" alt="Logo henallux"/></a></li>
+                            <li><a target="_blank" rel="noreferrer" href="https://github.com/ThibBer/smartcity_backoffice"><img src={GitHubLogo} width="55" alt="Logo github"/></a></li>
+                            <li><a target="_blank" rel="noreferrer" href="https://www.linkedin.com/in/nicolas-bernico-bernard"><img src={BernardNicolas} width="55" alt="Nicolas Bernard"/></a></li>
+                            <li><a target="_blank" rel="noreferrer" href="https://www.linkedin.com/in/thibautberg/"><img src={BergThibaut} width="55" alt="Thibaut Berg"/></a></li>
+                        </ul>
                     </div>
                 </div>
             </div>
