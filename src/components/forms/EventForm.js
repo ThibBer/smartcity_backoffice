@@ -2,6 +2,8 @@ import React from 'react';
 import Error from "../Error";
 import {AsyncTypeahead} from "react-bootstrap-typeahead";
 import axios from "axios";
+import axiosRetry from 'axios-retry';
+axiosRetry(axios, {retries: process.env.REACT_APP_EXPONENTIAL_RETRY_COUNT, retryDelay: axiosRetry.exponentialDelay});
 
 class EventForm extends React.Component {
     constructor(props) {
@@ -38,7 +40,7 @@ class EventForm extends React.Component {
     async onUserSearch(filter) {
         try {
             const response = await axios.get(process.env.REACT_APP_API_URL + "user/filter/" + filter, {headers: {
-                'Authorization': `Bearer ${localStorage.getItem("jwt")}`
+                'Authorization': `Bearer ${localStorage.getItem(process.env.REACT_APP_JWT_KEY)}`
             }});
             await this.setState({users: response.data});
         } catch (e) {
@@ -49,7 +51,7 @@ class EventForm extends React.Component {
     async onReportSearch(filter) {
         try {
             const response = await axios.get(process.env.REACT_APP_API_URL + "report/filter/" + filter, {headers: {
-                'Authorization': `Bearer ${localStorage.getItem("jwt")}`
+                'Authorization': `Bearer ${localStorage.getItem(process.env.REACT_APP_JWT_KEY)}`
             }});
             await this.setState({reports: response.data});
         } catch (e) {

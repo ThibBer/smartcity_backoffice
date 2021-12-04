@@ -45,13 +45,14 @@ class BackEndPanel extends React.Component {
 
         const filter = this.state.filter;
         try {
-            const webServiceAddress = process.env.REACT_APP_API_URL + this.state.apiRoute + "/filter/" + this.state.nbElementsPerPage * (this.state.currentPagination - 1) + "&" + (this.state.nbElementsPerPage * this.state.currentPagination) + (filter && ("&" + filter));
+            const webServiceAddress = process.env.REACT_APP_API_URL + this.state.apiRoute + "/filter/" + this.state.nbElementsPerPage * (this.state.currentPagination - 1) + "&" + this.state.nbElementsPerPage + (filter && ("&" + filter));
             const response = await axios.get(webServiceAddress, {headers: {
-                'Authorization': `Bearer ${localStorage.getItem("jwt")}`
+                'Authorization': `Bearer ${localStorage.getItem(process.env.REACT_APP_JWT_KEY)}`
             }});
 
             const jsonResponse = response.data
 
+            //countWithoutLimit : values which contains filter
             this.setState({tableContent: jsonResponse.data, allEntitiesCount: jsonResponse.countWithoutLimit});
 
         }catch (error) {
@@ -111,13 +112,15 @@ class BackEndPanel extends React.Component {
             const webServiceAddress = process.env.REACT_APP_API_URL + this.state.apiRoute;
             if(isAnUpdate){
                 await axios.patch(webServiceAddress, data, {headers: {
-                    'Authorization': `Bearer ${localStorage.getItem("jwt")}`
+                    'Authorization': `Bearer ${localStorage.getItem(process.env.REACT_APP_JWT_KEY)}`
                 }});
+
                 tableContent[this.state.modal.rowIndex] = data;
             }else{
                 const response = await axios.post(webServiceAddress, data, {headers: {
-                    'Authorization': `Bearer ${localStorage.getItem("jwt")}`
+                    'Authorization': `Bearer ${localStorage.getItem(process.env.REACT_APP_JWT_KEY)}`
                 }});
+
                 data.id = response.data.id;
 
                 tableContent.push(data);
@@ -170,9 +173,13 @@ class BackEndPanel extends React.Component {
 
         if(isConfirmed){
             try {
-                await axios.delete(process.env.REACT_APP_API_URL + this.state.apiRoute, {data: popup.data}, {headers: {
-                    'Authorization': `Bearer ${localStorage.getItem("jwt")}`
-                }});
+                await axios.delete(process.env.REACT_APP_API_URL + this.state.apiRoute, {
+                    headers: {
+                    'Authorization': `Bearer ${localStorage.getItem(process.env.REACT_APP_JWT_KEY)}`
+                    },
+                    data: popup.data
+                });
+
                 tableContent.splice(this.state.popup.rowIndex, 1);
             }catch (error) {
                 popup.visibility = true;

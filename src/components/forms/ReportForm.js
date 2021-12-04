@@ -1,12 +1,12 @@
 import React from 'react';
 
-import axios from "axios";
-import axiosRetry from 'axios-retry';
 import Error from "../Error";
 import {Form} from "react-bootstrap";
 import ReportStates from "../data/ReportStates";
 import {AsyncTypeahead, Typeahead} from "react-bootstrap-typeahead";
 
+import axios from "axios";
+import axiosRetry from 'axios-retry';
 axiosRetry(axios, {retries: process.env.REACT_APP_EXPONENTIAL_RETRY_COUNT, retryDelay: axiosRetry.exponentialDelay});
 
 class ReportForm extends React.Component {
@@ -27,7 +27,7 @@ class ReportForm extends React.Component {
     async componentDidMount() {
         try {
             const response = await axios.get(process.env.REACT_APP_API_URL + "reportType", {headers: {
-                'Authorization': `Bearer ${localStorage.getItem("jwt")}`
+                'Authorization': `Bearer ${localStorage.getItem(process.env.REACT_APP_JWT_KEY)}`
             }});
 
             this.setState({reportTypes: response.data});
@@ -60,7 +60,7 @@ class ReportForm extends React.Component {
 
         try {
             const response = await axios.get(process.env.REACT_APP_API_URL + "user/filter/" + filter, {headers: {
-                'Authorization': `Bearer ${localStorage.getItem("jwt")}`
+                'Authorization': `Bearer ${localStorage.getItem(process.env.REACT_APP_JWT_KEY)}`
             }});
 
             await this.setState({users: response.data});

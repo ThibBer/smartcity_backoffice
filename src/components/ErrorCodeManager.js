@@ -12,11 +12,13 @@ module.exports.message = (error, customChecksCallback) => {
             errorMessage = "Une erreur serveur rend cette action impossible, il est impossible de joindre le serveur";
         }else if(errorData) {
             errorMessage = errorData;
-        } else if (error.status >= 200 && error.status < 300) {
+        } else if (error?.response.status >= 200 && error?.response.status < 300) {
             errorMessage = undefined;
-        } else if (error.status >= 400 && error.status < 500) {
+        }else if (error?.response.status === 403){
+            errorMessage = "Vous n'êtes pas autorisé à effectuer cette action."
+        } else if (error?.response.status >= 400 && error?.response.status < 500) {
             errorMessage = "Une erreur est survenue. Utilisation d'une donnée incorrecte ou non disponible " + error.response.data;
-        } else if (error.status >= 500 && error.status < 600) {
+        } else if (error?.response.status >= 500 && error?.response.status < 600) {
             errorMessage = "Une erreur serveur est survenue. Réessayer dans quelques instants";
         }
     }

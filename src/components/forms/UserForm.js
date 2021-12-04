@@ -77,11 +77,11 @@ class UserForm extends React.Component{
                     <div className="col-6">
                         <div className="form-group mb-3">
                             <label htmlFor="group">Rôle utilisateur</label>
-                            <Form.Select id="group" onClick={(event) => this.onInputChange(event, "role")}>
+                            <Form.Select id="group" onClick={(event) => this.onInputChange(event, "role")} value={this.state.user?.role}>
                                 <option>Rôle</option>
                                 {
                                     Object.keys(UserRoles).map(role =>
-                                        (this.state.user?.role === role) ? <option key={role} value={role} defaultValue>{UserRoles[role]}</option> : <option key={role} value={role}>{UserRoles[role]}</option>
+                                        <option key={role} value={role}>{UserRoles[role]}</option>
                                     )
                                 }
                             </Form.Select>

@@ -3,12 +3,12 @@ import '../../css/loginForm.css'
 import Error from "../Error";
 import {Redirect} from "react-router-dom";
 import JwtManager from "../../JwtManager";
+import ErrorCodeManager from "../ErrorCodeManager";
+import Spinner from "../Spinner";
 
 import axios from "axios";
 import axiosRetry from 'axios-retry';
-import ErrorCodeManager from "../ErrorCodeManager";
-import Spinner from "../Spinner";
-axiosRetry(axios, {retries: process.env.REACT_APP_EXPONENTIAL_RETRY_COUNT});
+axiosRetry(axios, {retries: process.env.REACT_APP_EXPONENTIAL_RETRY_COUNT, retryDelay: axiosRetry.exponentialDelay});
 
 class LoginForm extends React.Component{
     constructor(props) {
@@ -28,9 +28,7 @@ class LoginForm extends React.Component{
         this.setState({error: undefined, isLogged: false, loginSubmitted: true})
 
         try{
-            const response = await axios.post(process.env.REACT_APP_API_URL + "login", {email: this.state.email, password: this.state.password}, {headers: {
-                'Authorization': `Bearer ${localStorage.getItem("jwt")}`
-            }});
+            const response = await axios.post(process.env.REACT_APP_API_URL + "login", {email: this.state.email, password: this.state.password});
 
             const jwt = response.data;
             const decodedJWT = JwtManager.decode(jwt);
@@ -40,7 +38,7 @@ class LoginForm extends React.Component{
             } else if(decodedJWT.payload.user.role !== "admin"){
                 this.setState({error: "Vous n'êtes pas autorisé à vous connecter."});
             }else{
-                localStorage.setItem("jwt", jwt);
+                localStorage.setItem(process.env.REACT_APP_JWT_KEY, jwt);
                 this.setState({isLogged: true, error: undefined, loginSubmitted: false});
             }
         }catch (error) {

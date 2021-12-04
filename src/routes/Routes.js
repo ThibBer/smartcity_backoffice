@@ -11,20 +11,20 @@ import WalloniaFixed from "../components/WalloniaFixed";
 import jwtManager from "../JwtManager";
 
 export default function Routes(){
-    function jwtIsValid(key){
-        const jwtToken = localStorage.getItem(key);
+    function jwtIsValid(){
+        const jwtToken = localStorage.getItem(process.env.REACT_APP_JWT_KEY);
         const jwt = jwtManager.decode(jwtToken);
         const jwtIsValid = jwtToken !== null && jwtManager.isValid(jwt);
 
         if(!jwtIsValid){
-            localStorage.removeItem(key);
+            localStorage.removeItem(process.env.REACT_APP_JWT_KEY);
         }
 
         return jwtIsValid;
     }
 
-    const HomeComponent = () => jwtIsValid("jwt") ? <WalloniaFixed/> : <Redirect to={"/login"}/>
-    const LoginComponent = () => jwtIsValid("jwt") ? <Redirect to={"/"}/> : <LoginForm/>
+    const HomeComponent = () => jwtIsValid() ? <WalloniaFixed/> : <Redirect to={"/login"}/>
+    const LoginComponent = () => jwtIsValid() ? <Redirect to={"/"}/> : <LoginForm/>
 
     return(
         <Router>

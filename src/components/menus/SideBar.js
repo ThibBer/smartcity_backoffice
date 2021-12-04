@@ -11,7 +11,7 @@ class SideBar extends React.Component{
     constructor(props) {
         super(props);
 
-        const jwt = localStorage.getItem("jwt");
+        const jwt = localStorage.getItem(process.env.REACT_APP_JWT_KEY);
         const payload = jwt.split(".")[1];
         const userData = JSON.parse(Buffer.from(payload, 'base64').toString('utf-8')).user;
 
