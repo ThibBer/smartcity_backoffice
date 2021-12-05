@@ -14,6 +14,8 @@ module.exports.message = (error, customChecksCallback) => {
             errorMessage = errorData;
         } else if (error?.response.status >= 200 && error?.response.status < 300) {
             errorMessage = undefined;
+        }else if (error?.response.status === 401){
+            errorMessage = "Une erreur d'authentification est survenue."
         }else if (error?.response.status === 403){
             errorMessage = "Vous n'êtes pas autorisé à effectuer cette action."
         } else if (error?.response.status >= 400 && error?.response.status < 500) {

@@ -3,6 +3,7 @@ import {Form} from "react-bootstrap";
 import UserRoles from "../data/UserRoles"
 import Error from "../Error";
 import Comparator from "../../utils/Comparator";
+import PropTypes from "prop-types";
 
 class UserForm extends React.Component{
     constructor(props) {
@@ -145,6 +146,13 @@ class UserForm extends React.Component{
             </form>
         );
     }
+}
+
+UserForm.propTypes = {
+    onInputChange: PropTypes.func.isRequired,
+    errors: PropTypes.object,
+    data: PropTypes.object,
+    isAnUpdate: PropTypes.bool,
 }
 
 export default UserForm;

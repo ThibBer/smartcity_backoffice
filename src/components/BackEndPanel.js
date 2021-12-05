@@ -4,9 +4,9 @@ import BackOfficeModal from "./modals/BackOfficeModal";
 import ErrorCodeManager from "./ErrorCodeManager"
 import DeletePopup from "./modals/DeletePopup";
 
-import axios from "axios";
-import axiosRetry from 'axios-retry';
-axiosRetry(axios, {retries: process.env.REACT_APP_EXPONENTIAL_RETRY_COUNT, retryDelay: axiosRetry.exponentialDelay});
+import PropTypes from "prop-types";
+import ApiWebService from "../api/ApiWebService";
+
 
 class BackEndPanel extends React.Component {
     constructor(props) {
@@ -45,19 +45,16 @@ class BackEndPanel extends React.Component {
 
         const filter = this.state.filter;
         try {
-            const webServiceAddress = process.env.REACT_APP_API_URL + this.state.apiRoute + "/filter/" + this.state.nbElementsPerPage * (this.state.currentPagination - 1) + "&" + this.state.nbElementsPerPage + (filter && ("&" + filter));
-            const response = await axios.get(webServiceAddress, {headers: {
-                'Authorization': `Bearer ${localStorage.getItem(process.env.REACT_APP_JWT_KEY)}`
-            }});
+            const webServiceAddress = this.state.apiRoute + "/filter/" + this.state.nbElementsPerPage * (this.state.currentPagination - 1) + "&" + this.state.nbElementsPerPage + (filter && ("&" + filter));
+            const response = await ApiWebService.get(webServiceAddress);
 
             const jsonResponse = response.data
 
             //countWithoutLimit : values which contains filter
             this.setState({tableContent: jsonResponse.data, allEntitiesCount: jsonResponse.countWithoutLimit});
-
         }catch (error) {
             this.setState({
-                error: error
+                error: ErrorCodeManager.message(error)
             });
         }
     }
@@ -111,15 +108,11 @@ class BackEndPanel extends React.Component {
         try {
             const webServiceAddress = process.env.REACT_APP_API_URL + this.state.apiRoute;
             if(isAnUpdate){
-                await axios.patch(webServiceAddress, data, {headers: {
-                    'Authorization': `Bearer ${localStorage.getItem(process.env.REACT_APP_JWT_KEY)}`
-                }});
+                await ApiWebService.get(webServiceAddress, data);
 
                 tableContent[this.state.modal.rowIndex] = data;
             }else{
-                const response = await axios.post(webServiceAddress, data, {headers: {
-                    'Authorization': `Bearer ${localStorage.getItem(process.env.REACT_APP_JWT_KEY)}`
-                }});
+                const response = await ApiWebService.post(webServiceAddress, data);
 
                 data.id = response.data.id;
 
@@ -130,7 +123,6 @@ class BackEndPanel extends React.Component {
             modal.error = undefined;
             modal.data = undefined;
         }catch (error) {
-            console.error(error)
             modal.error = ErrorCodeManager.message(error);
         }
 
@@ -173,12 +165,7 @@ class BackEndPanel extends React.Component {
 
         if(isConfirmed){
             try {
-                await axios.delete(process.env.REACT_APP_API_URL + this.state.apiRoute, {
-                    headers: {
-                    'Authorization': `Bearer ${localStorage.getItem(process.env.REACT_APP_JWT_KEY)}`
-                    },
-                    data: popup.data
-                });
+                await ApiWebService.delete(this.state.apiRoute, popup.data);
 
                 tableContent.splice(this.state.popup.rowIndex, 1);
             }catch (error) {
@@ -228,6 +215,17 @@ class BackEndPanel extends React.Component {
             </>
         )
     }
+}
+
+BackEndPanel.propTypes = {
+    nbElementsPerPage: PropTypes.number,
+    apiRoute: PropTypes.string,
+    modalIsVisible: PropTypes.bool,
+    filter: PropTypes.string,
+    onModalClosed: PropTypes.func.isRequired,
+    columns: PropTypes.array,
+    mapper: PropTypes.func.isRequired,
+    singularTableLabel: PropTypes.string
 }
 
 export default BackEndPanel;

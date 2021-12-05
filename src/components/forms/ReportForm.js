@@ -8,6 +8,8 @@ import {AsyncTypeahead, Typeahead} from "react-bootstrap-typeahead";
 import axios from "axios";
 import axiosRetry from 'axios-retry';
 import Comparator from "../../utils/Comparator";
+import PropTypes from "prop-types";
+import ApiWebService from "../../api/ApiWebService";
 axiosRetry(axios, {retries: process.env.REACT_APP_EXPONENTIAL_RETRY_COUNT, retryDelay: axiosRetry.exponentialDelay});
 
 class ReportForm extends React.Component {
@@ -27,9 +29,7 @@ class ReportForm extends React.Component {
 
     async componentDidMount() {
         try {
-            const response = await axios.get(process.env.REACT_APP_API_URL + "reportType", {headers: {
-                'Authorization': `Bearer ${localStorage.getItem(process.env.REACT_APP_JWT_KEY)}`
-            }});
+            const response = await ApiWebService.get("reportType");
 
             this.setState({reportTypes: response.data});
         } catch (error) {
@@ -60,9 +60,7 @@ class ReportForm extends React.Component {
         this.setState({loading: true});
 
         try {
-            const response = await axios.get(process.env.REACT_APP_API_URL + "user/filter/" + filter, {headers: {
-                'Authorization': `Bearer ${localStorage.getItem(process.env.REACT_APP_JWT_KEY)}`
-            }});
+            const response = await ApiWebService.get(`user/filter/${filter}`);
 
             await this.setState({users: response.data});
         } catch (e) {
@@ -192,6 +190,13 @@ class ReportForm extends React.Component {
             </form>
         );
     }
+}
+
+ReportForm.propTypes = {
+    onInputChange: PropTypes.func.isRequired,
+    errors: PropTypes.object,
+    data: PropTypes.object,
+    isAnUpdate: PropTypes.bool,
 }
 
 export default ReportForm;

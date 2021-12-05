@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from "prop-types";
 const INVALID_CHAR = /[!#$%^&*()_+\-=[\]{};':"\\|,<>/?]+/;
 
 class SearchBar extends React.Component{
@@ -58,7 +59,10 @@ class SearchBar extends React.Component{
             </div>
         )
     }
+}
 
+SearchBar.propTypes = {
+    onFilter: PropTypes.func.isRequired
 }
 
 export default SearchBar;

@@ -84,7 +84,7 @@ class LoginForm extends React.Component{
                                     }}/>
                                 </div>
 
-                                {(!this.state.isLogged && this.state.loginSubmitted && !this.state.error) && <Spinner text={""} />}
+                                {(!this.state.isLogged && this.state.loginSubmitted && !this.state.error) && <Spinner />}
 
                                 <button className="btn text-white mx-auto d-block border-white mt-md-3" onClick={(event) => this.login(event)}>Se connecter</button>
                             </div>

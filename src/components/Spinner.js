@@ -1,5 +1,6 @@
 import React from 'react';
 import "./../css/spinner.css";
+const PropTypes = require('prop-types');
 
 class Spinner extends React.Component {
 
@@ -19,10 +20,14 @@ class Spinner extends React.Component {
                     <div className="ring"/>
                     <div className="ring"/>
                 </div>
-                <p>{this.props.text ?? "Chargement des données en cours"}</p>
+                <p>{this.props.text ?? ""}</p>
             </div>
         );
     }
+}
+
+Spinner.propTypes = {
+    text: PropTypes.string
 }
 
 export default Spinner;

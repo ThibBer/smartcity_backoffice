@@ -1,6 +1,7 @@
 import React from 'react';
 import {Modal} from "react-bootstrap";
 import Error from "../Error";
+import PropTypes from "prop-types";
 
 class DeletePopup extends React.Component{
 
@@ -44,6 +45,13 @@ class DeletePopup extends React.Component{
             </Modal>
         );
     }
+}
+
+DeletePopup.propTypes = {
+    popupIsVisible: PropTypes.bool,
+    error: PropTypes.string,
+    onClose: PropTypes.func.isRequired,
+    title: PropTypes.string
 }
 
 export default DeletePopup;

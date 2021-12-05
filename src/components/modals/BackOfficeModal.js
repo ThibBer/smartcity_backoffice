@@ -17,6 +17,7 @@ import UserFormValidator from "../forms/validators/UserFormValidator";
 import EventFormValidator from "../forms/validators/EventFormValidator";
 import ReportTypeFormValidator from "../forms/validators/ReportTypeFormValidator";
 import Comparator from "../../utils/Comparator";
+import PropTypes from "prop-types";
 
 class BackOfficeModal extends React.Component{
     constructor(props) {
@@ -27,7 +28,7 @@ class BackOfficeModal extends React.Component{
             modalIsVisible : props.modalIsVisible,
             error: this.props.error ?? undefined,
             formErrors: {},
-            modalData: this.props.modalData
+            data: this.props.data
         }
 
         this.isAnUpdate = false;
@@ -41,7 +42,7 @@ class BackOfficeModal extends React.Component{
         }
 
         if(!Comparator.objectsAreEquals(previousProps.data, this.props.data)){
-            this.setState({modalData: {...this.props.data}})
+            this.setState({data: {...this.props.data}})
             this.isAnUpdate = this.props.data !== undefined && Object.keys(this.props.data).length > 0;
         }
 
@@ -51,11 +52,11 @@ class BackOfficeModal extends React.Component{
     }
 
     onInputChange(name, value){
-        const modalData = {...this.state.modalData};
+        const data = {...this.state.data};
 
-        modalData[name] = value;
+        data[name] = value;
 
-        this.setState({modalData: modalData});
+        this.setState({data: data});
     }
 
     getValidator(){
@@ -78,10 +79,10 @@ class BackOfficeModal extends React.Component{
 
     onClickSubmit(event) {
         const validator = this.getValidator();
-        const {object, errors, isValid} = validator({...this.state.modalData}, this.isAnUpdate);
+        const {object, errors, isValid} = validator({...this.state.data}, this.isAnUpdate);
 
         if(isValid){
-            this.setState({submitted: true, modalData: object, formErrors: {}});
+            this.setState({submitted: true, data: object, formErrors: {}});
             this.props.onSave(event, object, this.isAnUpdate);
         }else{
             this.setState({formErrors: errors});
@@ -91,25 +92,25 @@ class BackOfficeModal extends React.Component{
     }
 
     onHide(event) {
-        this.setState({submitted: false, formErrors: {}, error: undefined, modalData: {}});
+        this.setState({submitted: false, formErrors: {}, error: undefined, data: {}});
         this.props.onHide(event);
     }
 
     getForm(){
         if(this.props.apiRoute === "user"){
-            return <UserForm data={this.state.modalData} errors={this.state.formErrors} onInputChange={(name, value) => this.onInputChange(name, value)} isAnUpdate={this.isAnUpdate}/>
+            return <UserForm data={this.state.data} errors={this.state.formErrors} onInputChange={(name, value) => this.onInputChange(name, value)} isAnUpdate={this.isAnUpdate}/>
         }
 
         if(this.props.apiRoute === "report"){
-            return <ReportForm data={this.state.modalData} errors={this.state.formErrors} onInputChange={(name, value) => this.onInputChange(name, value)} isAnUpdate={this.isAnUpdate}/>
+            return <ReportForm data={this.state.data} errors={this.state.formErrors} onInputChange={(name, value) => this.onInputChange(name, value)} isAnUpdate={this.isAnUpdate}/>
         }
 
         if(this.props.apiRoute === "event"){
-            return <EventForm data={this.state.modalData} errors={this.state.formErrors} onInputChange={(name, value) => this.onInputChange(name, value)} isAnUpdate={this.isAnUpdate}/>
+            return <EventForm data={this.state.data} errors={this.state.formErrors} onInputChange={(name, value) => this.onInputChange(name, value)} isAnUpdate={this.isAnUpdate}/>
         }
 
         if(this.props.apiRoute === "reportType"){
-            return <ReportTypeForm data={this.state.modalData} errors={this.state.formErrors} onInputChange={(name, value) => this.onInputChange(name, value)} isAnUpdate={this.isAnUpdate}/>
+            return <ReportTypeForm data={this.state.data} errors={this.state.formErrors} onInputChange={(name, value) => this.onInputChange(name, value)} isAnUpdate={this.isAnUpdate}/>
         }
     }
 
@@ -121,7 +122,7 @@ class BackOfficeModal extends React.Component{
                 </Modal.Header>
                 <Modal.Body>
                     {this.getForm()}
-                    {(this.state.submitted && this.state.error === undefined && Object.keys(this.state.formErrors).length === 0) && <Spinner text={""} />}
+                    {(this.state.submitted && this.state.error === undefined && Object.keys(this.state.formErrors).length === 0) && <Spinner />}
 
                     {this.state.error && <Error content={this.state.error} icon={"fa-info-circle"}/>}
                 </Modal.Body>
@@ -132,6 +133,16 @@ class BackOfficeModal extends React.Component{
             </Modal>
         );
     }
+}
+
+BackOfficeModal.propTypes = {
+    modalIsVisible: PropTypes.bool,
+    error: PropTypes.string,
+    data: PropTypes.object,
+    apiRoute: PropTypes.string,
+    onSave: PropTypes.func.isRequired,
+    onHide: PropTypes.func.isRequired,
+    title: PropTypes.string,
 }
 
 export default BackOfficeModal;

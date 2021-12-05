@@ -2,9 +2,9 @@ import React from 'react';
 import Error from "../Error";
 import Comparator from "../../utils/Comparator";
 import {AsyncTypeahead} from "react-bootstrap-typeahead";
-import axios from "axios";
-import axiosRetry from 'axios-retry';
-axiosRetry(axios, {retries: process.env.REACT_APP_EXPONENTIAL_RETRY_COUNT, retryDelay: axiosRetry.exponentialDelay});
+
+import ApiWebService from "../../api/ApiWebService";
+const PropTypes = require('prop-types');
 
 class EventForm extends React.Component {
     constructor(props) {
@@ -40,9 +40,8 @@ class EventForm extends React.Component {
 
     async onUserSearch(filter) {
         try {
-            const response = await axios.get(process.env.REACT_APP_API_URL + "user/filter/" + filter, {headers: {
-                'Authorization': `Bearer ${localStorage.getItem(process.env.REACT_APP_JWT_KEY)}`
-            }});
+            const response = await ApiWebService.get(`user/filter/${filter}`);
+
             await this.setState({users: response.data});
         } catch (e) {
             console.error(e)
@@ -51,9 +50,8 @@ class EventForm extends React.Component {
 
     async onReportSearch(filter) {
         try {
-            const response = await axios.get(process.env.REACT_APP_API_URL + "report/filter/" + filter, {headers: {
-                'Authorization': `Bearer ${localStorage.getItem(process.env.REACT_APP_JWT_KEY)}`
-            }});
+            const response = await ApiWebService.get(`report/filter/${filter}`);
+
             await this.setState({reports: response.data});
         } catch (e) {
             console.error(e)
@@ -80,9 +78,8 @@ class EventForm extends React.Component {
                                 <div className="input-group-append">
                                     <span className="input-group-text" id="minutes-label">minutes</span>
                                 </div>
-
-                                {this.state.errors?.duration && <Error content={this.state.errors.duration}/>}
                             </div>
+                            {this.state.errors?.duration && <Error content={this.state.errors.duration}/>}
                         </div>
                     </div>
                 </div>
@@ -154,6 +151,13 @@ class EventForm extends React.Component {
             </form>
         );
     }
+}
+
+EventForm.propTypes = {
+    onInputChange: PropTypes.func.isRequired,
+    errors: PropTypes.object,
+    data: PropTypes.object,
+    isAnUpdate: PropTypes.bool,
 }
 
 export default EventForm;

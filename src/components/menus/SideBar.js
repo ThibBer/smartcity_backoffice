@@ -6,6 +6,7 @@ import SearchBar from "./SearchBar";
 import SideBarItems from "../data/SideBarItems"
 import UserRoles from "../data/UserRoles"
 import jwtManager from "../../JwtManager";
+import PropTypes from "prop-types";
 
 class SideBar extends React.Component{
 
@@ -13,7 +14,6 @@ class SideBar extends React.Component{
         super(props);
 
         this.state = {
-            onMenuItemSelected: props.onMenuItemSelected,
             currentButton: SideBarItems[0],
             firstname: "",
             lastname: "",
@@ -34,7 +34,7 @@ class SideBar extends React.Component{
             currentButton: item,
         });
 
-        this.state.onMenuItemSelected(event, item);
+        this.props.onMenuItemSelected(event, item);
     }
 
     render() {
@@ -79,6 +79,10 @@ class SideBar extends React.Component{
             </div>
         );
     }
+}
+
+SideBar.propTypes = {
+    onMenuItemSelected: PropTypes.func.isRequired
 }
 
 export default SideBar;

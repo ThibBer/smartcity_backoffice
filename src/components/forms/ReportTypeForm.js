@@ -1,6 +1,7 @@
 import React from "react";
 import Error from "../Error";
 import Comparator from "../../utils/Comparator";
+import PropTypes from "prop-types";
 
 class ReportTypeForm extends React.Component{
     constructor(props) {
@@ -43,6 +44,13 @@ class ReportTypeForm extends React.Component{
             </form>
         );
     }
+}
+
+ReportTypeForm.propTypes = {
+    onInputChange: PropTypes.func.isRequired,
+    errors: PropTypes.object,
+    data: PropTypes.object,
+    isAnUpdate: PropTypes.bool,
 }
 
 export default ReportTypeForm;

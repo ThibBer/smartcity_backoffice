@@ -1,7 +1,7 @@
 import React from 'react';
 import Spinner from "../Spinner";
-import ErrorCodeManager from "../ErrorCodeManager";
 import Comparator from "../../utils/Comparator";
+import PropTypes from "prop-types";
 
 class BackOfficeTable extends React.Component {
     constructor(props) {
@@ -10,8 +10,6 @@ class BackOfficeTable extends React.Component {
         this.state = {
             data: this.props.data,
             error: undefined,
-            onClickEditButton: this.props.onClickEditButton,
-            onClickDeleteButton: this.props.onClickDeleteButton,
             filter: "",
             currentPagination: 1,
             allEntitiesCount: this.props.allEntitiesCount,
@@ -56,8 +54,8 @@ class BackOfficeTable extends React.Component {
                         this.props.mapper(object)
                     }
                     <td>
-                        <button className="btn" onClick={(event) => this.state.onClickEditButton(event, object, rowIndex)}><i className="far fa-edit"/></button>
-                        <button className="btn" onClick={(event) => this.state.onClickDeleteButton(event, object, rowIndex)}><i className="far fa-trash-alt text-danger"/></button>
+                        <button className="btn" onClick={(event) => this.props.onClickEditButton(event, object, rowIndex)}><i className="far fa-edit"/></button>
+                        <button className="btn" onClick={(event) => this.props.onClickDeleteButton(event, object, rowIndex)}><i className="far fa-trash-alt text-danger"/></button>
                     </td>
                 </tr>
             )
@@ -69,9 +67,7 @@ class BackOfficeTable extends React.Component {
     }
 
     renderError(){
-        const message = ErrorCodeManager.message(this.state.error);
-
-        return <tr><td colSpan={this.props.columns.length + 1} className="text-center">{message}</td></tr>
+        return <tr><td colSpan={this.props.columns.length + 1} className="text-center">{this.state.error}</td></tr>
     }
 
     bodyTable(){
@@ -171,7 +167,7 @@ class BackOfficeTable extends React.Component {
         return (
             <div className="row justify-content-center">
                 <div className="col">
-                    <Spinner/>
+                    <Spinner text={"Chargement des données en cours"}/>
                 </div>
             </div>
         )
@@ -184,6 +180,20 @@ class BackOfficeTable extends React.Component {
 
         return this.spinner();
     }
+}
+
+BackOfficeTable.propTypes = {
+    data: PropTypes.object,
+    allEntitiesCount: PropTypes.number,
+    nbElementsPerPage: PropTypes.number,
+    currentPagination: PropTypes.number,
+    error: PropTypes.string,
+    filter: PropTypes.string,
+    onPaginationClick: PropTypes.func.isRequired,
+    onClickEditButton: PropTypes.func.isRequired,
+    onClickDeleteButton: PropTypes.func.isRequired,
+    columns: PropTypes.array,
+    mapper: PropTypes.func.isRequired
 }
 
 export default BackOfficeTable;
