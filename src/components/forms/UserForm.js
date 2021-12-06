@@ -39,13 +39,13 @@ class UserForm extends React.Component{
     }
 
     onInputChange(event, name){
-        const report = {...this.state.report};
+        const user = {...this.state.user};
         const value = event.target.value;
 
-        report[name] = value;
+        user[name] = value;
 
         this.props.onInputChange(name, value);
-        this.setState({report});
+        this.setState({user});
     }
 
     render(){
@@ -79,7 +79,7 @@ class UserForm extends React.Component{
                     <div className="col-6">
                         <div className="form-group mb-3">
                             <label htmlFor="group">Rôle utilisateur</label>
-                            <Form.Select id="group" onClick={(event) => this.onInputChange(event, "role")} value={this.state.user?.role}>
+                            <Form.Select id="group" onChange={(event) => this.onInputChange(event, "role")} value={this.state.user?.role}>
                                 <option>Rôle</option>
                                 {
                                     Object.keys(UserRoles).map(role =>

@@ -106,13 +106,12 @@ class BackEndPanel extends React.Component {
         const tableContent = [...this.state.tableContent];
 
         try {
-            const webServiceAddress = process.env.REACT_APP_API_URL + this.state.apiRoute;
             if(isAnUpdate){
-                await ApiWebService.get(webServiceAddress, data);
+                await ApiWebService.patch(this.state.apiRoute, data);
 
                 tableContent[this.state.modal.rowIndex] = data;
             }else{
-                const response = await ApiWebService.post(webServiceAddress, data);
+                const response = await ApiWebService.post(this.state.apiRoute, data);
 
                 data.id = response.data.id;
 
