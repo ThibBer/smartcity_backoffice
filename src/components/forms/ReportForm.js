@@ -5,12 +5,9 @@ import {Form} from "react-bootstrap";
 import ReportStates from "../data/ReportStates";
 import {AsyncTypeahead, Typeahead} from "react-bootstrap-typeahead";
 
-import axios from "axios";
-import axiosRetry from 'axios-retry';
 import Comparator from "../../utils/Comparator";
 import PropTypes from "prop-types";
 import ApiWebService from "../../api/ApiWebService";
-axiosRetry(axios, {retries: process.env.REACT_APP_EXPONENTIAL_RETRY_COUNT, retryDelay: axiosRetry.exponentialDelay});
 
 class ReportForm extends React.Component {
     constructor(props) {

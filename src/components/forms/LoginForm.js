@@ -10,9 +10,7 @@ import HenalluxLogo from "../../images/henallux.svg";
 import BernardNicolas from "../../images/bernard_nicolas.jpg";
 import BergThibaut from "../../images/berg_thibaut.png";
 
-import axios from "axios";
-import axiosRetry from 'axios-retry';
-axiosRetry(axios, {retries: process.env.REACT_APP_EXPONENTIAL_RETRY_COUNT, retryDelay: axiosRetry.exponentialDelay});
+import ApiWebService from "../../api/ApiWebService";
 
 class LoginForm extends React.Component{
     constructor(props) {
@@ -32,7 +30,7 @@ class LoginForm extends React.Component{
         this.setState({error: undefined, isLogged: false, loginSubmitted: true})
 
         try{
-            const response = await axios.post(process.env.REACT_APP_API_URL + "login", {email: this.state.email, password: this.state.password});
+            const response = await ApiWebService.post("login", {email: this.state.email, password: this.state.password});
 
             const jwt = response.data;
             const decodedJWT = JwtManager.decode(jwt);

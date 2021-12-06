@@ -183,7 +183,7 @@ class BackOfficeTable extends React.Component {
 }
 
 BackOfficeTable.propTypes = {
-    data: PropTypes.object,
+    data: PropTypes.array,
     allEntitiesCount: PropTypes.number,
     nbElementsPerPage: PropTypes.number,
     currentPagination: PropTypes.number,
