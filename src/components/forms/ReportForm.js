@@ -177,7 +177,7 @@ class ReportForm extends React.Component {
                     <div className="col-6">
                         <div className="form-group mb-3">
                             <label htmlFor="house_number">Numéro</label>
-                            <input id="house_number" type="text" className="form-control" placeholder="Numéro"
+                            <input id="house_number" type="number" className="form-control" placeholder="Numéro"
                                    defaultValue={this.state.report?.house_number}
                                    onChange={(event) => this.onInputChange(event, "house_number")}/>
                             {this.state.errors?.house_number && <Error content={this.state.errors.house_number}/>}

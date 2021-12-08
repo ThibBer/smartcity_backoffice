@@ -89,7 +89,6 @@ class WalloniaFixed extends React.Component{
                                             </div>
                                         </div>
 
-
                                         <div className="row">
                                             <div className="col">
                                                 <BackEndPanel modalIsVisible={this.state.modalIsVisible} singularTableLabel={this.state.currentItem.singularLabel} onModalClosed={() => this.onModalClosed()} apiRoute={this.state.currentItem.apiRoute} columns={this.state.currentItem.columns} mapper={this.state.currentItem.mapper} filter={this.state.filter} nbElementsPerPage={this.state.nbElementsPerPage}/>

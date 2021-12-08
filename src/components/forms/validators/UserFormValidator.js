@@ -1,4 +1,14 @@
+const REQUIRED_AGE = 16;
+
+
+
 module.exports = (userForm, isAnUpdate) => {
+    function getUserAge(birthDate) {
+        const ageDifMs = Date.now() - birthDate.getTime();
+        const ageDate = new Date(ageDifMs); // miliseconds from epoch
+        return Math.abs(ageDate.getUTCFullYear() - 1970);
+    }
+
     const errors = {};
     const user = {...userForm};
     const email = user?.email;
@@ -9,10 +19,13 @@ module.exports = (userForm, isAnUpdate) => {
     const birth_date = user?.birth_date;
     const now = new Date();
     const birthDate = new Date(birth_date);
+    const userAge = getUserAge(birthDate)
     if (birth_date === undefined) {
         errors.birth_date = "Date invalide";
     } else if (new Date(birthDate) >= now) {
         errors.birth_date = "La date ne peut pas être égale ou après aujourd'hui";
+    } if(userAge < REQUIRED_AGE){
+        errors.birth_date = "Age minimum requis : " + REQUIRED_AGE + " ans";
     }
 
     const password = user?.password;
@@ -51,7 +64,7 @@ module.exports = (userForm, isAnUpdate) => {
     }
 
     const houseNumber = user?.house_number;
-    if (houseNumber === undefined || houseNumber.trim() === "") {
+    if (houseNumber === undefined || isNaN(houseNumber)) {
         errors.house_number = "Numéro d'habitation invalide";
     }
 

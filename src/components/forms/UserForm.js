@@ -32,6 +32,10 @@ class UserForm extends React.Component{
         return number;
     }
 
+    matchDateFormat(date){
+        return date.match("^(?!0.)\\d{4}-\\d{2}-\\d{2}");
+    }
+
     async componentDidUpdate(previousProps, previousState, snapshot){
         if(!Comparator.objectsAreEquals(previousProps.errors, this.props.errors)){
             this.setState({errors: this.props.errors});
@@ -72,7 +76,11 @@ class UserForm extends React.Component{
                     <div className="col-6">
                         <div className="form-group mb-3">
                             <label htmlFor="birth_date">Date de naissance</label>
-                            <input id="birth_date" type="date" className="form-control" placeholder="Date de naissance" defaultValue={this.formattedDate(this.state.user?.birth_date)} onChange={(event) => this.onInputChange(event, "birth_date")}/>
+                            <input id="birth_date" type="date" className="form-control" placeholder="Date de naissance" defaultValue={this.formattedDate(this.state.user?.birth_date)} onChange={(event) => {
+                                if(this.matchDateFormat(event.target.value)){
+                                    this.onInputChange(event, "birth_date");
+                                }
+                            }}/>
                             {this.state.errors?.birth_date && <Error content={this.state.errors.birth_date}/>}
                         </div>
                     </div>
@@ -138,7 +146,7 @@ class UserForm extends React.Component{
                     <div className="col-6">
                         <div className="form-group mb-3">
                             <label htmlFor="house_number">Numéro</label>
-                            <input id="house_number" type="text" className="form-control" placeholder="Numéro" defaultValue={this.state.user?.house_number} onChange={(event) => this.onInputChange(event, "house_number")}/>
+                            <input id="house_number" type="number" className="form-control" placeholder="Numéro" defaultValue={this.state.user?.house_number} onChange={(event) => this.onInputChange(event, "house_number")}/>
                             {this.state.errors?.house_number && <Error content={this.state.errors.house_number}/>}
                         </div>
                     </div>

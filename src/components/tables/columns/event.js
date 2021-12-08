@@ -1,3 +1,3 @@
 module.exports = [
-    "Id", "Description", "Date", "Durée", "Signalement", "Createur"
+    "Id", "Description", "Date / heure", "Durée", "Signalement", "Créateur"
 ];

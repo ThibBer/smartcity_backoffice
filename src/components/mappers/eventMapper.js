@@ -11,7 +11,7 @@ const mapper = function(event) {
             <td>{eventDate?.toLocaleDateString()} {eventDate?.toLocaleTimeString()}</td>
             <td>{event.duration} minutes</td>
             <td>#{event.report?.id} - {ReportStates[event.report?.state]} <br/> {event.report?.zip_code + " " + event.report?.city}<br/>{event.report?.street + ", " + event.report?.house_number}</td>
-            <td>#{creator?.id} {creator?.first_name} {creator?.last_name}</td>
+            <td>{creator ? `#${creator?.id} ${creator?.first_name} ${creator?.last_name}` : "Donnée indisponible"}</td>
         </>
     );
 };

@@ -1,4 +1,4 @@
-module.exports = (formReport, isAnUpdate) => {
+module.exports = (formReport) => {
     const errors = {};
     const report = {...formReport};
 
@@ -28,7 +28,7 @@ module.exports = (formReport, isAnUpdate) => {
     }
 
     const houseNumber = report?.house_number;
-    if(houseNumber === undefined || houseNumber.trim() === ""){
+    if(houseNumber === undefined || isNaN(houseNumber)){
         errors.house_number = "Numéro d'habitation invalide";
     }
 
