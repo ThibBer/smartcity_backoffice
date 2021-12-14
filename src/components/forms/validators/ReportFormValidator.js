@@ -1,4 +1,4 @@
-module.exports = (formReport) => {
+const validator = (formReport) => {
     const errors = {};
     const report = {...formReport};
 
@@ -41,3 +41,5 @@ module.exports = (formReport) => {
 
     return {object: report, errors: errors, isValid: Object.keys(errors).length === 0};
 }
+
+export default validator;

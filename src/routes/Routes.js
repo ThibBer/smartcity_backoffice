@@ -8,7 +8,7 @@ import {
 import LoginForm from "../components/forms/LoginForm";
 import WalloniaFixed from "../components/WalloniaFixed";
 
-import jwtManager from "../JwtManager";
+import jwtManager from "../utils/JwtManager";
 
 export default function Routes(){
     function jwtIsValid(){

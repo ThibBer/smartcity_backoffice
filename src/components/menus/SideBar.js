@@ -5,7 +5,7 @@ import {Accordion} from "react-bootstrap";
 import SearchBar from "./SearchBar";
 import SideBarItems from "../data/SideBarItems"
 import UserRoles from "../data/UserRoles"
-import jwtManager from "../../JwtManager";
+import jwtManager from "../../utils/JwtManager";
 import PropTypes from "prop-types";
 
 class SideBar extends React.Component{
@@ -58,7 +58,7 @@ class SideBar extends React.Component{
                         </Accordion>
                         <Accordion defaultActiveKey="0" className="pb-2">
                             <Accordion.Item eventKey="0">
-                                <Accordion.Header>Entités</Accordion.Header>
+                                <Accordion.Header>Navigation</Accordion.Header>
                                 <Accordion.Body className="px-0">
                                     {
                                         SideBarItems.map(item => {

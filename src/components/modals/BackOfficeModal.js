@@ -16,6 +16,7 @@ import ReportFormValidator from "../forms/validators/ReportFormValidator";
 import UserFormValidator from "../forms/validators/UserFormValidator";
 import EventFormValidator from "../forms/validators/EventFormValidator";
 import ReportTypeFormValidator from "../forms/validators/ReportTypeFormValidator";
+
 import Comparator from "../../utils/Comparator";
 import PropTypes from "prop-types";
 

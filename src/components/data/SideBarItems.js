@@ -16,6 +16,7 @@ const items = [
     {name: "report", label: "Signalements", singularLabel: "signalement", icon: "fa-file-chart-line", apiRoute: "report", columns: reportColumns, mapper: reportMapper},
     {name: "event", label: "Évenements", singularLabel: "évenement", icon: "fa-calendar-week", apiRoute: "event", columns: eventColumns, mapper: eventMapper},
     {name: "reportType", label: "Types de signalement", singularLabel: "type de signalement", icon: "fa-list", apiRoute: "reportType", columns: reportTypeColumns, mapper: reportTypeMapper},
+    {name: "map", label: "Carte des signalements", icon: "fa-map-location"},
 ];
 
 export default items;

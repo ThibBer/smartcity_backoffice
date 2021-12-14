@@ -2,7 +2,7 @@ import React from 'react';
 import '../../css/loginForm.css'
 import Error from "../Error";
 import {Redirect} from "react-router-dom";
-import JwtManager from "../../JwtManager";
+import JwtManager from "../../utils/JwtManager";
 import ErrorCodeManager from "../ErrorCodeManager";
 import Spinner from "../Spinner";
 import GitHubLogo from "../../images/github.svg";

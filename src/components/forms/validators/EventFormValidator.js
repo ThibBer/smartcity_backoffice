@@ -1,4 +1,4 @@
-module.exports = (eventForm, isAnUpdate) => {
+const validator = (eventForm) => {
     const errors = {};
     const event = {...eventForm};
 
@@ -24,3 +24,5 @@ module.exports = (eventForm, isAnUpdate) => {
 
     return {object: event, errors: errors, isValid: Object.keys(errors).length === 0};
 }
+
+export default validator;

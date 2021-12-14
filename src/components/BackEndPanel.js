@@ -6,6 +6,10 @@ import DeletePopup from "./modals/DeletePopup";
 
 import PropTypes from "prop-types";
 import ApiWebService from "../api/ApiWebService";
+import {Form} from "react-bootstrap";
+import ElementsByPage from "./data/ElementsByPage";
+
+import Comparator from "../utils/Comparator";
 
 
 class BackEndPanel extends React.Component {
@@ -17,11 +21,11 @@ class BackEndPanel extends React.Component {
             error: undefined,
             filter: "",
             currentPagination: 1,
-            nbElementsPerPage: this.props.nbElementsPerPage,
+            nbElementsPerPage: ElementsByPage[0],
             allEntitiesCount: 0,
-            apiRoute: this.props.apiRoute,
+            apiRoute: this.props.currentItem.apiRoute,
             modal: {
-                visibility: this.props.modalIsVisible,
+                visibility: false,
                 data: undefined,
                 error: undefined
             },
@@ -31,6 +35,20 @@ class BackEndPanel extends React.Component {
                 error: undefined
             }
         }
+    }
+
+    onModalClosed(){
+        const modal = {...this.state.modal};
+        modal.visibility = false;
+
+        this.setState(modal);
+    }
+
+    onClickAddElementButton(){
+        const modal = {...this.state.modal};
+        modal.visibility = true;
+
+        this.setState(modal);
     }
 
     async componentDidMount() {
@@ -73,8 +91,8 @@ class BackEndPanel extends React.Component {
             await this.loadTableContent();
         }
 
-        if(previousProps.apiRoute !== this.props.apiRoute){
-            await this.setState({tableContent: undefined, apiRoute: this.props.apiRoute, currentPagination: 1});
+        if(!Comparator.objectsAreEquals(previousProps.currentItem, this.props.currentItem)){
+            await this.setState({tableContent: undefined, apiRoute: this.props.currentItem.apiRoute, currentPagination: 1});
             await this.loadTableContent();
         }
 
@@ -97,7 +115,7 @@ class BackEndPanel extends React.Component {
 
         this.setState({modal});
 
-        this.props.onModalClosed();
+        this.onModalClosed();
     }
 
     // ON SAVE MODAL
@@ -125,7 +143,7 @@ class BackEndPanel extends React.Component {
             modal.error = ErrorCodeManager.message(error);
         }
 
-        this.props.onModalClosed();
+        this.onModalClosed();
         this.setState({modal, tableContent});
     }
 
@@ -189,42 +207,80 @@ class BackEndPanel extends React.Component {
         }
     }
 
+    getTableIcon(){
+        return (<i className={"far " + this.props.currentItem.icon}/>);
+    }
+
+    async onUpdateElementsByPage(event){
+        await this.setState({nbElementsPerPage: event.target.value, currentPagination: 1});
+        await this.loadTableContent();
+    }
+
     render() {
         return (
             <>
-                <BackOfficeTable columns={this.props.columns} data={this.state.tableContent}
-                                 onClickEditButton={(event, selectedObject, rowIndex) => this.onClickEditButton(event, selectedObject, rowIndex)}
-                                 onClickDeleteButton={(event, selectedObject, rowIndex) => this.onClickDeleteButton(event, selectedObject, rowIndex)}
-                                 error={this.state.error} mapper={this.props.mapper} filter={this.state.filter}
-                                 allEntitiesCount={this.state.allEntitiesCount}
-                                 onPaginationClick={(newPagination) => this.onPaginationClick(newPagination)}
-                                 nbElementsPerPage={this.state.nbElementsPerPage}
-                                 currentPagination={this.state.currentPagination}/>
+                <div className="row text-center">
+                    <div className="col">
+                        <h3 id="table-label">{this.getTableIcon()}&nbsp;&nbsp;{this.props.currentItem.label}</h3>
+                    </div>
+                </div>
 
-                <BackOfficeModal data={this.state.modal.data} modalIsVisible={this.state.modal.visibility}
-                                 title={this.props.singularTableLabel} error={this.state.modal.error}
-                                 onHide={(event) => this.onHideModal(event)}
-                                 onSave={(event, object, isAnUpdate) => this.onSaveModal(event, object, isAnUpdate)}
-                                 apiRoute={this.state.apiRoute}
-                />
+                <div className="row">
+                    <div className="col">
+                        <button className="btn btn-smartcity rounded-pill" onClick={(event) => this.onClickAddElementButton(event)}>
+                            <i className="far fa-plus-circle"/>&nbsp;&nbsp;Ajouter un élément
+                        </button>
+                    </div>
+                    <div className={"col-2"}>
+                        <div className={"row"}>
+                            <div className={"col-6"}>
+                                <p>Nombre d'élements</p>
+                            </div>
+                            <div className={"col-6"}>
+                                <Form.Select onChange={(event) => this.onUpdateElementsByPage(event)} value={this.state.nbElementsPerPage}>
+                                    {
+                                        ElementsByPage.map((nbElementsPerPage) =>{
+                                            return <option key={nbElementsPerPage} value={nbElementsPerPage}>{nbElementsPerPage}</option>
+                                        })
+                                    }
+                                </Form.Select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                <DeletePopup popupIsVisible={this.state.popup.visibility} title={this.props.singularTableLabel}
-                             onClose={(event, isConfirmed) => this.onCloseDeletePopup(event, isConfirmed)}
-                             error={this.state.popup.error}/>
+                <div className="row">
+                    <div className="col">
+                        <BackOfficeTable columns={this.props.currentItem.columns} data={this.state.tableContent}
+                                         onClickEditButton={(event, selectedObject, rowIndex) => this.onClickEditButton(event, selectedObject, rowIndex)}
+                                         onClickDeleteButton={(event, selectedObject, rowIndex) => this.onClickDeleteButton(event, selectedObject, rowIndex)}
+                                         error={this.state.error} mapper={this.props.currentItem.mapper} filter={this.state.filter}
+                                         allEntitiesCount={this.state.allEntitiesCount}
+                                         onPaginationClick={(newPagination) => this.onPaginationClick(newPagination)}
+                                         nbElementsPerPage={this.state.nbElementsPerPage}
+                                         currentPagination={this.state.currentPagination}/>
+
+                        <BackOfficeModal data={this.state.modal.data} modalIsVisible={this.state.modal.visibility}
+                                         title={this.props.currentItem.singularTableLabel} error={this.state.modal.error}
+                                         onHide={(event) => this.onHideModal(event)}
+                                         onSave={(event, object, isAnUpdate) => this.onSaveModal(event, object, isAnUpdate)}
+                                         apiRoute={this.state.apiRoute}
+                        />
+
+                        <DeletePopup popupIsVisible={this.state.popup.visibility} title={this.props.currentItem.singularTableLabel}
+                                     onClose={(event, isConfirmed) => this.onCloseDeletePopup(event, isConfirmed)}
+                                     error={this.state.popup.error}/>
+                    </div>
+                </div>
             </>
         )
     }
 }
 
 BackEndPanel.propTypes = {
-    nbElementsPerPage: PropTypes.number,
-    apiRoute: PropTypes.string,
     modalIsVisible: PropTypes.bool,
     filter: PropTypes.string,
-    onModalClosed: PropTypes.func.isRequired,
-    columns: PropTypes.array,
-    mapper: PropTypes.func.isRequired,
-    singularTableLabel: PropTypes.string
+    currentItem: PropTypes.object.isRequired
 }
 
 export default BackEndPanel;

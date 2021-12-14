@@ -1,8 +1,6 @@
 const REQUIRED_AGE = 16;
 
-
-
-module.exports = (userForm, isAnUpdate) => {
+const validator = (userForm, isAnUpdate) => {
     function getUserAge(birthDate) {
         const ageDifMs = Date.now() - birthDate.getTime();
         const ageDate = new Date(ageDifMs); // miliseconds from epoch
@@ -70,3 +68,5 @@ module.exports = (userForm, isAnUpdate) => {
 
     return {object: user, errors: errors, isValid: Object.keys(errors).length === 0};
 }
+
+export default validator;
