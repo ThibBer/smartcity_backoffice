@@ -27,30 +27,37 @@ class LoginForm extends React.Component{
 
     async login(event){
         event.preventDefault();
-        this.setState({error: undefined, isLogged: false, loginSubmitted: true})
 
-        try{
-            const response = await ApiWebService.post("login", {email: this.state.email, password: this.state.password});
+        if (this.state.email === undefined || !this.state.email.match("[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+            this.setState({error: "Adresse email invalide", isLogged: false, loginSubmitted: false});
+        }else if(this.state.password === undefined || this.state.password.trim() === "") {
+            this.setState({error: "Mot de passe invalide", isLogged: false, loginSubmitted: false});
+        }else{
+            this.setState({error: undefined, isLogged: false, loginSubmitted: true})
 
-            const jwt = response.data;
-            const decodedJWT = JwtManager.decode(jwt);
+            try{
+                const response = await ApiWebService.post("login", {email: this.state.email, password: this.state.password});
 
-            if(!JwtManager.isValid(decodedJWT)){
-                this.setState({error: "Votre session à expirée. Veuillez vous connecter"});
-            } else if(decodedJWT.payload.user.role !== "admin"){
-                this.setState({error: "Vous n'êtes pas autorisé à vous connecter."});
-            }else{
-                localStorage.setItem(process.env.REACT_APP_JWT_KEY, jwt);
-                this.setState({isLogged: true, error: undefined, loginSubmitted: false});
-            }
-        }catch (error) {
-            const errorMessage = ErrorCodeManager.message(error, function(error){
-                if(error?.status === 404){
-                    return "Adresse email et/ou mot de passe invalide";
+                const jwt = response.data;
+                const decodedJWT = JwtManager.decode(jwt);
+
+                if(!JwtManager.isValid(decodedJWT)){
+                    this.setState({error: "Votre session à expirée. Veuillez vous connecter"});
+                } else if(decodedJWT.payload.user.role !== "admin"){
+                    this.setState({error: "Vous n'êtes pas autorisé à vous connecter."});
+                }else{
+                    localStorage.setItem(process.env.REACT_APP_JWT_KEY, jwt);
+                    this.setState({isLogged: true, error: undefined, loginSubmitted: false});
                 }
-            });
+            }catch (error) {
+                const errorMessage = ErrorCodeManager.message(error, function(error){
+                    if(error?.response?.status === 404){
+                        return "Adresse email et/ou mot de passe invalide";
+                    }
+                });
 
-            this.setState({error: errorMessage, loginSubmitted: false});
+                this.setState({error: errorMessage, loginSubmitted: false});
+            }
         }
     }
 
