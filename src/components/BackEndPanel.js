@@ -27,7 +27,8 @@ class BackEndPanel extends React.Component {
             modal: {
                 visibility: false,
                 data: undefined,
-                error: undefined
+                error: undefined,
+                rowIndex: undefined
             },
             popup: {
                 visibility: false,
@@ -41,14 +42,14 @@ class BackEndPanel extends React.Component {
         const modal = {...this.state.modal};
         modal.visibility = false;
 
-        this.setState(modal);
+        this.setState({modal});
     }
 
     onClickAddElementButton(){
         const modal = {...this.state.modal};
         modal.visibility = true;
 
-        this.setState(modal);
+        this.setState({modal});
     }
 
     async componentDidMount() {
@@ -79,7 +80,7 @@ class BackEndPanel extends React.Component {
 
     async componentDidUpdate(previousProps, previousState, snapshot){
         if(previousProps.modalIsVisible !== this.props.modalIsVisible){
-            const modal = this.state.modal;
+            const modal = {...this.state.modal};
             modal.visibility = this.props.modalIsVisible;
 
             this.setState({modal});
@@ -261,13 +262,13 @@ class BackEndPanel extends React.Component {
                                          currentPagination={this.state.currentPagination}/>
 
                         <BackOfficeModal data={this.state.modal.data} modalIsVisible={this.state.modal.visibility}
-                                         title={this.props.currentItem.singularTableLabel} error={this.state.modal.error}
+                                         title={this.props.currentItem.singularLabel} error={this.state.modal.error}
                                          onHide={(event) => this.onHideModal(event)}
                                          onSave={(event, object, isAnUpdate) => this.onSaveModal(event, object, isAnUpdate)}
                                          apiRoute={this.state.apiRoute}
                         />
 
-                        <DeletePopup popupIsVisible={this.state.popup.visibility} title={this.props.currentItem.singularTableLabel}
+                        <DeletePopup popupIsVisible={this.state.popup.visibility} title={this.props.currentItem.singularLabel}
                                      onClose={(event, isConfirmed) => this.onCloseDeletePopup(event, isConfirmed)}
                                      error={this.state.popup.error}/>
                     </div>
