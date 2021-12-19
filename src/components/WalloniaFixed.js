@@ -3,7 +3,6 @@ import TopBar from "./menus/TopBar";
 import SideBar from "./menus/SideBar";
 import BackEndPanel from "./BackEndPanel";
 import SideBarItems from "./data/SideBarItems";
-import WalloniaFixedMap from "./WalloniaFixedMap";
 
 class WalloniaFixed extends React.Component{
     constructor(props) {
@@ -40,10 +39,7 @@ class WalloniaFixed extends React.Component{
 
                                 <div className="col-10 py-4">
                                     <div id="panel" className="p-3">
-                                        {this.state.currentItem.name !== "map" ?
-                                            <BackEndPanel currentItem={this.state.currentItem} filter={this.state.filter}/>:
-                                            <WalloniaFixedMap/>
-                                        }
+                                        <BackEndPanel currentItem={this.state.currentItem} filter={this.state.filter}/>
                                     </div>
                                 </div>
                             </div>
