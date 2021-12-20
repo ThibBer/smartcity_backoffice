@@ -50,5 +50,5 @@ class WalloniaFixed extends React.Component{
         );
     }
 }
-
+bernard_nicolas.png
 export default WalloniaFixed;

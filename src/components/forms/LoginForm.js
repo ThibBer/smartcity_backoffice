@@ -7,7 +7,7 @@ import ErrorCodeManager from "../ErrorCodeManager";
 import Spinner from "../Spinner";
 import GitHubLogo from "../../images/github.svg";
 import HenalluxLogo from "../../images/henallux.svg";
-import BernardNicolas from "../../images/bernard_nicolas.jpg";
+import BernardNicolas from "../../images/bernard_nicolas.png";
 import BergThibaut from "../../images/berg_thibaut.png";
 
 import ApiWebService from "../../api/ApiWebService";
