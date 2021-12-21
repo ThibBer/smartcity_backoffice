@@ -24,6 +24,7 @@ class BackEndPanel extends React.Component {
             nbElementsPerPage: ElementsByPage[0],
             allEntitiesCount: 0,
             apiRoute: this.props.currentItem.apiRoute,
+            useFormData: this.props.currentItem.useFormData,
             modal: {
                 visibility: false,
                 data: undefined,
@@ -93,7 +94,7 @@ class BackEndPanel extends React.Component {
         }
 
         if(!Comparator.objectsAreEquals(previousProps.currentItem, this.props.currentItem)){
-            await this.setState({tableContent: undefined, apiRoute: this.props.currentItem.apiRoute, currentPagination: 1});
+            await this.setState({tableContent: undefined, apiRoute: this.props.currentItem.apiRoute, currentPagination: 1, useFormData: this.props.currentItem.useFormData});
             await this.loadTableContent();
         }
 
@@ -123,18 +124,31 @@ class BackEndPanel extends React.Component {
     async onSaveModal(event, data, isAnUpdate){
         const modal = {...this.state.modal};
         const tableContent = [...this.state.tableContent];
+        const dataSaved = {...data};
+
+        if(this.props.currentItem.useFormData){
+            const formData = new FormData();
+            for(const key in data){
+                formData.append(key, data[key]);
+            }
+
+            data = formData;
+        }
 
         try {
             if(isAnUpdate){
-                await ApiWebService.patch(this.state.apiRoute, data);
+                await ApiWebService.patch(this.state.apiRoute, data, this.props.currentItem.useFormData);
 
-                tableContent[this.state.modal.rowIndex] = data;
+                tableContent[this.state.modal.rowIndex] = dataSaved;
             }else{
-                const response = await ApiWebService.post(this.state.apiRoute, data);
+                const response = await ApiWebService.post(this.state.apiRoute, data, this.props.currentItem.useFormData);
+                console.log(response.data)
 
-                data.id = response.data.id;
+                for(const attribute in response.data){
+                    dataSaved[attribute] = response.data[attribute]
+                }
 
-                tableContent.push(data);
+                tableContent.push(dataSaved);
             }
 
             modal.visibility = false;

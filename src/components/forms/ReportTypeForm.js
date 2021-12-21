@@ -10,6 +10,7 @@ class ReportTypeForm extends React.Component{
         this.state = {
             errors: this.props.errors,
             reportType: {...this.props.data},
+            imageSrc : this.props.data.image
         }
     }
 
@@ -21,7 +22,7 @@ class ReportTypeForm extends React.Component{
 
     onInputChange(event, name){
         const report = {...this.state.report};
-        const value = event.target.value;
+        const value = name === "image" ? event.target.files[0] : event.target.value;
 
         report[name] = value;
 
@@ -38,6 +39,22 @@ class ReportTypeForm extends React.Component{
                             <label htmlFor="label">Libellé</label>
                             <input id="label" type="text" className="form-control" placeholder="Libellé" defaultValue={this.state.reportType?.label} onChange={(event) => this.onInputChange(event, "label")}/>
                             {this.state.errors?.label && <Error content={this.state.errors.label}/>}
+                        </div>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col">
+                        <div className="form-group mb-3">
+                            <label htmlFor="image">Image</label>
+                            {console.log(this.state.imageSrc)}
+                            <input id="image" type="file" accept="image/*" className="form-control" placeholder="Image du signalement" onChange={(event) => this.onInputChange(event, "image")}/>
+                            {(this.props.isAnUpdate && this.state.reportType?.image) &&
+                                <>
+                                    <p className="mt-5">Ancienne image</p>
+                                    <img className="img-fluid" src={`${process.env.REACT_APP_API_URL}reportTypes/${this.state.imageSrc}`} alt="Icone non trouvée"/>
+                                </>
+                            }
+                            {this.state.errors?.image && <Error content={this.state.errors.image}/>}
                         </div>
                     </div>
                 </div>

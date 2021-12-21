@@ -15,7 +15,7 @@ const items = [
     {name: "user", label: "Utilisateurs", singularLabel: "utilisateur", icon: "fa-user", apiRoute: "user", columns: userColumns, mapper: userMapper},
     {name: "report", label: "Signalements", singularLabel: "signalement", icon: "fa-file-chart-line", apiRoute: "report", columns: reportColumns, mapper: reportMapper},
     {name: "event", label: "Évenements", singularLabel: "évenement", icon: "fa-calendar-week", apiRoute: "event", columns: eventColumns, mapper: eventMapper},
-    {name: "reportType", label: "Types de signalement", singularLabel: "type de signalement", icon: "fa-list", apiRoute: "reportType", columns: reportTypeColumns, mapper: reportTypeMapper},
+    {name: "reportType", label: "Types de signalement", singularLabel: "type de signalement", icon: "fa-list", apiRoute: "reportType", columns: reportTypeColumns, mapper: reportTypeMapper, useFormData: true},
 ];
 
 export default items;

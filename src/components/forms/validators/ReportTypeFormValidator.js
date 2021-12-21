@@ -7,6 +7,11 @@ const validator = (reportTypeForm) => {
         errors.label = "Libellé invalide";
     }
 
+    const image = reportType?.image;
+    if(image === undefined){
+        errors.image = "Image invalide";
+    }
+
     return {object: reportType, errors: errors, isValid: Object.keys(errors).length === 0};
 }
 

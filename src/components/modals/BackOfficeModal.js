@@ -83,8 +83,8 @@ class BackOfficeModal extends React.Component{
         const {object, errors, isValid} = validator({...this.state.data}, this.isAnUpdate);
 
         if(isValid){
-            this.setState({submitted: true, data: object, formErrors: {}});
             this.props.onSave(event, object, this.isAnUpdate);
+            this.setState({submitted: true, data: object, formErrors: {}});
         }else{
             this.setState({formErrors: errors});
         }

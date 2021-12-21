@@ -1,3 +1,3 @@
 module.exports = [
-    "Id", "Nom"
+    "Id", "Nom", "Image"
 ];
