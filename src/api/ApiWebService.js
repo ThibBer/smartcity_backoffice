@@ -34,8 +34,6 @@ ApiWebService.post = async (route, data, useFormData) => {
         headers["Content-Type"] = "multipart/form-data";
     }
 
-    console.log(headers)
-
     return await axios.post(API_URL + route, data, {headers});
 }
 

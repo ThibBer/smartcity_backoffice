@@ -1,5 +1,4 @@
 module.exports.message = (error, customChecksCallback) => {
-    console.error(error) //TODO Use console.error() only for debug
     let errorMessage = undefined;
     if (customChecksCallback !== undefined){
         errorMessage = customChecksCallback(error);

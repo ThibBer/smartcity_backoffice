@@ -46,7 +46,6 @@ class ReportTypeForm extends React.Component{
                     <div className="col">
                         <div className="form-group mb-3">
                             <label htmlFor="image">Image</label>
-                            {console.log(this.state.imageSrc)}
                             <input id="image" type="file" accept="image/*" className="form-control" placeholder="Image du signalement" onChange={(event) => this.onInputChange(event, "image")}/>
                             {(this.props.isAnUpdate && this.state.reportType?.image) &&
                                 <>

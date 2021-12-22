@@ -5,7 +5,7 @@ import {Accordion} from "react-bootstrap";
 import SearchBar from "./SearchBar";
 import SideBarItems from "../data/SideBarItems"
 import UserRoles from "../data/UserRoles"
-import jwtManager from "../../utils/JwtManager";
+import JwtManager from "../../utils/JwtManager";
 import PropTypes from "prop-types";
 
 class SideBar extends React.Component{
@@ -23,7 +23,7 @@ class SideBar extends React.Component{
 
     componentDidMount() {
         const jwtToken = localStorage.getItem(process.env.REACT_APP_JWT_KEY);
-        const jwt = jwtManager.decode(jwtToken);
+        const jwt = JwtManager.decode(jwtToken);
         const {first_name, last_name, role} = jwt.payload.user;
 
         this.setState({firstname: first_name,lastname: last_name, role: UserRoles[role]});

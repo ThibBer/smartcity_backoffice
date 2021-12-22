@@ -11,7 +11,6 @@ import ElementsByPage from "./data/ElementsByPage";
 
 import Comparator from "../utils/Comparator";
 
-
 class BackEndPanel extends React.Component {
     constructor(props) {
         super(props);
@@ -142,7 +141,6 @@ class BackEndPanel extends React.Component {
                 tableContent[this.state.modal.rowIndex] = dataSaved;
             }else{
                 const response = await ApiWebService.post(this.state.apiRoute, data, this.props.currentItem.useFormData);
-                console.log(response.data)
 
                 for(const attribute in response.data){
                     dataSaved[attribute] = response.data[attribute]
