@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from "prop-types";
-const INVALID_CHAR = /[!#$%^&*()_+\-=[\]{};':"\\|,<>/?]+/;
+const INVALID_CHAR = /[!#$%^&*()_+\-=[\]{}"\\|<>/?]+/;
 
 class SearchBar extends React.Component{
     constructor(props) {

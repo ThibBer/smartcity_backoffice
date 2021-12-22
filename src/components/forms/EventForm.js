@@ -4,6 +4,7 @@ import Comparator from "../../utils/Comparator";
 import {AsyncTypeahead} from "react-bootstrap-typeahead";
 
 import ApiWebService from "../../api/ApiWebService";
+import ErrorCodeManager from "../ErrorCodeManager";
 const PropTypes = require('prop-types');
 
 class EventForm extends React.Component {
@@ -16,6 +17,7 @@ class EventForm extends React.Component {
 
             users: [],
             reports: [],
+            error: undefined
         }
     }
 
@@ -42,9 +44,9 @@ class EventForm extends React.Component {
         try {
             const response = await ApiWebService.get(`user/filter/${filter}`);
 
-            await this.setState({users: response.data});
+            await this.setState({users: response.data, error: undefined});
         } catch (e) {
-            console.error(e)
+            this.setState({error: ErrorCodeManager.message(e)});
         }
     }
 
@@ -52,15 +54,23 @@ class EventForm extends React.Component {
         try {
             const response = await ApiWebService.get(`report/filter/${filter}`);
 
-            await this.setState({reports: response.data});
+            await this.setState({reports: response.data, error: undefined});
         } catch (e) {
-            console.error(e)
+            this.setState({error: ErrorCodeManager.message(e)});
         }
     }
 
     render() {
         return (
             <form>
+                {this.state.error &&
+                    <div className="row">
+                        <div className="col">
+                            {this.state.error}
+                        </div>
+                    </div>
+                }
+
                 <div className="row">
                     <div className="col-6">
                         <div className="form-group mb-3">

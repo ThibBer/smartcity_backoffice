@@ -10,7 +10,7 @@ class ReportTypeForm extends React.Component{
         this.state = {
             errors: this.props.errors,
             reportType: {...this.props.data},
-            imageSrc : this.props.data.image
+            imageSrc : this.props.data?.image
         }
     }
 
@@ -47,7 +47,7 @@ class ReportTypeForm extends React.Component{
                         <div className="form-group mb-3">
                             <label htmlFor="image">Image</label>
                             <input id="image" type="file" accept="image/*" className="form-control" placeholder="Image du signalement" onChange={(event) => this.onInputChange(event, "image")}/>
-                            {(this.props.isAnUpdate && this.state.reportType?.image) &&
+                            {(this.props.isAnUpdate && this.state.imageSrc) &&
                                 <>
                                     <p className="mt-5">Ancienne image</p>
                                     <img className="img-fluid" src={`${process.env.REACT_APP_API_URL}reportTypes/${this.state.imageSrc}`} alt="Icone non trouvée"/>

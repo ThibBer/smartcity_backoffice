@@ -8,6 +8,7 @@ import {AsyncTypeahead, Typeahead} from "react-bootstrap-typeahead";
 import Comparator from "../../utils/Comparator";
 import PropTypes from "prop-types";
 import ApiWebService from "../../api/ApiWebService";
+import ErrorCodeManager from "../ErrorCodeManager";
 
 class ReportForm extends React.Component {
     constructor(props) {
@@ -16,6 +17,7 @@ class ReportForm extends React.Component {
         this.state = {
             errors: this.props.errors,
             report: {...this.props.data},
+            error: undefined,
 
 
             reportTypes: [],
@@ -28,9 +30,9 @@ class ReportForm extends React.Component {
         try {
             const response = await ApiWebService.get("reportType");
 
-            this.setState({reportTypes: response.data});
+            this.setState({reportTypes: response.data, error: undefined});
         } catch (error) {
-            console.error(error)
+            this.setState({error: ErrorCodeManager.message(error)});
         }
     }
 
@@ -59,9 +61,9 @@ class ReportForm extends React.Component {
         try {
             const response = await ApiWebService.get(`user/filter/${filter}`);
 
-            await this.setState({users: response.data});
+            await this.setState({users: response.data, error: undefined});
         } catch (e) {
-            console.error(e)
+            this.setState({error: ErrorCodeManager.message(e)});
         }
 
         this.setState({loading: false});
@@ -70,6 +72,14 @@ class ReportForm extends React.Component {
     render() {
         return (
             <form>
+                {this.state.error &&
+                    <div className="row">
+                        <div className="col">
+                            {this.state.error}
+                        </div>
+                    </div>
+                }
+
                 <div className="row">
                     <div className="col">
                         <div className="form-group mb-3">
