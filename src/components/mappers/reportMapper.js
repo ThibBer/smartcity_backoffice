@@ -1,8 +1,11 @@
 import ReportStates from "../data/ReportStates";
 
 const mapper = function(report) {
+    console.log("\n " + report.id)
+    console.log(report)
     const createdAt = new Date(report.created_at);
     const reporter = report.reporter;
+    console.log(reporter)
 
     return (
         <>
