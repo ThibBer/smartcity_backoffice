@@ -1,4 +1,4 @@
-# 
+# Projet disponible publiquement sur [GitHub](https://github.com/ThibBer/smartcity_backoffice)
 
 # Installation
 Ce projet requiert [NodeJS](https://nodejs.org/en/)
