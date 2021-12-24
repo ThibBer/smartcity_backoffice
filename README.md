@@ -14,8 +14,11 @@ REACT_APP_JWT_KEY=jwt
 
 ## Commandes
 ```
-npm install #Installation des dépendances
+npm install
 npm start #Lance l'application (port 3000 par défaut)
 ```
+
+- npm install : Installation des dépendances
+- npm start : Lance l'application
 
 L'application se lance sur http://localhost:3000
