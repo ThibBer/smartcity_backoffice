@@ -1,5 +1,9 @@
 # Projet disponible publiquement sur [GitHub](https://github.com/ThibBer/smartcity_backoffice)
 
+# Auteurs
+- BERNARD Nicolas (etu42888@henallux.be)
+- BERG Thibaut (etu43163@henallux.be)
+
 # Installation
 Ce projet requiert [NodeJS](https://nodejs.org/en/)
 
@@ -15,7 +19,7 @@ REACT_APP_JWT_KEY=jwt
 ## Commandes
 ```
 npm install
-npm start #Lance l'application (port 3000 par défaut)
+npm start
 ```
 
 - npm install : Installation des dépendances
