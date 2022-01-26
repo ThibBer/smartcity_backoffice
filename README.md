@@ -1,5 +1,3 @@
-# Projet disponible publiquement sur [GitHub](https://github.com/ThibBer/smartcity_backoffice)
-
 # Auteurs
 - BERNARD Nicolas (etu42888@henallux.be)
 - BERG Thibaut (etu43163@henallux.be)
